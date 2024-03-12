@@ -1,5 +1,5 @@
-import {ENDPOINT_ROUTERS} from "@/app/config";
 import {TraefikRouter} from "@/app/outgoing/traefik/models";
+import {ENDPOINT_ROUTERS} from "@/app/outgoing/traefik/config";
 
 export async function getRulesFromRouters(): Promise<Array<TraefikRouter>> {
     const response = await fetch(ENDPOINT_ROUTERS)
