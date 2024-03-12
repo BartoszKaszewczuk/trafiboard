@@ -15,7 +15,7 @@ export default function RootLayout({children}: Readonly<{ children: React.ReactN
     return (
         <html lang="en">
         {/*<body className={inter.className}>*/}
-        <body className="light">
+        <body className="dark">
         <Providers>
             {children}
         </Providers>
