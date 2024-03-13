@@ -1,10 +1,13 @@
-import {TraefikEntryPoint, TraefikRouter} from "@/app/outgoing/traefik/models";
-import {ENDPOINT_ROUTERS} from "@/app/outgoing/traefik/config";
-import voca from "voca";
+import {TraefikEntryPoint, TraefikRouter, TrafiService} from "@/app/outgoing/traefik/models";
+import {ENDPOINT_ENTRYPOINTS, ENDPOINT_ROUTERS} from "@/app/outgoing/traefik/config";
 
-function ruleToRoute(rule: string) {
-    const items = voca.split(rule).map(subRule => subRule.substring(subRule.indexOf("`")+1, subRule.lastIndexOf("`")))
-    return `https://${items[0]}`
+function rulesToRoutes(rule: string): string[] {
+    const items = rule.split("||").map(subRule => subRule.substring(subRule.indexOf("`") + 1, subRule.lastIndexOf("`")))
+    return items.map(route => `https://${route}`)
+}
+
+function cleanupName(name: string): string {
+    return name.split("@")[0]
 }
 
 async function httpGetBody(url: string) {
@@ -21,8 +24,8 @@ export async function getRules(): Promise<Array<TraefikRouter>> {
     return routes.map((router: any) => {
             const out: TraefikRouter = {
                 provider: router.provider,
-                name: voca.capitalize(router.name),
-                rule: ruleToRoute(router.rule),
+                name: router.name,
+                rule: rulesToRoutes(router.rule)[0],
                 entryPoint: router.entryPoints[0]
             }
             return out;
@@ -31,7 +34,7 @@ export async function getRules(): Promise<Array<TraefikRouter>> {
 }
 
 export async function getEntryPoints(): Promise<Array<TraefikEntryPoint>> {
-    const entryPoints = await httpGetBody(ENDPOINT_ROUTERS);
+    const entryPoints = await httpGetBody(ENDPOINT_ENTRYPOINTS);
     return entryPoints.map((entryPoint: any) => {
             const out: TraefikEntryPoint = {
                 name: entryPoint.name,
@@ -42,5 +45,14 @@ export async function getEntryPoints(): Promise<Array<TraefikEntryPoint>> {
     )
 }
 
+export async function getTrafiServices(): Promise<TrafiService[]> {
+    const rules = await getRules();
+    const entryPoints = await getEntryPoints();
 
-
+    const map = new Map<string, TraefikEntryPoint>()
+    entryPoints.forEach((entryPoint) => map.set(entryPoint.name, entryPoint))
+    return rules.map(rule => {
+        const service: TrafiService = {...rule, ...map.get(rule.entryPoint)}
+        return service
+    });
+}
