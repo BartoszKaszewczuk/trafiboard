@@ -1,5 +1,6 @@
 import {TraefikEntryPoint, TraefikRouter, TrafiService} from "@/app/outgoing/traefik/models";
 import {ENDPOINT_ENTRYPOINTS, ENDPOINT_ROUTERS} from "@/app/outgoing/traefik/config";
+import {plainToClass, plainToInstance} from 'class-transformer';
 
 function rulesToRoutes(rule: string): string[] {
     const items = rule.split("||").map(subRule => subRule.substring(subRule.indexOf("`") + 1, subRule.lastIndexOf("`")))
@@ -11,7 +12,9 @@ function cleanupName(name: string): string {
 }
 
 async function httpGetBody(url: string) {
-    const response = await fetch(url)
+    const response = await fetch(url, {
+        mode: 'no-cors',
+    })
     if (!response.ok) {
         // This will activate the closest `error.js` Error Boundary
         throw new Error(`Error calling endpoint ${url}: ${response.status}`)
@@ -19,13 +22,13 @@ async function httpGetBody(url: string) {
     return response.json();
 }
 
-export async function getRules(): Promise<Array<TraefikRouter>> {
+export async function getRules(): Promise<TraefikRouter[]> {
     const routes = await httpGetBody(ENDPOINT_ROUTERS);
     return routes.map((router: any) => {
             const out: TraefikRouter = {
                 provider: router.provider,
                 name: router.name,
-                rule: rulesToRoutes(router.rule)[0],
+                rule: router.rule,
                 entryPoint: router.entryPoints[0]
             }
             return out;
@@ -33,7 +36,7 @@ export async function getRules(): Promise<Array<TraefikRouter>> {
     )
 }
 
-export async function getEntryPoints(): Promise<Array<TraefikEntryPoint>> {
+export async function getEntryPoints(): Promise<TraefikEntryPoint[]> {
     const entryPoints = await httpGetBody(ENDPOINT_ENTRYPOINTS);
     return entryPoints.map((entryPoint: any) => {
             const out: TraefikEntryPoint = {
@@ -49,10 +52,11 @@ export async function getTrafiServices(): Promise<TrafiService[]> {
     const rules = await getRules();
     const entryPoints = await getEntryPoints();
 
-    const map = new Map<string, TraefikEntryPoint>()
-    entryPoints.forEach((entryPoint) => map.set(entryPoint.name, entryPoint))
+    const mapOfEntryPoints = new Map<string, TraefikEntryPoint>()
+    entryPoints.forEach((entryPoint) => mapOfEntryPoints.set(entryPoint.name, entryPoint))
     return rules.map(rule => {
-        const service: TrafiService = {...rule, ...map.get(rule.entryPoint)}
-        return service
+        const service: TrafiService = {...mapOfEntryPoints.get(rule.entryPoint), ...rule}
+        return plainToInstance(TrafiService, service)
+        // return service
     });
 }
