@@ -28,4 +28,7 @@ const TRAEFIK_ROUTER_ENTRY = {
     "name": "ytdl@docker",
     "provider": "docker"
 }
-export const ENDPOINT_ROUTERS = "https://traefik.app.kaszewczuk.com/api/http/routers";
+
+const TRAEFIK_ROOT = "https://traefik.app.kaszewczuk.com"
+export const ENDPOINT_ROUTERS = `${TRAEFIK_ROOT}/api/http/routers`;
+export const ENDPOINT_ENTRYPOINTS = `${TRAEFIK_ROOT}/api/entrypoints`;
