@@ -25,6 +25,14 @@ export class TrafiService implements TraefikRouter, TraefikEntryPoint {
 
     getRoutes(): string[] {
         const items = this.rule.split("||").map(subRule => subRule.substring(subRule.indexOf("`") + 1, subRule.lastIndexOf("`")))
-        return items.map(route => `https://${route}`)
+        return items.map(route => {
+            switch (this.port) {
+                case ":443":
+                    return `https://${route}`
+                default:
+                    // noinspection HttpUrlsUsage
+                    return `http://${route}`
+            }
+        })
     }
 }
