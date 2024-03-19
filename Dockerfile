@@ -1,4 +1,4 @@
-FROM node:18-alpine
+FROM node:21-alpine
 
 LABEL maintainer="bartosz.kaszewczuk@icloud.com"
 LABEL app_name="trafi-next"
