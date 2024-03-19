@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  trafi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: docker-registry.kaszewczuk.com/trafi:latest
+    ports:
+      - 8080:3000
