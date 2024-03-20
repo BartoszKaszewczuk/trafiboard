@@ -10,7 +10,6 @@ export function TrafiServiceList({trafiServices}: { trafiServices: TrafiService[
             <div key={service.name} className="grid grid-cols-4 gap-4">
                 <div>
                     <Link
-                        isExternal
                         href={service.getRoutes()[0]}
                         showAnchorIcon
                     >{service.getRoutes()[0]}</Link>
