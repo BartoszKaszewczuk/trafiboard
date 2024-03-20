@@ -7,13 +7,11 @@ export function TrafiServiceList({trafiServices}: { trafiServices: TrafiService[
         .filter(service => service.provider != "internal")
         .map(service => {
         return (
-            <div key={service.name} className="grid grid-cols-4 gap-4">
-                <div>
-                    <Link
-                        href={service.getRoutes()[0]}
-                        showAnchorIcon
-                    >{service.getRoutes()[0]}</Link>
-                </div>
+            <div key={service.name} className="grid grid-cols-4 gap-4 text-wrap">
+                <Link
+                    href={service.getRoutes()[0]}
+                    showAnchorIcon
+                >{service.getRoutes()[0]}</Link>
             </div>
         )
     })
