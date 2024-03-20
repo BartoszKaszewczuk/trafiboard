@@ -8,7 +8,7 @@ export function TrafiServiceList({trafiServices}: { trafiServices: TrafiService[
         .sort((a, b) => a.name.localeCompare(b.name))
         .map(service => {
         return (
-            <div key={service.name} className="grid grid-cols-4 gap-4 text-wrap">
+            <div key={service.name} className="text-wrap">
                 <Link
                     href={service.getRoutes()[0]}
                     showAnchorIcon
