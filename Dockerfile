@@ -8,7 +8,7 @@ ENTRYPOINT ["top", "-b"]
 
 WORKDIR /app
 COPY package*.json ./
-#COPY src/app/ .
+COPY src/app/ app/
 COPY . .
 
 #CMD mkdir app && npm install && npm run build .
