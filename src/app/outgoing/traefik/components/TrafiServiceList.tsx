@@ -5,6 +5,7 @@ import {Link} from "@nextui-org/link";
 export function TrafiServiceList({trafiServices}: { trafiServices: TrafiService[] }) {
     const trafi = trafiServices
         .filter(service => service.provider != "internal")
+        .sort((a, b) => a.name.localeCompare(b.name))
         .map(service => {
         return (
             <div key={service.name} className="grid grid-cols-4 gap-4 text-wrap">
