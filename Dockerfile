@@ -12,7 +12,7 @@ COPY package*.json ./
 COPY . .
 
 #CMD mkdir app && npm install && npm run build .
-CMD npm install
+CMD npm install && npm run build
 
 #ENTRYPOINT npm run start
 ENTRYPOINT npm run dev
