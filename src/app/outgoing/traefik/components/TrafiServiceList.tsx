@@ -12,7 +12,7 @@ export function TrafiServiceList({trafiServices}: { trafiServices: TrafiService[
                 <Link
                     href={service.getRoutes()[0]}
                     showAnchorIcon
-                >{service.getRoutes()[0]}</Link>
+                >{service.getCleanName()}</Link>
             </div>
         )
     })
