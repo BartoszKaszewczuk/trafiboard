@@ -31,7 +31,13 @@ export function TraefikRoutes({trafiServices}: { trafiServices: TrafiService[] }
             <TableBody items={rows}>
                 {(row) =>
                     <TableRow key={row.key}>
-                        {Object.keys(row.obj).map((fieldName, index) => <TableCell key={index}>{row.obj[fieldName]}</TableCell>)}
+                        {Object
+                            .keys(row.obj)
+                            .map((fieldName, index) => {
+                                // @ts-ignore
+                                return <TableCell key={index}>{row.obj[fieldName]}</TableCell>
+                            })
+                        }
                     </TableRow>
                 }
             </TableBody>

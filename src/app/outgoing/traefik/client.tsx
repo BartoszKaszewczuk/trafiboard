@@ -1,6 +1,8 @@
+import 'server-only'
+
 import {TraefikEntryPoint, TraefikRouter, TrafiService} from "@/app/outgoing/traefik/models";
 import {ENDPOINT_ENTRYPOINTS, ENDPOINT_ROUTERS} from "@/app/outgoing/traefik/config";
-import {plainToClass, plainToInstance} from 'class-transformer';
+import {plainToInstance} from 'class-transformer';
 
 function rulesToRoutes(rule: string): string[] {
     const items = rule.split("||").map(subRule => subRule.substring(subRule.indexOf("`") + 1, subRule.lastIndexOf("`")))
@@ -55,8 +57,6 @@ export async function getTrafiServices(): Promise<TrafiService[]> {
     const mapOfEntryPoints = new Map<string, TraefikEntryPoint>()
     entryPoints.forEach((entryPoint) => mapOfEntryPoints.set(entryPoint.name, entryPoint))
     return rules.map(rule => {
-        const service: TrafiService = {...mapOfEntryPoints.get(rule.entryPoint), ...rule}
-        return plainToInstance(TrafiService, service)
-        // return service
+        return plainToInstance(TrafiService, {...mapOfEntryPoints.get(rule.entryPoint), ...rule})
     });
 }
