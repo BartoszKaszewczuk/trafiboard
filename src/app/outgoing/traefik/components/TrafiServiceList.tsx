@@ -18,11 +18,11 @@ export function TrafiServiceList({trafiServices}: { trafiServices: TrafiService[
                     fullWidth={true}
                 >
                     <CardBody className="overflow-visible p-0">
-                        <Link
-                            className="h-20 text-cyan-700 bg-black/20 inline-block"
-                            href={service.getRoutes()[0]}
-                            showAnchorIcon
-                        >{service.getCleanName()}</Link>
+                        <Image
+                            height={150}
+                            width={150}
+                            src="https://picsum.photos/150"
+                            ></Image>
                     </CardBody>
                     {/*<Image*/}
                     {/*    alt="Woman listing to music"*/}
@@ -32,6 +32,10 @@ export function TrafiServiceList({trafiServices}: { trafiServices: TrafiService[
                     {/*    width={200}*/}
                     {/*/>*/}
                     <CardFooter className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
+                        <Link
+                            className="text-white inline-block"
+                            href={service.getRoutes()[0]}
+                        >{service.getCleanName()}</Link>
                         {/*<p className="text-tiny text-white/80">Available soon.</p>*/}
                         {/*<Button className="text-tiny text-white bg-black/20" variant="flat" color="default" radius="lg" size="sm" href={service.getRoutes()[0]}>*/}
                         {/*    {service.getCleanName()}*/}
@@ -43,7 +47,7 @@ export function TrafiServiceList({trafiServices}: { trafiServices: TrafiService[
     })
 
     const wrapped = (
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-4 gap-8">
             {trafi}
         </div>
     )
