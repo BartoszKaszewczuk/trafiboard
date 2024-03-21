@@ -15,10 +15,11 @@ export function TrafiServiceList({trafiServices}: { trafiServices: TrafiService[
                     isPressable
                     radius="lg"
                     className="border-none"
+                    fullWidth={true}
                 >
                     <CardBody className="overflow-visible p-0">
                         <Link
-                            className="h-30 text-white bg-black/20 inline-block"
+                            className="h-20 text-cyan-700 bg-black/20 inline-block"
                             href={service.getRoutes()[0]}
                             showAnchorIcon
                         >{service.getCleanName()}</Link>
