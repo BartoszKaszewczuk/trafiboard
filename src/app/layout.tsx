@@ -13,10 +13,12 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({children}: Readonly<{ children: React.ReactNode }>) {
+    const bgUrl = "/bg.jpg"
+
     return (
         <html lang="en">
         {/*<body className={inter.className}>*/}
-        <body className="light text-foreground bg-background">
+        <body className="light content-center text-foreground bg-background bg-center" style={{ backgroundImage: `url(${bgUrl})`}} >
         <Providers>
             {children}
         </Providers>

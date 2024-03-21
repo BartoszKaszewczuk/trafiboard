@@ -15,9 +15,9 @@ export function TrafiServiceCard({serviceName, serviceRoute}) {
             >
                 <CardBody className="overflow-visible p-0">
                     <Image
-                        height={150}
-                        width={150}
-                        src="https://picsum.photos/150"
+                        height="100%"
+                        width="100%"
+                        src="https://picsum.photos/350/150"
                     ></Image>
                 </CardBody>
                 <CardFooter
