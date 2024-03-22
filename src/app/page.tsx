@@ -12,7 +12,7 @@ export default function Home() {
     const services = use(getTrafiServices());
 
     return (
-        <main className="container min-h-screen flex-col items-center justify-between p-24">
+        <main className="container min-h-screen m-auto flex-col items-center justify-between p-24">
                 {/*<Image height={100} width={100} src="/vercel.svg"></Image>*/}
                 <TrafiServiceList trafiServices={services}></TrafiServiceList>
                 {/*<Divider orientation="horizontal"/>*/}

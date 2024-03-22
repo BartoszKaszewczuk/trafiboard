@@ -9,7 +9,7 @@ export function TrafiServiceList({trafiServices}: { trafiServices: TrafiService[
         .map((service) => <TrafiServiceCard key={service.name} serviceName={service.getCleanName()} serviceRoute={service.getRoutes()[0]}></TrafiServiceCard> )
 
     const wrapped = (
-        <div className="grid grid-cols-4 gap-8">
+        <div className="grid grid-flow-row-dense lg:grid-cols-4 gap-8 md:grid-cols-2 content-start">
             {trafiServicesFiltered}
         </div>
     )
