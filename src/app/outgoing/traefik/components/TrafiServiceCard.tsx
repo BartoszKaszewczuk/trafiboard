@@ -18,10 +18,12 @@ export function TrafiServiceCard({serviceName, serviceRoute}) {
                         height="100%"
                         width="100%"
                         src="https://picsum.photos/350/150"
+                        // src={serviceRoute + '/favicon.ico'}
                     ></Image>
                 </CardBody>
                 <CardFooter
-                    className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
+                    className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10"
+                >
                     {/*<Link*/}
                     {/*    className="text-white inline-block"*/}
                     {/*    href={serviceRoute}*/}
