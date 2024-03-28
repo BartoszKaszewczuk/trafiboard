@@ -15,6 +15,7 @@ export function TrafiServiceCard({serviceName, serviceRoute}) {
             >
                 <CardBody className="overflow-visible p-0">
                     <Image
+                        isZoomed
                         height="100%"
                         width="100%"
                         src="https://picsum.photos/350/150"
