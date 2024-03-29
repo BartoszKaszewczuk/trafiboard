@@ -4,7 +4,6 @@ import {TrafiServiceCard} from "@/app/outgoing/traefik/components/TrafiServiceCa
 
 export function TrafiServiceList({trafiServices}: { trafiServices: TrafiService[] }) {
     const trafiServicesFiltered = trafiServices
-        .filter(service => service.provider != "internal")
         .sort((a, b) => a.name.localeCompare(b.name))
         .map((service) => <TrafiServiceCard key={service.name} serviceName={service.getCleanName()} serviceRoute={service.getRoutes()[0]}></TrafiServiceCard> )
 
