@@ -13,8 +13,8 @@ function cleanupName(name: string): string {
     return name.split("@")[0]
 }
 
-async function httpGetBody(url: string) {
-    const response = await fetch(url, {
+async function httpGetBody(url: string, requestInit: RequestInit | null = null) {
+    const response = await fetch(url, { ...requestInit ,
         mode: 'no-cors',
     })
     if (!response.ok) {
@@ -25,7 +25,7 @@ async function httpGetBody(url: string) {
 }
 
 export async function getRules(): Promise<TraefikRouter[]> {
-    const routes = await httpGetBody(ENDPOINT_ROUTERS);
+    const routes = await httpGetBody(ENDPOINT_ROUTERS, { cache: 'no-store' });
     return routes.map((router: any) => {
             const out: TraefikRouter = {
                 provider: router.provider,
