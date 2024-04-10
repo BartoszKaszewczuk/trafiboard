@@ -31,7 +31,7 @@ export async function getRules(): Promise<TraefikRouter[]> {
                 provider: router.provider,
                 name: router.name,
                 rule: router.rule,
-                entryPoint: router.entryPoints[0]
+                entryPoint: router.entryPoints[0] // TODO Handle multiple entry points?
             }
             return out;
         }
