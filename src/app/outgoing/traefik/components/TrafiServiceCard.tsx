@@ -1,8 +1,7 @@
 'use client';
 import {Card, CardFooter, Image, CardBody, Link} from "@nextui-org/react";
 
-
-export function TrafiServiceCard({serviceName, serviceRoute}) {
+export function TrafiServiceCard({serviceName, serviceRoute, thumbnailUrl}: {serviceName: string; serviceRoute: string; thumbnailUrl: string}) {
     return (
         <div key={serviceName} className="text-wrap">
             <Card
@@ -19,8 +18,7 @@ export function TrafiServiceCard({serviceName, serviceRoute}) {
                             isZoomed
                             height="100%"
                             width="100%"
-                            src="https://picsum.photos/350/150"
-                            // src={serviceRoute + '/favicon.ico'}
+                            src={thumbnailUrl}
                         ></Image>
                     </CardBody>
                     <CardFooter

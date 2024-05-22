@@ -1,12 +1,15 @@
-import {TrafiService} from "@/app/outgoing/traefik/models";
+import {TrafiService, TrafiServicePresentable} from "@/app/outgoing/traefik/models";
 import {TrafiServiceList} from "@/app/outgoing/traefik/components/TrafiServiceList";
 import _ from 'lodash'
 
-export function TrafiServiceListGrouped({trafiServices}: { trafiServices: TrafiService[] }) {
+export function TrafiServiceListGrouped({trafiServices}: { trafiServices: TrafiServicePresentable[] }) {
     const discardTypes = ['traefik'];
 
     const trafiTypes = _.chain(trafiServices)
-        .groupBy("entryPoint")
+        /**
+         * @see TrafiServicePresentable.entryPointType
+         */
+        .groupBy("entryPointType")
         .pickBy((v, k) => discardTypes.some((discard) => !discard.includes(k.toLowerCase())))
         .map((value, entryPointName) => {
             return (
