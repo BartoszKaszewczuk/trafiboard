@@ -1,12 +1,24 @@
-// 'use client';
-import React from "react";
-import { use } from "react";
+import React, {use} from "react";
 import {getTrafiServices} from "@/app/outgoing/traefik/client";
 import {TrafiServiceListGrouped} from "@/app/outgoing/traefik/components/TrafiServiceListGrouped";
-import {Divider, Link} from "@nextui-org/react";
+import {Link} from "@nextui-org/react";
+import {getScreenshot} from "@/app/outgoing/screenshots/client";
+import {TrafiService, TrafiServicePresentable} from "@/app/outgoing/traefik/models";
+
+function fetchTrafiServices() {
+    return use(getTrafiServices());
+}
+
+function fetchPresentableTrafiServices() {
+    const services = fetchTrafiServices();
+    return services.map((service: TrafiService) => {
+        const screenshot = use(getScreenshot(service.getRoutes()[0]))
+        return TrafiServicePresentable.fromTrafiService(service, screenshot)
+    });
+}
 
 export default function Home() {
-    const services = use(getTrafiServices());
+    const servicesPresentable = fetchPresentableTrafiServices();
 
     return (
         <main className="container min-h-screen ml:px-5 m-auto flex-col items-center justify-between p-24">
@@ -20,7 +32,7 @@ export default function Home() {
             </div>
             {/*<Image height={100} width={100} src="/vercel.svg"></Image>*/}
             {/*<Divider orientation="horizontal"/>*/}
-            <TrafiServiceListGrouped trafiServices={services}></TrafiServiceListGrouped>
+            <TrafiServiceListGrouped trafiServices={servicesPresentable}></TrafiServiceListGrouped>
             {/*<TraefikRoutes trafiServices={services}></TraefikRoutes>*/}
             {/*<Button>Click Me</Button>*/}
         </main>
