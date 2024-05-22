@@ -1,4 +1,4 @@
-import {TrafiService, TrafiServicePresentable} from "@/app/outgoing/traefik/models";
+import {TrafiServicePresentable} from "@/app/outgoing/traefik/models";
 import {TrafiServiceCard} from "@/app/outgoing/traefik/components/TrafiServiceCard";
 
 

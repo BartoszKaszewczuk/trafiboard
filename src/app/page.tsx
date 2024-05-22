@@ -30,11 +30,9 @@ export default function Home() {
                         {process.env.TRAFI_TITLE}
                     </Link>
             </div>
-            {/*<Image height={100} width={100} src="/vercel.svg"></Image>*/}
             {/*<Divider orientation="horizontal"/>*/}
             <TrafiServiceListGrouped trafiServices={servicesPresentable}></TrafiServiceListGrouped>
             {/*<TraefikRoutes trafiServices={services}></TraefikRoutes>*/}
-            {/*<Button>Click Me</Button>*/}
         </main>
     )
 }

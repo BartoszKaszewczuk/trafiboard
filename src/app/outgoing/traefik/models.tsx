@@ -53,13 +53,13 @@ export class TrafiServicePresentable extends TrafiService implements WithThumbna
         public name: string,
         public rule: string,
         public entryPointType: string,
-        public thumbnailUrl: string,
+        public thumbnailUrl: string | null,
     ) {
         super(port, provider, name, rule, entryPointType)
         this.thumbnailUrl = thumbnailUrl
     }
 
-    static fromTrafiService(trafiService: TrafiService, thumbnailUrl: string) {
+    static fromTrafiService(trafiService: TrafiService, thumbnailUrl: string | null) {
         return new TrafiServicePresentable(trafiService.port, trafiService.provider, trafiService.name, trafiService.rule, trafiService.entryPointType, thumbnailUrl)
     }
 }
