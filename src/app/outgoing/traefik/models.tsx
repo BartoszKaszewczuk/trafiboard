@@ -2,12 +2,16 @@ export interface TraefikRouter {
     provider: string;
     name: string;
     rule: string;
-    entryPoint: string;
+    entryPointType: string;
 }
 
 export interface TraefikEntryPoint {
     name: string;
     port: string;
+}
+
+export interface WithThumbnail {
+    thumbnailUrl: string,
 }
 
 export class TrafiService implements TraefikRouter, TraefikEntryPoint {
@@ -16,7 +20,7 @@ export class TrafiService implements TraefikRouter, TraefikEntryPoint {
         public provider: string,
         public name: string,
         public rule: string,
-        public entryPoint: string,
+        public entryPointType: string,
     ) {}
 
     getCleanName(): string {
@@ -24,9 +28,14 @@ export class TrafiService implements TraefikRouter, TraefikEntryPoint {
     }
 
     getRoutes(): string[] {
-        const items = this.rule.split("||").map(subRule => subRule.substring(subRule.indexOf("`") + 1, subRule.lastIndexOf("`")))
+        return TrafiService.getRoutesFromRule(this.rule, this.port)
+    }
+
+    static getRoutesFromRule(rule: string, port: string): string[] {
+        const items = rule.split("||")
+            .map(subRule => subRule.substring(subRule.indexOf("`") + 1, subRule.lastIndexOf("`")))
         return items.map(route => {
-            switch (this.port) {
+            switch (port) {
                 case ":443":
                     return `https://${route}`
                 default:
@@ -34,5 +43,23 @@ export class TrafiService implements TraefikRouter, TraefikEntryPoint {
                     return `http://${route}`
             }
         })
+    }
+}
+
+export class TrafiServicePresentable extends TrafiService implements WithThumbnail {
+    constructor(
+        public port: string,
+        public provider: string,
+        public name: string,
+        public rule: string,
+        public entryPointType: string,
+        public thumbnailUrl: string,
+    ) {
+        super(port, provider, name, rule, entryPointType)
+        this.thumbnailUrl = thumbnailUrl
+    }
+
+    static fromTrafiService(trafiService: TrafiService, thumbnailUrl: string) {
+        return new TrafiServicePresentable(trafiService.port, trafiService.provider, trafiService.name, trafiService.rule, trafiService.entryPointType, thumbnailUrl)
     }
 }
