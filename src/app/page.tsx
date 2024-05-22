@@ -27,7 +27,7 @@ export default function Home() {
                         className="mb-1.5 text-3xl inline-block rounded-full bg-gray-500/50 py-2 px-6 text-white/90"
                         href="#"
                     >
-                    Kaszewczuk's Apps
+                        {process.env.TRAFI_TITLE}
                     </Link>
             </div>
             {/*<Image height={100} width={100} src="/vercel.svg"></Image>*/}
