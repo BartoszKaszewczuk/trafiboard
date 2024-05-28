@@ -26,7 +26,7 @@ async function createScreenshot(url: string, savePath: string): Promise<string> 
 
 export async function getScreenshot(url: string): Promise<string | null> {
     if (!StringUtils.isUrl(url)) {
-        console.warn(`URL ${url} is not a valid URL`);
+        console.warn(`URL ${url} is not a valid URL. Skipping this service.`);
         return null
     }
     const publicUrl = `/${SCREENSHOT_DIRECTORY_NAME}/${getDomainName(url)}-${VIEWPORT_WIDTH}x${VIEWPORT_WIDTH}${IMAGE_EXTENSION}`;
