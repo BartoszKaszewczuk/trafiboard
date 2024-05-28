@@ -1,7 +1,8 @@
 'use client';
 import {Card, CardFooter, Image, CardBody, Link} from "@nextui-org/react";
+import { nullAsUndefined } from "null-as-undefined";
 
-export function TrafiServiceCard({serviceName, serviceRoute, thumbnailUrl}: {serviceName: string; serviceRoute: string; thumbnailUrl: string}) {
+export function TrafiServiceCard({serviceName, serviceRoute, thumbnailUrl}: {serviceName: string; serviceRoute: string; thumbnailUrl: string | null}) {
     return (
         <div key={serviceName} className="text-wrap">
             <Card
@@ -18,7 +19,7 @@ export function TrafiServiceCard({serviceName, serviceRoute, thumbnailUrl}: {ser
                             isZoomed
                             height="100%"
                             width="100%"
-                            src={thumbnailUrl}
+                            src={nullAsUndefined(thumbnailUrl)}
                         ></Image>
                     </CardBody>
                     <CardFooter
