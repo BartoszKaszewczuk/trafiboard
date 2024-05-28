@@ -20,6 +20,7 @@ export function TrafiServiceCard({serviceName, serviceRoute, thumbnailUrl}: {ser
                             height="100%"
                             width="100%"
                             src={nullAsUndefined(thumbnailUrl)}
+                            alt={`thumbnail-${serviceName}`}
                         ></Image>
                     </CardBody>
                     <CardFooter
