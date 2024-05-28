@@ -10,8 +10,8 @@ export interface TraefikEntryPoint {
     port: string;
 }
 
-export interface WithThumbnail {
-    thumbnailUrl: string,
+export interface MaybeThumbnail {
+    thumbnailUrl: string | null,
 }
 
 export class TrafiService implements TraefikRouter, TraefikEntryPoint {
@@ -46,7 +46,7 @@ export class TrafiService implements TraefikRouter, TraefikEntryPoint {
     }
 }
 
-export class TrafiServicePresentable extends TrafiService implements WithThumbnail {
+export class TrafiServicePresentable extends TrafiService implements MaybeThumbnail {
     constructor(
         public port: string,
         public provider: string,
