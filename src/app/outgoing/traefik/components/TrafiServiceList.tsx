@@ -9,8 +9,8 @@ export function TrafiServiceList({trafiServices}: { trafiServices: TrafiServiceP
                 return (<TrafiServiceCard {...service}
                     key={service.name}
                     serviceName={service.getCleanName()}
-                    serviceRoute={service.getRoutes()[0]}>
-                    thumbnailUrl={service.thumbnailUrl}
+                    serviceRoute={service.getRoutes()[0]}
+                    thumbnailUrl={service.thumbnailUrl}>
                 </TrafiServiceCard>)
             }
         )
