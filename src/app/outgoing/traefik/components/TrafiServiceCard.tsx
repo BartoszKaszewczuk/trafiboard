@@ -19,7 +19,7 @@ export function TrafiServiceCard({serviceName, serviceRoute, thumbnailUrl}: {ser
                             isZoomed
                             height="100%"
                             width="100%"
-                            src={nullAsUndefined(thumbnailUrl)}
+                            src={nullAsUndefined(thumbnailUrl) ? thumbnailUrl : "https://picsum.photos/350/150"}
                             alt={`thumbnail-${serviceName}`}
                         ></Image>
                     </CardBody>

@@ -12,7 +12,8 @@ function fetchTrafiServices() {
 function fetchPresentableTrafiServices() {
     const services = fetchTrafiServices();
     return services.map((service: TrafiService) => {
-        const screenshot = use(getScreenshot(service.getRoutes()[0]))
+//         const screenshot = use(getScreenshot(service.getRoutes()[0]))
+        const screenshot = null
         return TrafiServicePresentable.fromTrafiService(service, screenshot)
     });
 }
