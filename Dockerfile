@@ -4,8 +4,6 @@ LABEL maintainer="bartosz.kaszewczuk@icloud.com"
 LABEL app_name="trafi-next"
 LABEL project="trafi"
 
-ENTRYPOINT ["top", "-b"]
-
 WORKDIR /app
 COPY package*.json ./
 #COPY src/app/ app/
