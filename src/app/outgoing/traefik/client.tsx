@@ -52,8 +52,8 @@ export async function getEntryPoints(host: string): Promise<TraefikEntryPoint[]>
 }
 
 export async function getTrafiServices(): Promise<TrafiService[]> {
-    const hosts = Array.from(process.env.TRAFI_TRAEFIK_HOSTS!!) // TODO: Underlying object has type TraefikHost, refactor this block to make it type aware
-    const out = (await Promise.all(hosts.map(async (host) => {
+    const hosts = Array.from(process.env.TRAFI_TRAEFIK_HOSTS!!) // TODO: Underlying object has type TraefikHost[], refactor this block to make it type aware
+    const services = (await Promise.all(hosts.map(async (host) => {
         // console.log(`Processing host: ${host}`)
         // console.log(`Processing host: ${host.url}`)
         // console.log(`Processing host: ${JSON.parse(JSON.stringify(host)).URL}`)
@@ -64,15 +64,16 @@ export async function getTrafiServices(): Promise<TrafiService[]> {
 
         const mapOfEntryPoints = new Map<string, TraefikEntryPoint>()
         entryPoints.forEach((entryPoint) => mapOfEntryPoints.set(entryPoint.name, entryPoint))
-        return rules.map(rule => {
+        return (rules.map(rule => {
             return plainToInstance(
                 TrafiService,
                 {
                     ...mapOfEntryPoints.get(rule.entryPointType),
                     ...rule,
                 })
-        });
+        }));
     }))).flat()
-    console.log(JSON.stringify(out))
-    return out
+    const deduplicated = Array.from(new Set(services));
+    console.log(JSON.stringify(deduplicated))
+    return deduplicated
 }
