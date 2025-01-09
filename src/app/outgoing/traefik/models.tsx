@@ -1,3 +1,9 @@
+export interface TraefikHost {
+    url: string;
+    username: string;
+    password: string;
+}
+
 export interface TraefikRouter {
     provider: string;
     name: string;

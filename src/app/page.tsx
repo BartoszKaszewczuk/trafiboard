@@ -10,6 +10,7 @@ function fetchTrafiServices() {
 }
 
 function fetchPresentableTrafiServices() {
+    console.log(Array.of(process.env.TRAFI_TRAEFIK_HOSTS))
     const services = fetchTrafiServices();
     return services.map((service: TrafiService) => {
 //         const screenshot = use(getScreenshot(service.getRoutes()[0]))
