@@ -1,17 +1,18 @@
 import React, {use} from "react";
-import {getTrafiServices} from "@/app/outgoing/traefik/client";
+import {getTrafiServices, getTrafiServicesFromHosts, isUrlValidUnsafe} from "@/app/outgoing/traefik/client";
 import {TrafiServiceListGrouped} from "@/app/outgoing/traefik/components/TrafiServiceListGrouped";
 import {Link} from "@nextui-org/react";
 import {getScreenshot} from "@/app/outgoing/screenshots/client";
-import {TrafiService, TrafiServicePresentable} from "@/app/outgoing/traefik/models";
+import {TraefikHost, TrafiService, TrafiServicePresentable} from "@/app/outgoing/traefik/models";
+import {TRAEFIK_HOSTS} from "@/app/outgoing/traefik/config";
 
-function fetchTrafiServices() {
-    return use(getTrafiServices());
+function fetchTrafiServices(): Map<string, TrafiService[]> {
+    return use(getTrafiServicesFromHosts(TRAEFIK_HOSTS));
 }
 
 function fetchPresentableTrafiServices() {
-    console.log(Array.of(process.env.TRAFI_TRAEFIK_HOSTS))
-    const services = fetchTrafiServices();
+    // const services = Array.of(fetchTrafiServices().values());
+    const services: TrafiService[] = [...fetchTrafiServices().values()];
     return services.map((service: TrafiService) => {
 //         const screenshot = use(getScreenshot(service.getRoutes()[0]))
         const screenshot = null

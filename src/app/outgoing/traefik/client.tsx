@@ -21,8 +21,9 @@ async function httpGetBody(url: string, requestInit: RequestInit | null = null):
     return response.json();
 }
 
-export async function getRules(host: string): Promise<TraefikRouter[]> {
-    const url = host + ENDPOINT_ROUTERS
+export async function getRules(host: TraefikHost): Promise<TraefikRouter[]> {
+    isUrlValidUnsafe(host.url)
+    const url = host.url + ENDPOINT_ROUTERS
     console.debug(`Calling GET on Rules from ${url}`)
     const routes = await httpGetBody(url, { cache: 'no-store' });
     return routes.map((router: any) => {
@@ -37,8 +38,9 @@ export async function getRules(host: string): Promise<TraefikRouter[]> {
     )
 }
 
-export async function getEntryPoints(host: string): Promise<TraefikEntryPoint[]> {
-    const url = host + ENDPOINT_ENTRYPOINTS
+export async function getEntryPoints(host: TraefikHost): Promise<TraefikEntryPoint[]> {
+    isUrlValidUnsafe(host.url)
+    const url = host.url + ENDPOINT_ENTRYPOINTS
     console.debug(`Calling GET on Rules from ${url}`)
     const entryPoints = await httpGetBody(url);
     return entryPoints.map((entryPoint: any) => {
@@ -51,29 +53,54 @@ export async function getEntryPoints(host: string): Promise<TraefikEntryPoint[]>
     )
 }
 
-export async function getTrafiServices(): Promise<TrafiService[]> {
-    const hosts = Array.from(process.env.TRAFI_TRAEFIK_HOSTS!!) // TODO: Underlying object has type TraefikHost[], refactor this block to make it type aware
-    const services = (await Promise.all(hosts.map(async (host) => {
-        // console.log(`Processing host: ${host}`)
-        // console.log(`Processing host: ${host.url}`)
-        // console.log(`Processing host: ${JSON.parse(JSON.stringify(host)).URL}`)
-        // const host = "https://traefik.nas.kaszewczuk.com"
+export async function getTrafiServices(traefikHost: TraefikHost): Promise<TrafiService[]> {
+    const rules = await getRules(traefikHost);
+    const entryPoints = await getEntryPoints(traefikHost);
 
-        const rules = await getRules(host.URL);
-        const entryPoints = await getEntryPoints(host.URL);
+    const mapOfEntryPoints = new Map<string, TraefikEntryPoint>()
+    entryPoints.forEach((entryPoint) => mapOfEntryPoints.set(entryPoint.name, entryPoint))
+    return (rules.map(rule => {
+        return plainToInstance(
+            TrafiService,
+            {
+                ...mapOfEntryPoints.get(rule.entryPointType),
+                ...rule,
+            })
+    }));
+}
 
-        const mapOfEntryPoints = new Map<string, TraefikEntryPoint>()
-        entryPoints.forEach((entryPoint) => mapOfEntryPoints.set(entryPoint.name, entryPoint))
-        return (rules.map(rule => {
-            return plainToInstance(
-                TrafiService,
-                {
-                    ...mapOfEntryPoints.get(rule.entryPointType),
-                    ...rule,
-                })
-        }));
-    }))).flat()
-    const deduplicated = Array.from(new Set(services));
-    console.log(JSON.stringify(deduplicated))
-    return deduplicated
+export async function getTrafiServicesFromHosts(traefikHosts: TraefikHost[]): Promise<Map<string, TrafiService[]>> {
+    const mapOfHosts = new Map<string, TrafiService[]>()
+    // const services = (await Promise.all(hosts.map(async (host: TraefikHost) => {
+    console.info(`Fetching routes from Traefik hosts: ${JSON.stringify(traefikHosts)}`)
+    await Promise.all(traefikHosts.map(async (host: TraefikHost) => {
+        mapOfHosts.set(host.url, await getTrafiServices(host))
+    }))
+    console.debug(`Complete Map of Hosts: ${JSON.stringify(mapOfHosts)}`)
+    return mapOfHosts
+}
+
+export function isUrlValid(url: string): boolean {
+    try {
+        new URL(url)
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
+
+export function isUrlValidUnsafe(url: string): boolean {
+    try {
+        new URL(url)
+        return true
+    } catch (e) {
+        throw new Error(`URL ${url} is invalid!`)
+    }
+}
+
+export function throwIfUndefined(object) {
+    if (object == null) {
+        throw new Error(`Value should be defined but encountered: ${object}`)
+    }
+    return object
 }
