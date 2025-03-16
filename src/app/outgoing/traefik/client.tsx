@@ -98,7 +98,7 @@ export function isUrlValidUnsafe(url: string): boolean {
     }
 }
 
-export function throwIfUndefined(object) {
+export function throwIfUndefined(object: any) {
     if (object == null) {
         throw new Error(`Value should be defined but encountered: ${object}`)
     }

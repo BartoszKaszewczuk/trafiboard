@@ -17,18 +17,6 @@ const nextConfig = {
     env: {
         // ...configYaml,
         TRAFI_TITLE: "TrafiBoard Apps",
-        TRAFI_TRAEFIK_HOSTS: [
-            {
-                URL: "https://traefik.nas.kaszewczuk.com",
-                USER: "",
-                PASSWORD: "",
-            },
-            {
-                URL: "https://traefik.app.kaszewczuk.com",
-                USER: "",
-                PASSWORD: "",
-            }
-        ]
     },
 };
 
