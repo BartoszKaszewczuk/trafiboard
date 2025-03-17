@@ -52,7 +52,7 @@ export async function getRules(host: TraefikHost): Promise<TraefikRouter[]> {
 export async function getEntryPoints(host: TraefikHost): Promise<TraefikEntryPoint[]> {
     isUrlValidUnsafe(host.url)
     const url = host.url + ENDPOINT_ENTRYPOINTS
-    console.debug(`Calling GET on Rules from ${url}`)
+    console.debug(`Calling GET on Entrypoints from ${url}`)
     const entryPoints = await httpGetBody(url);
     return entryPoints.map((entryPoint: any) => {
             const out: TraefikEntryPoint = {
@@ -87,7 +87,7 @@ export async function getTrafiServicesFromHosts(traefikHosts: TraefikHost[]): Pr
     await Promise.all(traefikHosts.map(async (host: TraefikHost) => {
         mapOfHosts.set(host.url, await getTrafiServices(host))
     }))
-    console.debug(`Complete Map of Hosts: ${JSON.stringify(mapOfHosts)}`)
+    console.debug(`Complete map of ${mapOfHosts.size} hosts: ${JSON.stringify(mapOfHosts.entries())}`)
     return mapOfHosts
 }
 
@@ -110,7 +110,7 @@ export function isUrlValidUnsafe(url: string): boolean {
 }
 
 export function throwIfUndefined(object: any) {
-    if (object == null) {
+    if (object === null || object === undefined) {
         throw new Error(`Value should be defined but encountered: ${object}`)
     }
     return object
