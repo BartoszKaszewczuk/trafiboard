@@ -9,10 +9,11 @@ async function httpGetBody(url: string, requestInit: RequestInit | null = null):
     try {
         response = await fetch(url, { ...requestInit ,
             mode: 'no-cors',
+            signal: AbortSignal.timeout(10000)
         })
     } catch (e) {
-        console.error(`Error while calling URL: ${url}`, e)
-        return [];
+        console.error(`Error while calling URL: ${url} ${e.cause}`)
+        return null;
     }
     if (!response.ok) {
         // This will activate the closest `error.js` Error Boundary
