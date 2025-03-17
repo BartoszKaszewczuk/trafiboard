@@ -65,7 +65,7 @@ export class TrafiServicePresentable extends TrafiService implements MaybeThumbn
         this.thumbnailUrl = thumbnailUrl
     }
 
-    static fromTrafiService(trafiService: TrafiService, thumbnailUrl: string | null) {
+    static fromTrafiService(trafiService: TrafiService, thumbnailUrl: string | null): TrafiServicePresentable {
         return new TrafiServicePresentable(trafiService.port, trafiService.provider, trafiService.name, trafiService.rule, trafiService.entryPointType, thumbnailUrl)
     }
 }
