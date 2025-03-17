@@ -1,7 +1,7 @@
 import 'server-only'
 
 import {TraefikEntryPoint, TraefikHost, TraefikRouter, TrafiService} from "@/app/outgoing/traefik/models";
-import {ENDPOINT_ENTRYPOINTS, ENDPOINT_ROUTERS} from "@/app/outgoing/traefik/config";
+import {ENDPOINT_ENTRYPOINTS, ENDPOINT_ROUTERS, ENDPOINT_VERSION} from "@/app/outgoing/traefik/config";
 import {plainToInstance} from 'class-transformer';
 
 async function httpGetBody(url: string, requestInit: RequestInit | null = null): Promise<any | null> {
@@ -19,6 +19,17 @@ async function httpGetBody(url: string, requestInit: RequestInit | null = null):
         throw new Error(`Error calling endpoint ${url}: ${response.status}`)
     }
     return response.json();
+}
+
+export async function getApiVersion(host: TraefikHost): Promise<string | null> {
+    isUrlValidUnsafe(host.url)
+    const url = host.url + ENDPOINT_VERSION
+    const version = await httpGetBody(url, { cache: 'no-store' });
+    return version.Version ? version.Version : null
+}
+
+export async function isApiReachable(host: TraefikHost): Promise<boolean> {
+    return !!(await getApiVersion(host));
 }
 
 export async function getRules(host: TraefikHost): Promise<TraefikRouter[]> {
