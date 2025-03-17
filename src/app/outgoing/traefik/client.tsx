@@ -82,13 +82,35 @@ export async function getTrafiServices(traefikHost: TraefikHost): Promise<TrafiS
 
 export async function getTrafiServicesFromHosts(traefikHosts: TraefikHost[]): Promise<Map<string, TrafiService[]>> {
     const mapOfHosts = new Map<string, TrafiService[]>()
-    // const services = (await Promise.all(hosts.map(async (host: TraefikHost) => {
-    console.info(`Fetching routes from Traefik hosts: ${JSON.stringify(traefikHosts)}`)
-    await Promise.all(traefikHosts.map(async (host: TraefikHost) => {
-        mapOfHosts.set(host.url, await getTrafiServices(host))
+    console.info(`Fetching routes from Traefik hosts: ${traefikHosts.map(x=>x.url).join(', ')}`)
+
+    const onlineHosts = await filterOnlineHosts(traefikHosts)
+    console.info(`Online Hosts: ${onlineHosts.map(x=>x.url).join(', ')}`)
+
+    const offlineHosts = traefikHosts.filter(x => !onlineHosts.includes(x))
+    if (offlineHosts.length > 0) {
+        console.warn(`Unreachable Hosts: ${offlineHosts.map(x=>x.url).join(', ')}`)
+    }
+
+    await Promise.all(onlineHosts
+        .map(async (host: TraefikHost) => {
+            const services = await getTrafiServices(host);
+            console.debug(`Indexed ${services.length} service routes hosted by ${host.url}`);
+            mapOfHosts.set(host.url, services)
     }))
     console.debug(`Complete map of ${mapOfHosts.size} hosts: ${JSON.stringify(mapOfHosts.entries())}`)
     return mapOfHosts
+}
+
+async function filterOnlineHosts(hosts: TraefikHost[]): Promise<TraefikHost[]> {
+    const onlineHosts: TraefikHost[] = []
+    for (const host of hosts) {
+        if (await isApiReachable(host)) {
+            console.debug(`Host ${host.url} is reachable`)
+            onlineHosts.push(host)
+        }
+    }
+    return onlineHosts
 }
 
 export function isUrlValid(url: string): boolean {
