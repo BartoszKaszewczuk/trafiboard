@@ -6,22 +6,31 @@ import {getScreenshot} from "@/app/outgoing/screenshots/client";
 import {TraefikHost, TrafiService, TrafiServicePresentable} from "@/app/outgoing/traefik/models";
 import {TRAEFIK_HOSTS} from "@/app/outgoing/traefik/config";
 
-function fetchTrafiServices(): Map<string, TrafiService[]> {
+function fetchTrafiServices(): TrafiService[] {
+    return use(getTrafiServices(TRAEFIK_HOSTS[0]));
+}
+
+function fetchTrafiServicesFromHosts(): Map<string, TrafiService[]> {
     return use(getTrafiServicesFromHosts(TRAEFIK_HOSTS));
 }
 
 function fetchPresentableTrafiServices() {
-    // const services = Array.of(fetchTrafiServices().values());
-    const services: TrafiService[] = [...fetchTrafiServices().values()];
-    return services.map((service: TrafiService) => {
+    const hosts: Map<string, TrafiService[]> = fetchTrafiServicesFromHosts()
+    const mapOfPresentableServices = new Map<string, TrafiServicePresentable[]>()
+    for (const [host, services] of hosts.entries()) {
+        const presentables: TrafiServicePresentable[] = services.map((service: TrafiService) => {
 //         const screenshot = use(getScreenshot(service.getRoutes()[0]))
-        const screenshot = null
-        return TrafiServicePresentable.fromTrafiService(service, screenshot)
-    });
+            const screenshot = null
+            return TrafiServicePresentable.fromTrafiService(service, screenshot)
+        })
+        mapOfPresentableServices.set(host, presentables)
+    }
+    return mapOfPresentableServices
 }
 
 export default function Home() {
     const servicesPresentable = fetchPresentableTrafiServices();
+    const servicesFlat = Array.from(servicesPresentable.values()).flat()
 
     return (
         <main className="container min-h-screen ml:px-5 m-auto flex-col items-center justify-between p-24">
@@ -34,7 +43,7 @@ export default function Home() {
                     </Link>
             </div>
             {/*<Divider orientation="horizontal"/>*/}
-            <TrafiServiceListGrouped trafiServices={servicesPresentable}></TrafiServiceListGrouped>
+            <TrafiServiceListGrouped trafiServices={servicesFlat}></TrafiServiceListGrouped>
             {/*<TraefikRoutes trafiServices={services}></TraefikRoutes>*/}
         </main>
     )
