@@ -8,3 +8,17 @@ services:
     image: docker-registry.kaszewczuk.com/trafi:latest
     ports:
       - 8080:3000
+    environment:
+      TRAFI_TRAEFIK_HOSTS: >
+        [
+          {
+            "url": "https://traefik.example.com",
+            "username": "",
+            "password": ""
+          },
+          {
+            "url": "https://192.168.0.1",
+            "username": "",
+            "password": ""
+          }
+        ]

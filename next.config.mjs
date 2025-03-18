@@ -13,7 +13,11 @@ const nextConfig = {
                 ]
             }
         ]
-    }
+    },
+    env: {
+        // ...configYaml,
+        TRAFI_TITLE: "TrafiBoard Apps",
+    },
 };
 
 export default nextConfig;
