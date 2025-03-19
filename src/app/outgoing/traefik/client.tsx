@@ -3,6 +3,7 @@ import 'server-only'
 import {TraefikEntryPoint, TraefikHost, TraefikRouter, TrafiService} from "@/app/outgoing/traefik/models";
 import {ENDPOINT_ENTRYPOINTS, ENDPOINT_ROUTERS, ENDPOINT_VERSION} from "@/app/outgoing/traefik/config";
 import {plainToInstance} from 'class-transformer';
+import {logger} from "@/app/utils";
 
 async function httpGetBody(url: string, requestInit: RequestInit | null = null): Promise<any | null> {
     let response;
@@ -12,7 +13,7 @@ async function httpGetBody(url: string, requestInit: RequestInit | null = null):
             signal: AbortSignal.timeout(10000)
         })
     } catch (e) {
-        console.error(`Error while calling URL: ${url} ${e.cause}`)
+        logger.error(`Error while calling URL: ${url} ${e.cause}`)
         return null;
     }
     if (!response.ok) {
@@ -36,7 +37,7 @@ export async function isApiReachable(host: TraefikHost): Promise<boolean> {
 export async function getRules(host: TraefikHost): Promise<TraefikRouter[]> {
     isUrlValidUnsafe(host.url)
     const url = host.url + ENDPOINT_ROUTERS
-    console.debug(`Calling GET on Rules from ${url}`)
+    logger.trace(`Calling GET on Rules from ${url}`)
     const routes = await httpGetBody(url, { cache: 'no-store' });
     return routes.map((router: any) => {
             const out: TraefikRouter = {
@@ -53,7 +54,7 @@ export async function getRules(host: TraefikHost): Promise<TraefikRouter[]> {
 export async function getEntryPoints(host: TraefikHost): Promise<TraefikEntryPoint[]> {
     isUrlValidUnsafe(host.url)
     const url = host.url + ENDPOINT_ENTRYPOINTS
-    console.debug(`Calling GET on Entrypoints from ${url}`)
+    logger.trace(`Calling GET on Entrypoints from ${url}`)
     const entryPoints = await httpGetBody(url);
     return entryPoints.map((entryPoint: any) => {
             const out: TraefikEntryPoint = {
@@ -83,23 +84,23 @@ export async function getTrafiServices(traefikHost: TraefikHost): Promise<TrafiS
 
 export async function getTrafiServicesFromHosts(traefikHosts: TraefikHost[]): Promise<Map<string, TrafiService[]>> {
     const mapOfHosts = new Map<string, TrafiService[]>()
-    console.info(`Fetching routes from Traefik hosts: ${traefikHosts.map(x=>x.url).join(', ')}`)
+    logger.info(`Fetching routes from Traefik hosts: ${traefikHosts.map(x=>x.url).join(', ')}`)
 
     const onlineHosts = await filterOnlineHosts(traefikHosts)
-    console.info(`Online Hosts: ${onlineHosts.map(x=>x.url).join(', ')}`)
+    logger.info(`${onlineHosts.length} online host(s): ${onlineHosts.map(x=>x.url).join(', ')}`)
 
     const offlineHosts = traefikHosts.filter(x => !onlineHosts.includes(x))
     if (offlineHosts.length > 0) {
-        console.warn(`Unreachable Hosts: ${offlineHosts.map(x=>x.url).join(', ')}`)
+        logger.warn(`${offlineHosts.length} unreachable host(s): ${offlineHosts.map(x=>x.url).join(', ')}`)
     }
 
     await Promise.all(onlineHosts
         .map(async (host: TraefikHost) => {
             const services = await getTrafiServices(host);
-            console.debug(`Indexed ${services.length} service routes hosted by ${host.url}`);
+            logger.debug(`Indexed ${services.length} service routes hosted by ${host.url}`);
             mapOfHosts.set(host.url, services)
     }))
-    console.debug(`Complete map of ${mapOfHosts.size} hosts: ${JSON.stringify(mapOfHosts.entries())}`)
+    logger.debug(`Complete map of ${mapOfHosts.size} hosts: ${JSON.stringify(Object.fromEntries(mapOfHosts))}`)
     return mapOfHosts
 }
 
@@ -107,7 +108,7 @@ async function filterOnlineHosts(hosts: TraefikHost[]): Promise<TraefikHost[]> {
     const onlineHosts: TraefikHost[] = []
     for (const host of hosts) {
         if (await isApiReachable(host)) {
-            console.debug(`Host ${host.url} is reachable`)
+            logger.trace(`Host ${host.url} is reachable`)
             onlineHosts.push(host)
         }
     }
@@ -124,12 +125,11 @@ export function isUrlValid(url: string): boolean {
 }
 
 export function isUrlValidUnsafe(url: string): boolean {
-    try {
-        new URL(url)
-        return true
-    } catch (e) {
+    const result = isUrlValid(url)
+    if (!result) {
         throw new Error(`URL ${url} is invalid!`)
     }
+    return result
 }
 
 export function throwIfUndefined(object: any) {

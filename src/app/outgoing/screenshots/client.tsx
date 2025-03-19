@@ -1,6 +1,7 @@
 import {chromium} from "playwright";
 import fs from "node:fs";
 import { StringUtils } from 'turbocommons-ts';
+import {logger} from "@/app/utils";
 
 
 const ROOT_DIRECTORY_NAME = "public";
@@ -18,7 +19,7 @@ async function createScreenshot(url: string, savePath: string): Promise<string> 
         await page.goto(url, { waitUntil: "domcontentloaded" });
         await page.screenshot({path: savePath});
     } catch (e) {
-        console.error(`Error creating screenshot for URL: ${url}\n`, e);
+        logger.error({exception: e}, `Error creating screenshot for URL: ${url}\n`);
     }
     await browser.close();
     return savePath;
@@ -26,7 +27,7 @@ async function createScreenshot(url: string, savePath: string): Promise<string> 
 
 export async function getScreenshot(url: string): Promise<string | null> {
     if (!StringUtils.isUrl(url)) {
-        console.warn(`URL ${url} is not a valid URL. Skipping this service.`);
+        logger.error(`URL ${url} is not a valid URL. Skipping this service.`);
         return null
     }
     const publicUrl = `/${SCREENSHOT_DIRECTORY_NAME}/${getDomainName(url)}-${VIEWPORT_WIDTH}x${VIEWPORT_WIDTH}${IMAGE_EXTENSION}`;
