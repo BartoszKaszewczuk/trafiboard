@@ -27,14 +27,16 @@ export function TrafiServiceCard({serviceName, serviceRoute, thumbnailUrl}: {ser
                     <CardFooter
                         className="before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10"
                     >
-                        <div className="h-6 mr-3">
+                        <div className="h-6 w-6 mr-3">
                             <Image
                                 height="100%"
                                 className="h-6"
                                 src={serviceRoute + '/favicon.ico'}
                             ></Image>
                         </div>
-                        <p className="inline-block text-white/80">{serviceName}</p>
+                        <p className="inline-block text-white/80">
+                            {serviceName}
+                        </p>
                     </CardFooter>
                 </Link>
             </Card>
