@@ -10,9 +10,9 @@ export function TrafiServiceList({trafiServices}: { trafiServices: TrafiServiceP
         .filter(x => !isNullNorUndefined(x.name))
         .filter(x => !isNullNorUndefined(x.rule))
         .sort((a, b) => a.name.localeCompare(b.name))
-        .map((service) => {
+        .map((service, index) => {
                 return (<TrafiServiceCard {...service}
-                    key={service.name}
+                    key={service.name+index}
                     serviceName={service.getCleanName()}
                     serviceRoute={service.getRoutes()[0]}
                     thumbnailUrl={service.thumbnailUrl}>
