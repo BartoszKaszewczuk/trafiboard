@@ -18,6 +18,7 @@ const nextConfig = {
         // ...configYaml,
         TRAFI_TITLE: "TrafiBoard Apps",
     },
+    serverExternalPackages: ["pino", "pino-pretty"],
 };
 
 export default nextConfig;
