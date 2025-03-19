@@ -49,7 +49,6 @@ export default function Home() {
                     <TrafiServiceListGrouped key={index} title={host} trafiServices={services}></TrafiServiceListGrouped>
                 )}
             </TrafiTabs>
-            {/*<TrafiServiceListGrouped trafiServices={servicesFlat}></TrafiServiceListGrouped>*/}
         </main>
     )
 }
