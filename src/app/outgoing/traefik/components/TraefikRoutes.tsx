@@ -1,9 +1,9 @@
 'use client';
 import React, {use} from "react";
-import {  Table,  TableHeader,  TableBody,  TableColumn,  TableRow,  TableCell} from "@nextui-org/table";
+import {  Table,  TableHeader,  TableBody,  TableColumn,  TableRow,  TableCell} from "@heroui/table";
 import {TraefikRouter, TrafiService} from "@/app/outgoing/traefik/models";
-import {capitalize} from "@nextui-org/shared-utils";
-import {Link} from "@nextui-org/link";
+import {capitalize} from "@heroui/shared-utils";
+import {Link} from "@heroui/link";
 // import _ from "lodash";
 
 export function TraefikRoutes({trafiServices}: { trafiServices: TrafiService[] }) {

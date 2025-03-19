@@ -1,7 +1,7 @@
 import React, {use} from "react";
 import {getTrafiServices, getTrafiServicesFromHosts, isUrlValidUnsafe} from "@/app/outgoing/traefik/client";
 import {TrafiServiceListGrouped} from "@/app/outgoing/traefik/components/TrafiServiceListGrouped";
-import {Link} from "@nextui-org/react";
+import {Link} from "@heroui/react";
 import {getScreenshot} from "@/app/outgoing/screenshots/client";
 import {TraefikHost, TrafiService, TrafiServicePresentable} from "@/app/outgoing/traefik/models";
 import {TRAEFIK_HOSTS} from "@/app/outgoing/traefik/config";
