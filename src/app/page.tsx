@@ -3,8 +3,9 @@ import {getTrafiServices, getTrafiServicesFromHosts, isUrlValidUnsafe} from "@/a
 import {TrafiServiceListGrouped} from "@/app/outgoing/traefik/components/TrafiServiceListGrouped";
 import {Link} from "@heroui/react";
 import {getScreenshot} from "@/app/outgoing/screenshots/client";
-import {TraefikHost, TrafiService, TrafiServicePresentable} from "@/app/outgoing/traefik/models";
+import {TrafiService, TrafiServicePresentable} from "@/app/outgoing/traefik/models";
 import {TRAEFIK_HOSTS} from "@/app/outgoing/traefik/config";
+import {TrafiTabs} from "@/app/outgoing/traefik/components/TrafiTabs";
 
 function fetchTrafiServices(): TrafiService[] {
     return use(getTrafiServices(TRAEFIK_HOSTS[0]));
@@ -31,20 +32,24 @@ function fetchPresentableTrafiServices() {
 export default function Home() {
     const servicesPresentable = fetchPresentableTrafiServices();
     const servicesFlat = Array.from(servicesPresentable.values()).flat()
+    const mergedServices = new Map([["All", servicesFlat], ...servicesPresentable])
 
     return (
         <main className="container min-h-screen ml:px-5 m-auto flex-col items-center justify-between p-24">
             <div className="h-20">
                     <Link
-                        className="mb-1.5 text-3xl inline-block rounded-full bg-gray-500/50 py-2 px-6 text-white/90"
+                        className="mb-1.5 text-3xl inline-block rounded-full bg-gray-500/30 py-2 px-6 text-white/90 backdrop-blur-sm"
                         href="#"
                     >
                         {process.env.TRAFI_TITLE}
                     </Link>
             </div>
-            {/*<Divider orientation="horizontal"/>*/}
-            <TrafiServiceListGrouped trafiServices={servicesFlat}></TrafiServiceListGrouped>
-            {/*<TraefikRoutes trafiServices={services}></TraefikRoutes>*/}
+            <TrafiTabs>
+                {Array.from(mergedServices.entries()).map(([host,services], index) =>
+                    <TrafiServiceListGrouped key={index} title={host} trafiServices={services}></TrafiServiceListGrouped>
+                )}
+            </TrafiTabs>
+            {/*<TrafiServiceListGrouped trafiServices={servicesFlat}></TrafiServiceListGrouped>*/}
         </main>
     )
 }
