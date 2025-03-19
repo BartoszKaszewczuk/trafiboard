@@ -18,7 +18,8 @@ export default function RootLayout({children}: Readonly<{ children: React.ReactN
     return (
         <html lang="en">
         {/*<body className={inter.className}>*/}
-        <body className="light content-center text-foreground bg-background sm:bg-center lg:bg-contain" style={{ backgroundImage: `url(${bgUrl})`}} >
+        <body className="light content-center text-foreground bg-background sm:bg-center lg:bg-contain bg-fixed"
+              style={{backgroundImage: `url(${bgUrl})`}}>
         <Providers>
             {children}
         </Providers>
