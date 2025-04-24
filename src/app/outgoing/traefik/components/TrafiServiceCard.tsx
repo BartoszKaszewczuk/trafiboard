@@ -13,7 +13,7 @@ export function TrafiServiceCard({serviceName, serviceRoute, thumbnailUrl}: {ser
                 className="border-none object-cover"
                 fullWidth={true}
             >
-                <Link href={serviceRoute}>
+                <Link href={serviceRoute} target={"_blank"}>
                     <CardBody className="overflow-visible p-0">
                         <Image
                             isZoomed
