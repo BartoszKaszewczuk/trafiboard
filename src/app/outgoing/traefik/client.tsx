@@ -13,7 +13,7 @@ async function httpGetBody(url: string, requestInit: RequestInit | null = null):
             signal: AbortSignal.timeout(10000)
         })
     } catch (e) {
-        logger.error(`Error while calling URL: ${url} ${e.cause}`)
+        logger.error({e}, `Error while calling URL: ${url}`)
         return null;
     }
     if (!response.ok) {
