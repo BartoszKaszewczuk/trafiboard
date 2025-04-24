@@ -30,7 +30,7 @@ export function TrafiServiceCard({serviceName, serviceRoute, thumbnailUrl}: {ser
                         <div className="h-6 w-6 mr-3">
                             <Image
                                 height="100%"
-                                width="1em"
+                                width="100%"
                                 className="h-6"
                                 src={serviceRoute + '/favicon.ico'}
                             ></Image>
