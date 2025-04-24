@@ -1,14 +1,14 @@
 import {TrafiServicePresentable} from "@/app/outgoing/traefik/models";
 import {TrafiServiceCard} from "@/app/outgoing/traefik/components/TrafiServiceCard";
 
-function isNullNorUndefined(obj: any) {
+function isNullOrUndefined(obj: any) {
     return obj === undefined || obj === null;
 }
 
 export function TrafiServiceList({trafiServices}: { trafiServices: TrafiServicePresentable[] }) {
     const trafiServicesFiltered = trafiServices
-        .filter(x => !isNullNorUndefined(x.name))
-        .filter(x => !isNullNorUndefined(x.rule))
+        .filter(x => !isNullOrUndefined(x.name))
+        .filter(x => !isNullOrUndefined(x.rule))
         .sort((a, b) => a.name.localeCompare(b.name))
         .map((service, index) => {
                 return (<TrafiServiceCard {...service}

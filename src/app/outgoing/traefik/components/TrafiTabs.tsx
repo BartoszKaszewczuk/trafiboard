@@ -32,7 +32,7 @@ export function TrafiTabs(props: any) {
               classNames={{
                   tab: "max-w-fit px-3 bg-slate-200 bg-gray-500/30",
                   tabContent: "text-white/80",
-                  tabList: "backdrop-blur-sm bg-gray-500/30 border-1 border-gray-400",
+                  tabList: "backdrop-blur-sm bg-gray-500/30 border-1 border-white/30",
                   panel: "bg-transparent px-0",
               }}
         >

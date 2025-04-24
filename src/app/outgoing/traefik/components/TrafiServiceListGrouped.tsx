@@ -14,7 +14,7 @@ export function TrafiServiceListGrouped({title, trafiServices}: { title: string,
         .map((value, entryPointName) => {
             return (
                 <div key={entryPointName} className="pb-50 block">
-                    <h3 className="mt-16 mb-5 text-xl inline-block rounded-full bg-gray-500/30 py-2 px-6 text-white/90 backdrop-blur-sm">
+                    <h3 className="mt-16 mb-5 text-xl inline-block rounded-full bg-gray-500/30 py-2 px-6 text-white/90 backdrop-blur-sm border-white/10 border-1">
                         {entryPointName}
                     </h3>
                     <TrafiServiceList trafiServices={value}></TrafiServiceList>

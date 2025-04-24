@@ -38,7 +38,7 @@ export default function Home() {
         <main className="container min-h-screen ml:px-5 m-auto flex-col items-center justify-between p-24">
             <div className="h-20">
                     <Link
-                        className="mb-1.5 text-3xl inline-block rounded-full bg-gray-500/30 py-2 px-6 text-white/90 backdrop-blur-sm"
+                        className="mb-1.5 text-3xl inline-block rounded-full bg-gray-500/30 py-2 px-6 text-white/90 backdrop-blur-sm border-1 border-white/10"
                         href="#"
                     >
                         {process.env.TRAFI_TITLE}
