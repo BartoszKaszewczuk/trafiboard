@@ -46,7 +46,7 @@ export default function Home() {
             </div>
             <TrafiTabs>
                 {Array.from(mergedServices.entries()).map(([host,services], index) =>
-                    <TrafiServiceListGrouped key={index} title={host} trafiServices={services}></TrafiServiceListGrouped>
+                    <TrafiServiceListGrouped key={index} title={host} trafiServices={services} deduplicate={true}></TrafiServiceListGrouped>
                 )}
             </TrafiTabs>
         </main>

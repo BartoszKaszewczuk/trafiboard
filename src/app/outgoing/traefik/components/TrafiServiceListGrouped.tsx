@@ -2,10 +2,15 @@ import {TrafiServicePresentable} from "@/app/outgoing/traefik/models";
 import {TrafiServiceList} from "@/app/outgoing/traefik/components/TrafiServiceList";
 import _ from 'lodash'
 
-export function TrafiServiceListGrouped({title, trafiServices}: { title: string, trafiServices: TrafiServicePresentable[] }) {
+export function TrafiServiceListGrouped({title, trafiServices, deduplicate}: { title: string, trafiServices: TrafiServicePresentable[], deduplicate: boolean }) {
     const discardTypes = ['traefik'];
 
-    const trafiTypes = _.chain(trafiServices)
+    let chain = _.chain(trafiServices)
+    if (deduplicate) {
+        chain = chain.uniqBy("rule")
+    }
+    const trafiTypes = chain
+        .uniqBy("rule")
         /**
          * @see TrafiServicePresentable.entryPointType
          */
