@@ -14,15 +14,18 @@ declare module 'TrafiTypes' {
     interface TrafiServicePresentableList {
         trafiServices: TrafiServicePresentableType[]
     }
+    interface TrafiServicePresentableMap {
+        trafiServicesMap: Map<string, TrafiServicePresentableType[]>
+    }
     interface TrafiServiceListGroupedProps {
         trafiServices: TrafiServicePresentableType[]
-        deduplicate: boolean
     }
 }
 
 module.exports = {
     TrafiServicePresentableType,
     TrafiServicePresentableList,
+    TrafiServicePresentableMap,
 
     TrafiServiceListProps,
     TrafiServiceListGroupedProps
