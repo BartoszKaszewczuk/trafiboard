@@ -1,21 +1,21 @@
-import {TrafiServicePresentable} from "@/app/outgoing/traefik/models";
+'use client'
+import {TrafiService} from "@/app/outgoing/traefik/models";
 import {TrafiServiceCard} from "@/app/outgoing/traefik/components/TrafiServiceCard";
+import {FC} from "react";
+import {TrafiServiceListProps} from 'TrafiTypes'
+import {isNullOrUndefined} from "@/app/utils";
 
-function isNullOrUndefined(obj: any) {
-    return obj === undefined || obj === null;
-}
-
-export function TrafiServiceList({trafiServices}: { trafiServices: TrafiServicePresentable[] }) {
+export const TrafiServiceList: FC<TrafiServiceListProps> = ({trafiServices}: TrafiServiceListProps) => {
     const trafiServicesFiltered = trafiServices
         .filter(x => !isNullOrUndefined(x.name))
         .filter(x => !isNullOrUndefined(x.rule))
         .sort((a, b) => a.name.localeCompare(b.name))
         .map((service, index) => {
                 return (<TrafiServiceCard {...service}
-                    key={service.name+index}
-                    serviceName={service.getCleanName()}
-                    serviceRoute={service.getRoutes()[0]}
-                    thumbnailUrl={service.thumbnailUrl}>
+                                          key={service.name + index}
+                                          serviceName={TrafiService.cleanupTrafiServiceName(service.name)}
+                                          serviceRoute={TrafiService.getRoutesFromRule(service.rule, service.port)[0]}
+                                          thumbnailUrl={service.thumbnailUrl}>
                 </TrafiServiceCard>)
             }
         )
