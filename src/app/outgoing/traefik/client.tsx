@@ -8,7 +8,7 @@ import {logger} from "@/app/utils";
 async function httpGetBody(url: string, requestInit: RequestInit | null = null): Promise<any | null> {
     let response;
     try {
-        response = await fetch(url, { ...requestInit ,
+        response = await fetch(url, { ...requestInit,
             mode: 'no-cors',
             signal: AbortSignal.timeout(10000)
         })
@@ -27,6 +27,9 @@ export async function getApiVersion(host: TraefikHost): Promise<string | null> {
     isUrlValidUnsafe(host.url)
     const url = host.url + ENDPOINT_VERSION
     const version = await httpGetBody(url, { cache: 'no-store' });
+    if (!version) {
+        return null
+    }
     return version.Version ? version.Version : null
 }
 
