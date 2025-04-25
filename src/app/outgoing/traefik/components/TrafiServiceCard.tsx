@@ -39,6 +39,7 @@ export function TrafiServiceCard({serviceName, serviceRoute, thumbnailUrl}: {
                                 width="100%"
                                 className="h-6"
                                 src={faviconUrl}
+                                alt="favicon"
                             ></Image>
                         </div>
                         <p className="inline-block text-white/80">
