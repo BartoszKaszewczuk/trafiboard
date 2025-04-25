@@ -6,6 +6,9 @@ import {getScreenshot} from "@/app/outgoing/screenshots/client";
 import {TrafiService, TrafiServicePresentable} from "@/app/outgoing/traefik/models";
 import {TRAEFIK_HOSTS} from "@/app/outgoing/traefik/config";
 import {TrafiTabs} from "@/app/outgoing/traefik/components/TrafiTabs";
+import SearchFilter from "@/app/components/SerachFilter";
+import {TrafiServicePresentableList, TrafiServicePresentableType } from "TrafiTypes";
+import {TrafiServiceListGroupedFiltered} from "@/app/outgoing/traefik/components/TrafiServiceListGroupedFiltered";
 
 function fetchTrafiServices(): TrafiService[] {
     return use(getTrafiServices(TRAEFIK_HOSTS[0]));
@@ -28,9 +31,23 @@ function fetchPresentableTrafiServices() {
     }
     return mapOfPresentableServices
 }
+function fetchPresentableTrafiServicesType() {
+    const hosts: Map<string, TrafiService[]> = fetchTrafiServicesFromHosts()
+    const mapOfPresentableServices = new Map<string, TrafiServicePresentableType[]>()
+    for (const [host, services] of hosts.entries()) {
+        const presentables: TrafiServicePresentableType[] = services.map((service: TrafiService) => {
+//         const screenshot = use(getScreenshot(service.getRoutes()[0]))
+            const screenshot = null
+            return TrafiServicePresentable.fromTrafiServiceType(service, screenshot)
+        })
+        mapOfPresentableServices.set(host, presentables)
+    }
+    return mapOfPresentableServices
+}
 
 export default function Home() {
-    const servicesPresentable = fetchPresentableTrafiServices();
+    // const servicesPresentable = fetchPresentableTrafiServices();
+    const servicesPresentable = fetchPresentableTrafiServicesType();
     const servicesFlat = Array.from(servicesPresentable.values()).flat()
     const mergedServices = new Map([["All", servicesFlat], ...servicesPresentable])
 
@@ -44,11 +61,13 @@ export default function Home() {
                         {process.env.TRAFI_TITLE}
                     </Link>
             </div>
-            <TrafiTabs>
-                {Array.from(mergedServices.entries()).map(([host,services], index) =>
-                    <TrafiServiceListGrouped key={index} title={host} trafiServices={services} deduplicate={true}></TrafiServiceListGrouped>
-                )}
-            </TrafiTabs>
+            {/*<SearchFilter hay={servicesFlat.map(x => x.rule)}></SearchFilter>*/}
+            <TrafiServiceListGroupedFiltered trafiServicesMap={servicesPresentable}></TrafiServiceListGroupedFiltered>
+            {/*<TrafiTabs>*/}
+            {/*    {Array.from(mergedServices.entries()).map(([host,services], index) =>*/}
+            {/*        <TrafiServiceListGrouped key={index} trafiServices={services} deduplicate={true}></TrafiServiceListGrouped>*/}
+            {/*    )}*/}
+            {/*</TrafiTabs>*/}
         </main>
     )
 }
