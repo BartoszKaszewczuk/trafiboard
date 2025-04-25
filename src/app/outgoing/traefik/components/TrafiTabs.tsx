@@ -2,10 +2,15 @@
 
 import {Card, CardBody, Tab, Tabs} from "@heroui/react";
 import React from "react";
+import {isNullOrUndefined} from "@/app/utils";
 
 function getTabTitle(maybeTitle: string): string {
-    if (maybeTitle.includes("//")) {
-        return maybeTitle.split("//")[1]
+    if (isNullOrUndefined(maybeTitle)) {
+        return maybeTitle
+    }
+
+    if (maybeTitle.includes("://")) {
+        return maybeTitle.split("://")[1]
     } else {
         return maybeTitle
     }
