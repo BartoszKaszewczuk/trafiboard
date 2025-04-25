@@ -1,7 +1,7 @@
 import 'server-only'
 
 import {TraefikEntryPoint, TraefikHost, TraefikRouter, TrafiService} from "@/app/outgoing/traefik/models";
-import {ENDPOINT_ENTRYPOINTS, ENDPOINT_ROUTERS, ENDPOINT_VERSION} from "@/app/outgoing/traefik/config";
+import {ENDPOINT_TRAEFIK_ENTRYPOINTS, ENDPOINT_TRAEFIK_ROUTERS, ENDPOINT_TRAEFIK_VERSION} from "@/app/outgoing/traefik/config";
 import {plainToInstance} from 'class-transformer';
 import {logger} from "@/app/utils";
 
@@ -25,7 +25,7 @@ async function httpGetBody(url: string, requestInit: RequestInit | null = null):
 
 export async function getApiVersion(host: TraefikHost): Promise<string | null> {
     isUrlValidUnsafe(host.url)
-    const url = host.url + ENDPOINT_VERSION
+    const url = host.url + ENDPOINT_TRAEFIK_VERSION
     const version = await httpGetBody(url, { cache: 'no-store' });
     if (!version) {
         return null
@@ -39,7 +39,7 @@ export async function isApiReachable(host: TraefikHost): Promise<boolean> {
 
 export async function getRules(host: TraefikHost): Promise<TraefikRouter[]> {
     isUrlValidUnsafe(host.url)
-    const url = host.url + ENDPOINT_ROUTERS
+    const url = host.url + ENDPOINT_TRAEFIK_ROUTERS
     logger.trace(`Calling GET on Rules from ${url}`)
     const routes = await httpGetBody(url, { cache: 'no-store' });
     return routes.map((router: any) => {
@@ -56,7 +56,7 @@ export async function getRules(host: TraefikHost): Promise<TraefikRouter[]> {
 
 export async function getEntryPoints(host: TraefikHost): Promise<TraefikEntryPoint[]> {
     isUrlValidUnsafe(host.url)
-    const url = host.url + ENDPOINT_ENTRYPOINTS
+    const url = host.url + ENDPOINT_TRAEFIK_ENTRYPOINTS
     logger.trace(`Calling GET on Entrypoints from ${url}`)
     const entryPoints = await httpGetBody(url);
     return entryPoints.map((entryPoint: any) => {
