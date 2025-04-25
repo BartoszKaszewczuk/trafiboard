@@ -23,6 +23,7 @@
     "playwright": "^1.44.0",
     "react": "^18",
     "react-dom": "^18",
+    "react-icons": "^5.5.0",
     "reflect-metadata": "^0.2.1",
     "server-only": "^0.0.1",
     "turbocommons-ts": "^3.11.0"

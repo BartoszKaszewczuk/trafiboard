@@ -1,3 +1,5 @@
+import { TrafiServicePresentableType } from "TrafiTypes";
+
 export interface TraefikHost {
     url: string;
     username: string;
@@ -30,11 +32,15 @@ export class TrafiService implements TraefikRouter, TraefikEntryPoint {
     ) {}
 
     getCleanName(): string {
-        return this.name.split("@")[0]
+        return TrafiService.cleanupTrafiServiceName(this.name)
     }
 
     getRoutes(): string[] {
         return TrafiService.getRoutesFromRule(this.rule, this.port)
+    }
+
+    static cleanupTrafiServiceName(name: string): string {
+        return name.split("@")[0];
     }
 
     static getRoutesFromRule(rule: string, port: string): string[] {
@@ -67,5 +73,16 @@ export class TrafiServicePresentable extends TrafiService implements MaybeThumbn
 
     static fromTrafiService(trafiService: TrafiService, thumbnailUrl: string | null): TrafiServicePresentable {
         return new TrafiServicePresentable(trafiService.port, trafiService.provider, trafiService.name, trafiService.rule, trafiService.entryPointType, thumbnailUrl)
+    }
+    static fromTrafiServiceType(trafiService: TrafiService, thumbnailUrl: string | null): TrafiServicePresentableType {
+        const type: TrafiServicePresentableType = {
+            port: trafiService.port,
+            provider: trafiService.provider,
+            name: trafiService.name,
+            rule: trafiService.rule,
+            entryPointType: trafiService.entryPointType,
+            thumbnailUrl: thumbnailUrl
+        }
+        return type
     }
 }

@@ -8,7 +8,7 @@ import 'reflect-metadata';
 const inter = Inter({subsets: ["latin"]});
 
 export const metadata: Metadata = {
-    title: "Trafi",
+    title: "TrafiBoard",
     description: "Your dynamic homepage auto populated with Traefik routes",
 };
 

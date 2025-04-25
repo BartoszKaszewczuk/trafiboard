@@ -1,16 +1,13 @@
-import {TrafiServicePresentable} from "@/app/outgoing/traefik/models";
+'use client'
 import {TrafiServiceList} from "@/app/outgoing/traefik/components/TrafiServiceList";
 import _ from 'lodash'
+import React, {FC, useState} from "react";
+import {TrafiServiceListGroupedProps } from "TrafiTypes";
 
-export function TrafiServiceListGrouped({title, trafiServices, deduplicate}: { title: string, trafiServices: TrafiServicePresentable[], deduplicate: boolean }) {
+export const TrafiServiceListGrouped: FC<TrafiServiceListGroupedProps> = ({trafiServices}) => {
     const discardTypes = ['traefik'];
 
-    let chain = _.chain(trafiServices)
-    if (deduplicate) {
-        chain = chain.uniqBy("rule")
-    }
-    const trafiTypes = chain
-        .uniqBy("rule")
+    const trafiTypes = _.chain(trafiServices)
         /**
          * @see TrafiServicePresentable.entryPointType
          */
@@ -28,10 +25,12 @@ export function TrafiServiceListGrouped({title, trafiServices, deduplicate}: { t
         })
         .value()
 
-        const grouped = (
+    const grouped = (
+        <div>
             <div className="lg:grid-cols-4 gap-8 md:grid-cols-2 content-start">
                 {trafiTypes}
             </div>
-        )
-        return grouped;
+        </div>
+    )
+    return grouped;
 }
