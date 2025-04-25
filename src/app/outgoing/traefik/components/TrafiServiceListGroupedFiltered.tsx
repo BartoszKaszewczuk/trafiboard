@@ -20,7 +20,7 @@ export const TrafiServiceListGroupedFiltered: FC<TrafiServicePresentableMap> = (
     }
 
     const filtered = chain
-        .filter(x => x.rule.includes(query))
+        .filter(x => x.rule.includes(query) || x.name.includes(query))
         .value()
 
     const mergedServices = new Map([["All", filtered], ...trafiServicesMap])
