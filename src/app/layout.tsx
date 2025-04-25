@@ -10,6 +10,9 @@ const inter = Inter({subsets: ["latin"]});
 export const metadata: Metadata = {
     title: "TrafiBoard",
     description: "Your dynamic homepage auto populated with Traefik routes",
+    icons: {
+        icon: '/favicon.ico',
+    },
 };
 
 export default function RootLayout({children}: Readonly<{ children: React.ReactNode }>) {
