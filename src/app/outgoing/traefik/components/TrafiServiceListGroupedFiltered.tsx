@@ -27,7 +27,6 @@ export const TrafiServiceListGroupedFiltered: FC<TrafiServicePresentableMap> = (
 
     return (
         <div>
-            {/*<div className={"flex-col grid grid-flow-row-dense lg:grid-cols-4 gap-8 md:grid-cols-2"}>*/}
             <div className="flex w-full flex-col">
                 <Tabs aria-label="Hosts"
                       size={"md"}
