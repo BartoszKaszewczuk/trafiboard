@@ -1,9 +1,13 @@
 import 'server-only'
 
 import {TraefikEntryPoint, TraefikHost, TraefikRouter, TrafiService} from "@/app/outgoing/traefik/models";
-import {ENDPOINT_TRAEFIK_ENTRYPOINTS, ENDPOINT_TRAEFIK_ROUTERS, ENDPOINT_TRAEFIK_VERSION} from "@/app/outgoing/traefik/config";
+import {
+    ENDPOINT_TRAEFIK_ENTRYPOINTS,
+    ENDPOINT_TRAEFIK_ROUTERS,
+    ENDPOINT_TRAEFIK_VERSION
+} from "@/app/outgoing/traefik/config";
 import {plainToInstance} from 'class-transformer';
-import {logger} from "@/app/utils";
+import {isUrlValidUnsafe, logger} from "@/app/utils";
 
 async function httpGetBody(url: string, requestInit: RequestInit | null = null): Promise<any | null> {
     let response;
@@ -94,7 +98,7 @@ export async function getTrafiServicesFromHosts(traefikHosts: TraefikHost[]): Pr
 
     const offlineHosts = traefikHosts.filter(x => !onlineHosts.includes(x))
     if (offlineHosts.length > 0) {
-        logger.warn(`${offlineHosts.length} unreachable host(s): ${offlineHosts.map(x=>x.url).join(', ')}`)
+        logger.warn(`${offlineHosts.length} unreachable Traefik host(s): ${offlineHosts.map(x=>x.url).join(', ')}`)
     }
 
     await Promise.all(onlineHosts
@@ -111,28 +115,11 @@ async function filterOnlineHosts(hosts: TraefikHost[]): Promise<TraefikHost[]> {
     const onlineHosts: TraefikHost[] = []
     for (const host of hosts) {
         if (await isApiReachable(host)) {
-            logger.trace(`Host ${host.url} is reachable`)
+            logger.info(`Host ${host.url} is reachable and identified as Traefik`)
             onlineHosts.push(host)
         }
     }
     return onlineHosts
-}
-
-export function isUrlValid(url: string): boolean {
-    try {
-        new URL(url)
-        return true;
-    } catch (e) {
-        return false;
-    }
-}
-
-export function isUrlValidUnsafe(url: string): boolean {
-    const result = isUrlValid(url)
-    if (!result) {
-        throw new Error(`URL ${url} is invalid!`)
-    }
-    return result
 }
 
 export function throwIfUndefined(object: any) {
