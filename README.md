@@ -32,17 +32,9 @@ Include screenshots, GIFs, or a link to a live demo if available.
 
 ### 🐳 Docker Run
 ```bash
-# Clone the repository
-git clone https://github.com/your-username/your-project-name.git
-
-# Go into the project directory
-cd your-project-name
-
-# Install dependencies
-npm install
-
-# Run the app
-npm start
+docker run -p 8080:8080 --name traefiboard \ 
+  -e '[{"url":"https://traefik.instance1.com","username":"","password":""},{"url":"http://192.168.0.1","username":"","password":""},{"url":"https://nginx.instance3.com","username":"","password":""}]' \
+  ghcr.io/TBD
 ```
 
 ### 🐳 Docker Compose
@@ -52,7 +44,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: //TODO TBD
+    image: //TODO ghcr.io/TBD
     ports:
       - 8080:8080
     environment:
