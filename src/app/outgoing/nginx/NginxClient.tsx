@@ -131,20 +131,22 @@ export namespace NginxClient {
         if (!resp) {
             return []
         }
-        const services: TrafiService[] = resp.flatMap((resp: any) => {
-            const port = resp.certificate === null ? "80" : "443"
-            const type = port === "443" ? "HTTPS" : "HTTP"
-            return resp.domain_names
-                .filter((domain: any) => !domain.includes("*"))
-                .map((domain: any) => {
-                    const route = getRouteFromHost(domain, port)
-                    const trafiService = new TrafiService(
-                        port, "NGINX", domain, route, type
-                    );
-                    logger.trace(`Created a TrafiService ${JSON.stringify(trafiService)}`)
-                    return trafiService
-                })
-        })
+        const services: TrafiService[] = resp
+            .filter((nginx: any) => nginx.enabled === 1) // Omit disabled NGINX hosts
+            .flatMap((nginx: any) => {
+                const port = nginx.certificate === null ? "80" : "443"
+                const type = port === "443" ? "HTTPS" : "HTTP"
+                return nginx.domain_names
+                    .filter((domain: any) => !domain.includes("*"))
+                    .map((domain: any) => {
+                        const route = getRouteFromHost(domain, port)
+                        const trafiService = new TrafiService(
+                            port, "NGINX", domain, route, type
+                        );
+                        logger.trace(`Created a TrafiService ${JSON.stringify(trafiService)}`)
+                        return trafiService
+                    })
+            })
         logger.info(`Fetched ${services.length} NGINX domains from host ${host.url}: ${JSON.stringify(services)}`)
 
         return services
