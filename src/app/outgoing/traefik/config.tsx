@@ -8,6 +8,6 @@ export const ENDPOINT_TRAEFIK_ENTRYPOINTS = `/api/entrypoints`;
 export const ENDPOINT_TRAEFIK_VERSION = `/api/version`;
 export const TRAEFIK_HOSTS: TraefikHost[] = process.env.TRAFI_TRAEFIK_HOSTS ? JSON.parse(process.env.TRAFI_TRAEFIK_HOSTS) : []
 
-export const ENDPOINT_NGINX_HOSTS = `/api/nginx/proxy-hosts`;
+export const ENDPOINT_NGINX_HOSTS = `/api/nginx/proxy-hosts?expand=certificate`;
 export const ENDPOINT_NGINX_VERSION = `/api/`;
 export const ENDPOINT_NGINX_TOKEN = `/api/tokens`;
