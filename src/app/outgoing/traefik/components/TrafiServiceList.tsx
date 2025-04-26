@@ -13,8 +13,8 @@ export const TrafiServiceList: FC<TrafiServiceListProps> = ({trafiServices}: Tra
         .map((service, index) => {
                 return (<TrafiServiceCard {...service}
                                           key={service.name + index}
-                                          serviceName={TrafiService.cleanupTrafiServiceName(service.name)}
-                                          serviceRoute={TrafiService.getRoutesFromRule(service.rule, service.port)[0]}
+                                          serviceName={service.name}
+                                          serviceRoute={service.rule}
                                           thumbnailUrl={service.thumbnailUrl}>
                 </TrafiServiceCard>)
             }
