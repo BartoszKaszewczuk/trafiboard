@@ -173,7 +173,7 @@ export namespace NginxClient {
         const onlineHosts: TraefikHost[] = []
         for (const host of hosts) {
             if (await isApiReachable(host)) {
-                logger.info(`Host ${host.url} is reachable and identified as NGINX`)
+                logger.trace(`Host ${host.url} is reachable and identified as NGINX`)
                 onlineHosts.push(host)
             }
         }

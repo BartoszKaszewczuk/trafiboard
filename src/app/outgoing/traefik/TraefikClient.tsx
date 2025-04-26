@@ -130,7 +130,7 @@ export namespace TraefikClient {
         const onlineHosts: TraefikHost[] = []
         for (const host of hosts) {
             if (await isApiReachable(host)) {
-                logger.info(`Host ${host.url} is reachable and identified as Traefik`)
+                logger.trace(`Host ${host.url} is reachable and identified as Traefik`)
                 onlineHosts.push(host)
             }
         }
