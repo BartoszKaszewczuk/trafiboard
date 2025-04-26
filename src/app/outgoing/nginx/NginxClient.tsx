@@ -1,10 +1,6 @@
-import {isUrlValidUnsafe, logger as logger_master, logger} from "@/app/utils";
+import {isUrlValidUnsafe, logger as logger_master} from "@/app/utils";
 import {TraefikHost, TrafiService} from "@/app/outgoing/traefik/models";
-import {
-    ENDPOINT_NGINX_HOSTS,
-    ENDPOINT_NGINX_TOKEN,
-    ENDPOINT_NGINX_VERSION,
-} from "@/app/outgoing/traefik/config";
+import {ENDPOINT_NGINX_HOSTS, ENDPOINT_NGINX_TOKEN, ENDPOINT_NGINX_VERSION,} from "@/app/outgoing/traefik/config";
 
 
 export namespace NginxClient {
@@ -40,7 +36,7 @@ export namespace NginxClient {
     async function httpPostBody(url: string, requestInit: RequestInit | null = null): Promise<any | null> {
         let response;
         try {
-            const init: RequestInit = {
+            response = await fetch(url, {
                 ...requestInit,
                 method: 'POST',
                 mode: 'no-cors',
@@ -49,9 +45,7 @@ export namespace NginxClient {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json, */*;q=0.5'
                 }
-            };
-            logger.warn(`POSTing request: ${JSON.stringify(init)}`)
-            response = await fetch(url, init)
+            })
         } catch (e) {
             logger.error({e}, `Error while calling URL: ${url}`)
             return null;
