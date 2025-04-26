@@ -151,17 +151,17 @@ export namespace NginxClient {
         logger.info(`Fetching routes from NGINX hosts: ${traefikHosts.map(x => x.url).join(', ')}`)
 
         const onlineHosts = await filterOnlineHosts(traefikHosts)
-        logger.info(`${onlineHosts.length} online NGINX host(s): ${onlineHosts.map(x => x.url).join(', ')}`)
+        logger.info(`${onlineHosts.length} reachable NGINX host(s): ${onlineHosts.map(x => x.url).join(', ')}`)
 
         const offlineHosts = traefikHosts.filter(x => !onlineHosts.includes(x))
         if (offlineHosts.length > 0) {
-            logger.warn(`${offlineHosts.length} unreachable NGINX host(s): ${offlineHosts.map(x => x.url).join(', ')}`)
+            logger.warn(`${offlineHosts.length} not NGINX or unreachable host(s): ${offlineHosts.map(x => x.url).join(', ')}`)
         }
 
         await Promise.all(onlineHosts
             .map(async (host: TraefikHost) => {
                 const services = await getHosts(host);
-                logger.debug(`Indexed ${services.length} NGINX service routes hosted by ${host.url}`);
+                logger.info(`Indexed ${services.length} NGINX service routes hosted by ${host.url}`);
                 mapOfHosts.set(host.url, services)
             }))
         logger.debug(`Complete map of ${mapOfHosts.size} NGINX hosts: ${JSON.stringify(Object.fromEntries(mapOfHosts))}`)
@@ -173,7 +173,7 @@ export namespace NginxClient {
         const onlineHosts: TraefikHost[] = []
         for (const host of hosts) {
             if (await isApiReachable(host)) {
-                logger.info(`Host ${host.url} is reachable and identified as NGINX`)
+                logger.trace(`Host ${host.url} is reachable and identified as NGINX`)
                 onlineHosts.push(host)
             }
         }
