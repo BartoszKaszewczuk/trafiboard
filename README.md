@@ -21,7 +21,9 @@ Include screenshots, GIFs, or a link to a live demo if available.
    1. [Nginx Proxy Manager](https://nginxproxymanager.com)
 1. 👯 Toggleable deduplication of routes that are common across hosts
 2. 🎯 Search bar to find your services even faster!
-3. ⚙️ Dead simple to setup and maintain. Just configure the URLs to your proxies and TrafiBoard will figure out the type of proxy and how to extract its information.
+3. ⚙️ Dead simple to setup and maintain 
+   4. Just configure the URLs to your proxies and TrafiBoard will figure out the type of proxy and how to extract its information.
+4. 🐳 Docker deployment. Fast and simple.
 4. 💨 Stateless. No volumes to mount. No file permissions to deal with.
 
 ---
