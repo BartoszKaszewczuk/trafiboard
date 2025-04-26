@@ -1,14 +1,12 @@
 # 💡🐳 TrafiBoard
 
-TrafiBoard is a dynamic `Reverse-Proxy-to-Dashboard` application capable of aggregating multiple Reverse Proxies, parsing their data and generating dashboards that are always up to date with your infrastructure! 
+TrafiBoard is a dynamic `Reverse-Proxy-to-Dashboard` application capable of aggregating multiple Reverse Proxies, parsing their data and generating a unified dashboard that is always up to date with your infrastructure! 
 
 No more bookmarks or manually managed dashboards with broken links!
 
-- Tired of maintaining dashboards and bookmarks of your services?
-- Do you use Traefik as reverse proxy for your Docker containers?
-- Maybe Nginx Proxy Manager?
+Do you use Traefik as reverse proxy for your Docker containers or Nginx Proxy Manager?
 
-If you answered YES to any of the above then TrafiBoard may be just the tool for you.
+If so then TrafiBoard may be just the tool for you.
 
 TrafiBoard automagically generates a dashboard/index of services from reverse proxies (even multiple).
 
@@ -21,15 +19,16 @@ Include screenshots, GIFs, or a link to a live demo if available.
 1. 🧩 Supports indexing of Reverse Proxies:
    1. [Traefik](https://traefik.io/traefik/)
    1. [Nginx Proxy Manager](https://nginxproxymanager.com)
-1. 👯 Toggleable deduplication of routes common across hosts
-2. 🎯 Search bar to filter and find your services even faster!
+1. 👯 Toggleable deduplication of routes that are common across hosts
+2. 🎯 Search bar to find your services even faster!
 3. ⚙️ Dead simple to setup and maintain. Just configure the URLs to your proxies and TrafiBoard will figure out the type of proxy and how to extract its information.
+4. 💨 Stateless. No volumes to mount. No file permissions to deal with.
 
 ---
 
 ## 📦 Deployment
 
-### 🐳 Docker
+### 🐳 Docker Run
 ```bash
 # Clone the repository
 git clone https://github.com/your-username/your-project-name.git
@@ -77,7 +76,7 @@ services:
 ```
 ---
 
-## ⚠️ Known Issues
+## ⚠️ Current Limitations
 1. Only unprotected API access to Traefik is currently supported. We recommend setting up communication over a private network.
 2. Currently only services defining `favicon.ico` at the root will display a favicon beside service name.
 
