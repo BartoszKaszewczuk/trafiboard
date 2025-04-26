@@ -30,32 +30,6 @@ export class TrafiService implements TraefikRouter, TraefikEntryPoint {
         public rule: string,
         public entryPointType: string,
     ) {}
-
-    getCleanName(): string {
-        return TrafiService.cleanupTrafiServiceName(this.name)
-    }
-
-    getRoutes(): string[] {
-        return TrafiService.getRoutesFromRule(this.rule, this.port)
-    }
-
-    static cleanupTrafiServiceName(name: string): string {
-        return name.split("@")[0];
-    }
-
-    static getRoutesFromRule(rule: string, port: string): string[] {
-        const items = rule.split("||")
-            .map(subRule => subRule.substring(subRule.indexOf("`") + 1, subRule.lastIndexOf("`")))
-        return items.map(route => {
-            switch (port) {
-                case ":443":
-                    return `https://${route}`
-                default:
-                    // noinspection HttpUrlsUsage
-                    return `http://${route}`
-            }
-        })
-    }
 }
 
 export class TrafiServicePresentable extends TrafiService implements MaybeThumbnail {

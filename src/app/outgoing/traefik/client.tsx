@@ -7,12 +7,15 @@ import {
     ENDPOINT_TRAEFIK_VERSION
 } from "@/app/outgoing/traefik/config";
 import {plainToInstance} from 'class-transformer';
-import {isUrlValidUnsafe, logger} from "@/app/utils";
+import {isUrlValidUnsafe, logger as logger_master} from "@/app/utils";
+
+const logger = logger_master.child({module: "TRAEFIK"})
 
 async function httpGetBody(url: string, requestInit: RequestInit | null = null): Promise<any | null> {
     let response;
     try {
-        response = await fetch(url, { ...requestInit,
+        response = await fetch(url, {
+            ...requestInit,
             mode: 'no-cors',
             signal: AbortSignal.timeout(10000)
         })
@@ -21,7 +24,6 @@ async function httpGetBody(url: string, requestInit: RequestInit | null = null):
         return null;
     }
     if (!response.ok) {
-        // This will activate the closest `error.js` Error Boundary
         throw new Error(`Error calling endpoint ${url}: ${response.status}`)
     }
     return response.json();
@@ -30,11 +32,15 @@ async function httpGetBody(url: string, requestInit: RequestInit | null = null):
 export async function getApiVersion(host: TraefikHost): Promise<string | null> {
     isUrlValidUnsafe(host.url)
     const url = host.url + ENDPOINT_TRAEFIK_VERSION
-    const version = await httpGetBody(url, { cache: 'no-store' });
-    if (!version) {
+    try {
+        const version = await httpGetBody(url, {cache: 'no-store'});
+        if (!version) {
+            return null
+        }
+        return version.Version ? version.Version : null
+    } catch (e) {
         return null
     }
-    return version.Version ? version.Version : null
 }
 
 export async function isApiReachable(host: TraefikHost): Promise<boolean> {
@@ -45,7 +51,7 @@ export async function getRules(host: TraefikHost): Promise<TraefikRouter[]> {
     isUrlValidUnsafe(host.url)
     const url = host.url + ENDPOINT_TRAEFIK_ROUTERS
     logger.trace(`Calling GET on Rules from ${url}`)
-    const routes = await httpGetBody(url, { cache: 'no-store' });
+    const routes = await httpGetBody(url, {cache: 'no-store'});
     return routes.map((router: any) => {
             const out: TraefikRouter = {
                 provider: router.provider,
@@ -79,35 +85,43 @@ export async function getTrafiServices(traefikHost: TraefikHost): Promise<TrafiS
 
     const mapOfEntryPoints = new Map<string, TraefikEntryPoint>()
     entryPoints.forEach((entryPoint) => mapOfEntryPoints.set(entryPoint.name, entryPoint))
-    return (rules.map(rule => {
-        return plainToInstance(
-            TrafiService,
-            {
-                ...mapOfEntryPoints.get(rule.entryPointType),
-                ...rule,
-            })
-    }));
+    const trafiServices = rules
+        .map(rule => {
+            return plainToInstance(
+                TrafiService,
+                {
+                    ...mapOfEntryPoints.get(rule.entryPointType),
+                    ...rule,
+                })
+        })
+        .map(service => {
+            // Transform Traefik Rules into Trafi routes
+            service.name = cleanupTrafiServiceName(service.name)
+            service.rule = getRoutesFromRule(service.rule, service.port)[0]
+            return service
+        });
+    return trafiServices
 }
 
 export async function getTrafiServicesFromHosts(traefikHosts: TraefikHost[]): Promise<Map<string, TrafiService[]>> {
     const mapOfHosts = new Map<string, TrafiService[]>()
-    logger.info(`Fetching routes from Traefik hosts: ${traefikHosts.map(x=>x.url).join(', ')}`)
+    logger.info(`Fetching routes from Traefik hosts: ${traefikHosts.map(x => x.url).join(', ')}`)
 
     const onlineHosts = await filterOnlineHosts(traefikHosts)
-    logger.info(`${onlineHosts.length} online host(s): ${onlineHosts.map(x=>x.url).join(', ')}`)
+    logger.info(`${onlineHosts.length} online Traefik host(s): ${onlineHosts.map(x => x.url).join(', ')}`)
 
     const offlineHosts = traefikHosts.filter(x => !onlineHosts.includes(x))
     if (offlineHosts.length > 0) {
-        logger.warn(`${offlineHosts.length} unreachable Traefik host(s): ${offlineHosts.map(x=>x.url).join(', ')}`)
+        logger.warn(`${offlineHosts.length} unreachable Traefik host(s): ${offlineHosts.map(x => x.url).join(', ')}`)
     }
 
     await Promise.all(onlineHosts
         .map(async (host: TraefikHost) => {
             const services = await getTrafiServices(host);
-            logger.debug(`Indexed ${services.length} service routes hosted by ${host.url}`);
+            logger.debug(`Indexed ${services.length} Traefik service routes hosted by ${host.url}`);
             mapOfHosts.set(host.url, services)
-    }))
-    logger.debug(`Complete map of ${mapOfHosts.size} hosts: ${JSON.stringify(Object.fromEntries(mapOfHosts))}`)
+        }))
+    logger.debug(`Complete map of ${mapOfHosts.size} Traefik hosts: ${JSON.stringify(Object.fromEntries(mapOfHosts))}`)
     return mapOfHosts
 }
 
@@ -127,4 +141,22 @@ export function throwIfUndefined(object: any) {
         throw new Error(`Value should be defined but encountered: ${object}`)
     }
     return object
+}
+
+function cleanupTrafiServiceName(name: string): string {
+    return name.split("@")[0];
+}
+
+function getRoutesFromRule(rule: string, port: string): string[] {
+    const items = rule.split("||")
+        .map(subRule => subRule.substring(subRule.indexOf("`") + 1, subRule.lastIndexOf("`")))
+    return items.map(route => {
+        switch (port) {
+            case ":443" || "https":
+                return `https://${route}`
+            default:
+                // noinspection HttpUrlsUsage
+                return `http://${route}`
+        }
+    })
 }
