@@ -1,5 +1,4 @@
 import React, {use} from "react";
-import {getTrafiServicesFromHosts} from "@/app/outgoing/traefik/client";
 import {Link} from "@heroui/react";
 import {getScreenshot} from "@/app/outgoing/screenshots/client";
 import {TrafiService, TrafiServicePresentable} from "@/app/outgoing/traefik/models";
@@ -7,9 +6,10 @@ import {TRAEFIK_HOSTS} from "@/app/outgoing/traefik/config";
 import {TrafiServicePresentableType} from "TrafiTypes";
 import {TrafiServiceListGroupedFiltered} from "@/app/outgoing/traefik/components/TrafiServiceListGroupedFiltered";
 import {NginxClient} from "@/app/outgoing/nginx/NginxClient";
+import {TraefikClient} from "@/app/outgoing/traefik/TraefikClient";
 
 function fetchTrafiServicesFromHosts(): Map<string, TrafiService[]> {
-    return use(getTrafiServicesFromHosts(TRAEFIK_HOSTS));
+    return use(TraefikClient.getTrafiServicesFromHosts(TRAEFIK_HOSTS));
 }
 
 function fetchTrafiServicesFromNginxHosts(): Map<string, TrafiService[]> {
