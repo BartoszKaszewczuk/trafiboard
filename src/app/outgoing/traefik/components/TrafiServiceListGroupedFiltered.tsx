@@ -44,7 +44,7 @@ export const TrafiServiceListGroupedFiltered: FC<TrafiServicePresentableMap> = (
                             {host.toLowerCase() === "all" ?
                                 <div>
                                     <div
-                                        className="flex flex-row p-1 mb-3 rounded-lg backdrop-blur-sm bg-gray-500/30 border-1 border-white/30">
+                                        className="flex flex-row p-1 mb-5 rounded-lg backdrop-blur-sm bg-gray-500/30 border-1 border-white/30">
                                         <div className="flex-auto w-80">
                                             <Input
                                                 type="text"

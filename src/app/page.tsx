@@ -38,21 +38,16 @@ export default function Home() {
     const servicesPresentable = fetchPresentableTrafiServicesType();
 
     return (
-        <main className="container min-h-screen ml:px-5 m-auto flex-col items-center justify-between p-24">
-            <div className="h-20">
-                <Link
-                    className="mb-1.5 text-3xl inline-block rounded-full bg-gray-500/30 py-2 px-6 text-white/90 backdrop-blur-sm border-1 border-white/10"
-                    href="#"
-                >
-                    {process.env.TRAFI_TITLE}
-                </Link>
-            </div>
+        <main
+            className="container min-h-screen m-auto flex-col items-center justify-between pt-10 sm:p-24 px-5 lg:px-20 sm:px-10"
+        >
+            <Link
+                className="text-3xl inline-block rounded-full bg-gray-500/30 py-2 px-6 mb-5 text-white/90 backdrop-blur-sm border-1 border-white/10"
+                href="#"
+            >
+                {process.env.TRAFI_TITLE}
+            </Link>
             <TrafiServiceListGroupedFiltered trafiServicesMap={servicesPresentable}></TrafiServiceListGroupedFiltered>
-            {/*<TrafiTabs>*/}
-            {/*    {Array.from(mergedServices.entries()).map(([host,services], index) =>*/}
-            {/*        <TrafiServiceListGrouped key={index} trafiServices={services} deduplicate={true}></TrafiServiceListGrouped>*/}
-            {/*    )}*/}
-            {/*</TrafiTabs>*/}
         </main>
     )
 }

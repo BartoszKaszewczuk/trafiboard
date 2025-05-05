@@ -9,12 +9,12 @@ export function TrafiServiceCard({serviceName, serviceRoute, thumbnailUrl}: {
 }) {
     const faviconUrl = serviceRoute + '/favicon.ico'
     return (
-        <div key={serviceName} className="text-wrap">
             <Card
+                key={serviceName}
                 isFooterBlurred
                 onPress={(e) => window.open(serviceRoute)}
                 radius="lg"
-                className="border-none object-cover max-w-[350px]"
+                className="border-none object-cover max-w-[300px] text-wrap"
                 fullWidth={true}
             >
                 <Link href={serviceRoute} target={"_blank"}>
@@ -54,6 +54,5 @@ export function TrafiServiceCard({serviceName, serviceRoute, thumbnailUrl}: {
                     </CardFooter>
                 </Link>
             </Card>
-        </div>
     )
 }

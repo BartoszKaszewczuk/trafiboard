@@ -21,7 +21,7 @@ export const TrafiServiceList: FC<TrafiServiceListProps> = ({trafiServices}: Tra
         )
 
     const wrapped = (
-        <div className="grid grid-flow-row-dense lg:grid-cols-4 gap-8 md:grid-cols-2 content-start">
+        <div className="grid grid-flow-row-dense content-start place-items-center lg:grid-cols-4 gap-8 md:grid-cols-2">
             {trafiServicesFiltered}
         </div>
     )

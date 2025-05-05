@@ -1,4 +1,4 @@
-import type {Metadata} from "next";
+import type {Metadata, Viewport} from "next";
 import {Inter} from "next/font/google";
 import "./globals.css";
 import React from "react";
@@ -6,6 +6,7 @@ import {Providers} from "@/app/providers";
 import 'reflect-metadata';
 
 const inter = Inter({subsets: ["latin"]});
+export const viewport: Viewport = { width: "device-width", initialScale: 1.0 }
 
 export const metadata: Metadata = {
     title: "TrafiBoard",
@@ -21,7 +22,7 @@ export default function RootLayout({children}: Readonly<{ children: React.ReactN
     return (
         <html lang="en">
         {/*<body className={inter.className}>*/}
-        <body className="light content-center text-foreground bg-background sm:bg-center lg:bg-contain bg-fixed"
+        <body className="light content-center text-foreground bg-background sm:bg-top lg:bg-contain bg-fixed"
               style={{backgroundImage: `url(${bgUrl})`}}>
         <Providers>
             {children}
