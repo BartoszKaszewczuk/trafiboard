@@ -1,5 +1,4 @@
 'use client'
-import {TrafiService} from "@/app/outgoing/traefik/models";
 import {TrafiServiceCard} from "@/app/outgoing/traefik/components/TrafiServiceCard";
 import {FC} from "react";
 import {TrafiServiceListProps} from 'TrafiTypes'
@@ -13,15 +12,14 @@ export const TrafiServiceList: FC<TrafiServiceListProps> = ({trafiServices}: Tra
         .map((service, index) => {
                 return (<TrafiServiceCard {...service}
                                           key={service.name + index}
-                                          serviceName={service.name}
-                                          serviceRoute={service.rule}
-                                          thumbnailUrl={service.thumbnailUrl}>
+                                          trafiService={service}
+                >
                 </TrafiServiceCard>)
             }
         )
 
     const wrapped = (
-        <div className="grid grid-flow-row-dense content-start place-items-center lg:grid-cols-4 gap-8 md:grid-cols-2">
+        <div className="grid grid-flow-row-dense content-start place-items-center lg:grid-cols-4 gap-8 grid-cols-2">
             {trafiServicesFiltered}
         </div>
     )

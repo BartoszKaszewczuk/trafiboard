@@ -1,4 +1,4 @@
-import {TraefikHost} from "@/app/outgoing/traefik/models";
+import {TraefikHost} from "TrafiTypes";
 
 const TRAEFIK_ROOT = process.env.TRAFI_TRAEFIK_URL
 // export const ENDPOINT_ROUTERS = `${TRAEFIK_ROOT}/api/http/routers`;

@@ -1,12 +1,13 @@
 'use client';
 import {Card, CardFooter, Image, CardBody, Link} from "@heroui/react";
 import {nullAsUndefined} from "null-as-undefined";
+import {TrafiServiceCardProps} from 'TrafiTypes'
+import {FC} from "react";
 
-export function TrafiServiceCard({serviceName, serviceRoute, thumbnailUrl}: {
-    serviceName: string;
-    serviceRoute: string;
-    thumbnailUrl: string | null;
-}) {
+export const TrafiServiceCard: FC<TrafiServiceCardProps> = ({trafiService}: TrafiServiceCardProps) => {
+    const serviceName = trafiService.name
+    const serviceRoute = trafiService.rule
+    const thumbnailUrl = trafiService.thumbnailUrl
     const faviconUrl = serviceRoute + '/favicon.ico'
     return (
             <Card

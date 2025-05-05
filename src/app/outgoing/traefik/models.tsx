@@ -1,29 +1,35 @@
-import { TrafiServicePresentableType } from "TrafiTypes";
+import { TrafiServicePresentableType, TraefikRouter, TraefikEntryPoint } from "TrafiTypes";
 
-export interface TraefikHost {
-    url: string;
-    username: string;
-    password: string;
-}
+// export interface TraefikHost {
+//     url: string;
+//     username: string;
+//     password: string;
+// }
 
-export interface TraefikRouter {
-    provider: string;
-    name: string;
-    rule: string;
-    entryPointType: string;
-}
-
-export interface TraefikEntryPoint {
-    name: string;
-    port: string;
-}
+// export interface TraefikRouter {
+//     provider: string;
+//     name: string;
+//     rule: string;
+//     entryPointType: string;
+// }
+//
+// export interface TraefikEntryPoint {
+//     name: string;
+//     port: string;
+// }
 
 export interface MaybeThumbnail {
     thumbnailUrl: string | null,
 }
 
+export enum ServiceType {
+    TRAEFIK,
+    NGINX
+}
+
 export class TrafiService implements TraefikRouter, TraefikEntryPoint {
     constructor(
+        public serviceType: ServiceType,
         public port: string,
         public provider: string,
         public name: string,
@@ -34,6 +40,7 @@ export class TrafiService implements TraefikRouter, TraefikEntryPoint {
 
 export class TrafiServicePresentable extends TrafiService implements MaybeThumbnail {
     constructor(
+        public serviceType: ServiceType,
         public port: string,
         public provider: string,
         public name: string,
@@ -41,15 +48,16 @@ export class TrafiServicePresentable extends TrafiService implements MaybeThumbn
         public entryPointType: string,
         public thumbnailUrl: string | null,
     ) {
-        super(port, provider, name, rule, entryPointType)
+        super(serviceType, port, provider, name, rule, entryPointType)
         this.thumbnailUrl = thumbnailUrl
     }
 
     static fromTrafiService(trafiService: TrafiService, thumbnailUrl: string | null): TrafiServicePresentable {
-        return new TrafiServicePresentable(trafiService.port, trafiService.provider, trafiService.name, trafiService.rule, trafiService.entryPointType, thumbnailUrl)
+        return new TrafiServicePresentable(trafiService.serviceType, trafiService.port, trafiService.provider, trafiService.name, trafiService.rule, trafiService.entryPointType, thumbnailUrl)
     }
     static fromTrafiServiceType(trafiService: TrafiService, thumbnailUrl: string | null): TrafiServicePresentableType {
         const type: TrafiServicePresentableType = {
+            serviceType: trafiService.serviceType,
             port: trafiService.port,
             provider: trafiService.provider,
             name: trafiService.name,

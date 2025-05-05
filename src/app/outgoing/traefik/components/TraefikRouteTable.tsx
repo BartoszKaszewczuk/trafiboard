@@ -1,10 +1,8 @@
 'use client';
 import React, {use} from "react";
 import {  Table,  TableHeader,  TableBody,  TableColumn,  TableRow,  TableCell} from "@heroui/table";
-import {TraefikRouter, TrafiService} from "@/app/outgoing/traefik/models";
 import {capitalize} from "@heroui/shared-utils";
-import {Link} from "@heroui/link";
-// import _ from "lodash";
+import {TrafiService} from "TrafiTypes";
 
 export function TraefikRoutes({trafiServices}: { trafiServices: TrafiService[] }) {
     const services = trafiServices;

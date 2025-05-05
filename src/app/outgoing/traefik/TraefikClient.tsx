@@ -1,13 +1,14 @@
 import 'server-only'
 
-import {TraefikEntryPoint, TraefikHost, TraefikRouter, TrafiService} from "@/app/outgoing/traefik/models";
 import {
     ENDPOINT_TRAEFIK_ENTRYPOINTS,
     ENDPOINT_TRAEFIK_ROUTERS,
     ENDPOINT_TRAEFIK_VERSION
 } from "@/app/outgoing/traefik/config";
-import {plainToInstance} from 'class-transformer';
+// import {plainToInstance} from 'class-transformer';
 import {isUrlValidUnsafe, logger as logger_master} from "@/app/utils";
+import {ServiceType, TrafiService} from "@/app/outgoing/traefik/models";
+import { TrafiServicePresentableType, TraefikEntryPoint, TraefikRouter, TraefikHost } from "TrafiTypes";
 
 export namespace TraefikClient {
     const logger = logger_master.child({module: "TRAEFIK"})
@@ -86,15 +87,21 @@ export namespace TraefikClient {
 
         const mapOfEntryPoints = new Map<string, TraefikEntryPoint>()
         entryPoints.forEach((entryPoint) => mapOfEntryPoints.set(entryPoint.name, entryPoint))
-        const trafiServices = rules
+        const services: TrafiService[] = rules
             .map(rule => {
-                return plainToInstance(
-                    TrafiService,
-                    {
-                        ...mapOfEntryPoints.get(rule.entryPointType),
-                        ...rule,
-                    })
+                const entrypoint = mapOfEntryPoints.get(rule.entryPointType);
+                if (!entrypoint) {
+                    const errMessage = `Entrypoint '${rule.entryPointType}' of service '${rule.name}' was not found in Traefik ${traefikHost.url} entrypoints: ${Array.from(mapOfEntryPoints.keys())}. Are Traefik routes configured correctly?`;
+                    logger.error(errMessage)
+                    return null
+                }
+                return new TrafiService(
+                    ServiceType.TRAEFIK, entrypoint.port, rule.provider, entrypoint.name, rule.rule, rule.entryPointType
+                )
             })
+            .filter(maybeNull => maybeNull !== null) as TrafiService[]
+
+        const trafiServices: TrafiService[] = services // Filter out nulls
             .map(service => {
                 // Transform Traefik Rules into Trafi routes
                 service.name = cleanupTrafiServiceName(service.name)
@@ -149,7 +156,8 @@ export namespace TraefikClient {
     }
 
     function getRoutesFromRule(rule: string, port: string): string[] {
-        const items = rule.split("||")
+        const items = rule
+            .split("||")
             .map(subRule => subRule.substring(subRule.indexOf("`") + 1, subRule.lastIndexOf("`")))
         return items.map(route => {
             switch (port) {

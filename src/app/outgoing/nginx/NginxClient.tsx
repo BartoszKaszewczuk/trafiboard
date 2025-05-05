@@ -1,6 +1,9 @@
+import 'server-only'
+
+import {TraefikHost} from "TrafiTypes";
 import {isUrlValidUnsafe, logger as logger_master} from "@/app/utils";
-import {TraefikHost, TrafiService} from "@/app/outgoing/traefik/models";
 import {ENDPOINT_NGINX_HOSTS, ENDPOINT_NGINX_TOKEN, ENDPOINT_NGINX_VERSION,} from "@/app/outgoing/traefik/config";
+import {ServiceType, TrafiService} from "@/app/outgoing/traefik/models";
 
 
 export namespace NginxClient {
@@ -55,7 +58,6 @@ export namespace NginxClient {
         }
         return response.json();
     }
-
 
     export async function getApiVersion(host: TraefikHost): Promise<string | null> {
         isUrlValidUnsafe(host.url)
@@ -135,7 +137,7 @@ export namespace NginxClient {
                     .map((domain: any) => {
                         const route = getRouteFromHost(domain, port)
                         const trafiService = new TrafiService(
-                            port, "NGINX", domain, route, type
+                            ServiceType.NGINX, port, "NGINX", domain, route, type
                         );
                         logger.trace(`Created a TrafiService ${JSON.stringify(trafiService)}`)
                         return trafiService
@@ -168,7 +170,6 @@ export namespace NginxClient {
         return mapOfHosts
     }
 
-
     async function filterOnlineHosts(hosts: TraefikHost[]): Promise<TraefikHost[]> {
         const onlineHosts: TraefikHost[] = []
         for (const host of hosts) {
@@ -179,7 +180,6 @@ export namespace NginxClient {
         }
         return onlineHosts
     }
-
 
     function getRouteFromHost(rule: string, port: string): string {
         switch (port) {
