@@ -2,7 +2,7 @@
 import React, {use} from "react";
 import {  Table,  TableHeader,  TableBody,  TableColumn,  TableRow,  TableCell} from "@heroui/table";
 import {capitalize} from "@heroui/shared-utils";
-import {TrafiService} from "TrafiTypes";
+import {TrafiService} from "@/app/outgoing/traefik/models";
 
 export function TraefikRoutes({trafiServices}: { trafiServices: TrafiService[] }) {
     const services = trafiServices;
