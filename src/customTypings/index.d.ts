@@ -24,8 +24,8 @@ declare module 'TrafiTypes' {
     }
 
     declare enum ServiceType {
-        TRAEFIK,
-        NGINX
+        TRAEFIK = "TRAEFIK",
+        NGINX = "NGINX"
     }
 
     // class TrafiService implements TraefikRouter, TraefikEntryPoint {
@@ -107,6 +107,7 @@ declare module 'TrafiTypes' {
 
 module.exports = {
     TraefikHost,
+    TrafiHost,
     ServiceType,
     TrafiService,
     TrafiServicePresentable,

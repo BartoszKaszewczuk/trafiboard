@@ -23,8 +23,8 @@ export interface MaybeThumbnail {
 }
 
 export enum ServiceType {
-    TRAEFIK,
-    NGINX
+    TRAEFIK = "TRAEFIK",
+    NGINX = "NGINX"
 }
 
 export class TrafiService implements TraefikRouter, TraefikEntryPoint {
