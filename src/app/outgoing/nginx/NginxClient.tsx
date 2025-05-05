@@ -1,6 +1,6 @@
 import 'server-only'
 
-import {TraefikHost} from "TrafiTypes";
+import {TraefikHost, TrafiHost} from "TrafiTypes";
 import {isUrlValidUnsafe, logger as logger_master} from "@/app/utils";
 import {ENDPOINT_NGINX_HOSTS, ENDPOINT_NGINX_TOKEN, ENDPOINT_NGINX_VERSION,} from "@/app/outgoing/traefik/config";
 import {ServiceType, TrafiService} from "@/app/outgoing/traefik/models";
@@ -148,8 +148,8 @@ export namespace NginxClient {
         return services
     }
 
-    export async function getTrafiServicesFromHosts(traefikHosts: TraefikHost[]): Promise<Map<string, TrafiService[]>> {
-        const mapOfHosts = new Map<string, TrafiService[]>()
+    export async function getTrafiServicesFromHosts(traefikHosts: TraefikHost[]): Promise<Map<TrafiHost, TrafiService[]>> {
+        const mapOfHosts = new Map<TrafiHost, TrafiService[]>()
         logger.info(`Fetching routes from NGINX hosts: ${traefikHosts.map(x => x.url).join(', ')}`)
 
         const onlineHosts = await filterOnlineHosts(traefikHosts)
@@ -164,7 +164,11 @@ export namespace NginxClient {
             .map(async (host: TraefikHost) => {
                 const services = await getHosts(host);
                 logger.info(`Indexed ${services.length} NGINX service routes hosted by ${host.url}`);
-                mapOfHosts.set(host.url, services)
+                const key: TrafiHost = {
+                    hostname: host.url,
+                    hostType: ServiceType.TRAEFIK
+                }
+                mapOfHosts.set(key, services)
             }))
         logger.debug(`Complete map of ${mapOfHosts.size} NGINX hosts: ${JSON.stringify(Object.fromEntries(mapOfHosts))}`)
         return mapOfHosts

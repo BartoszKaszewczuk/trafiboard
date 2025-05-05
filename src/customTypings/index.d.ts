@@ -80,6 +80,11 @@ declare module 'TrafiTypes' {
         thumbnailUrl: string | null,
     }
 
+    interface TrafiHost {
+        hostname: string,
+        hostType: ServiceType,
+    }
+
     interface TrafiServiceCardProps {
         trafiService: TrafiServicePresentableType
     }
@@ -91,6 +96,9 @@ declare module 'TrafiTypes' {
     }
     interface TrafiServicePresentableMap {
         trafiServicesMap: Map<string, TrafiServicePresentableType[]>
+    }
+    interface TrafiHostServiceMap {
+        trafiServicesMap: Map<TrafiHost, TrafiServicePresentableType[]>
     }
     interface TrafiServiceListGroupedProps {
         trafiServices: TrafiServicePresentableType[]
@@ -108,6 +116,7 @@ module.exports = {
     TrafiServicePresentableType,
     TrafiServicePresentableList,
     TrafiServicePresentableMap,
+    TrafiHostServiceMap,
 
     TrafiServiceListProps,
     TrafiServiceListGroupedProps

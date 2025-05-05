@@ -8,7 +8,7 @@ import {
 // import {plainToInstance} from 'class-transformer';
 import {isUrlValidUnsafe, logger as logger_master} from "@/app/utils";
 import {ServiceType, TrafiService} from "@/app/outgoing/traefik/models";
-import { TrafiServicePresentableType, TraefikEntryPoint, TraefikRouter, TraefikHost } from "TrafiTypes";
+import { TrafiServicePresentableType, TraefikEntryPoint, TraefikRouter, TraefikHost, TrafiHost } from "TrafiTypes";
 
 export namespace TraefikClient {
     const logger = logger_master.child({module: "TRAEFIK"})
@@ -111,8 +111,8 @@ export namespace TraefikClient {
         return trafiServices
     }
 
-    export async function getTrafiServicesFromHosts(traefikHosts: TraefikHost[]): Promise<Map<string, TrafiService[]>> {
-        const mapOfHosts = new Map<string, TrafiService[]>()
+    export async function getTrafiServicesFromHosts(traefikHosts: TraefikHost[]): Promise<Map<TrafiHost, TrafiService[]>> {
+        const mapOfHosts = new Map<TrafiHost, TrafiService[]>()
         logger.info(`Fetching routes from Traefik hosts: ${traefikHosts.map(x => x.url).join(', ')}`)
 
         const onlineHosts = await filterOnlineHosts(traefikHosts)
@@ -127,7 +127,12 @@ export namespace TraefikClient {
             .map(async (host: TraefikHost) => {
                 const services = await getTrafiServices(host);
                 logger.info(`Indexed ${services.length} Traefik service routes hosted by ${host.url}`);
-                mapOfHosts.set(host.url, services)
+                const key: TrafiHost = {
+                    hostname: host.url,
+                    hostType: ServiceType.TRAEFIK
+                }
+                // mapOfHosts.set(host.url, services)
+                mapOfHosts.set(key, services)
             }))
         logger.debug(`Complete map of ${mapOfHosts.size} Traefik hosts: ${JSON.stringify(Object.fromEntries(mapOfHosts))}`)
         return mapOfHosts
