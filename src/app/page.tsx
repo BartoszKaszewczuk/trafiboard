@@ -2,26 +2,26 @@ import React, {use} from "react";
 import {Link} from "@heroui/react";
 import {getScreenshot} from "@/app/outgoing/screenshots/client";
 import {TRAEFIK_HOSTS} from "@/app/outgoing/traefik/config";
-import {TrafiServicePresentableType} from "TrafiTypes";
+import {TrafiServicePresentableType, TrafiHost} from "TrafiTypes";
 import {TrafiServiceListGroupedFiltered} from "@/app/outgoing/traefik/components/TrafiServiceListGroupedFiltered";
 import {NginxClient} from "@/app/outgoing/nginx/NginxClient";
 import {TraefikClient} from "@/app/outgoing/traefik/TraefikClient";
 import {TrafiService, TrafiServicePresentable} from "@/app/outgoing/traefik/models";
 
-function fetchTrafiServicesFromHosts(): Map<string, TrafiService[]> {
+function fetchTrafiServicesFromHosts(): Map<TrafiHost, TrafiService[]> {
     return use(TraefikClient.getTrafiServicesFromHosts(TRAEFIK_HOSTS));
 }
 
-function fetchTrafiServicesFromNginxHosts(): Map<string, TrafiService[]> {
+function fetchTrafiServicesFromNginxHosts(): Map<TrafiHost, TrafiService[]> {
     return use(NginxClient.getTrafiServicesFromHosts(TRAEFIK_HOSTS));
 }
 
-function fetchPresentableTrafiServicesType(): Map<string, TrafiServicePresentableType[]> {
-    const hostsTraefik: Map<string, TrafiService[]> = fetchTrafiServicesFromHosts()
-    const hostsNginx: Map<string, TrafiService[]> = fetchTrafiServicesFromNginxHosts()
+function fetchPresentableTrafiServicesType(): Map<TrafiHost, TrafiServicePresentableType[]> {
+    const hostsTraefik: Map<TrafiHost, TrafiService[]> = fetchTrafiServicesFromHosts()
+    const hostsNginx: Map<TrafiHost, TrafiService[]> = fetchTrafiServicesFromNginxHosts()
     const hosts = new Map([...hostsTraefik, ...hostsNginx]);
 
-    const mapOfPresentableServices = new Map<string, TrafiServicePresentableType[]>()
+    const mapOfPresentableServices = new Map<TrafiHost, TrafiServicePresentableType[]>()
     for (const [host, services] of hosts.entries()) {
         const presentables: TrafiServicePresentableType[] = services.map((service: TrafiService) => {
 //         const screenshot = use(getScreenshot(service.getRoutes()[0]))

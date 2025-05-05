@@ -166,7 +166,7 @@ export namespace NginxClient {
                 logger.info(`Indexed ${services.length} NGINX service routes hosted by ${host.url}`);
                 const key: TrafiHost = {
                     hostname: host.url,
-                    hostType: ServiceType.TRAEFIK
+                    hostType: ServiceType.NGINX
                 }
                 mapOfHosts.set(key, services)
             }))
