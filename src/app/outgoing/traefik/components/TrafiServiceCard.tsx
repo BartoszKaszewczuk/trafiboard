@@ -14,7 +14,7 @@ export function TrafiServiceCard({serviceName, serviceRoute, thumbnailUrl}: {
                 isFooterBlurred
                 onPress={(e) => window.open(serviceRoute)}
                 radius="lg"
-                className="border-none object-cover max-w-[150px]"
+                className="border-none object-cover max-w-[350px]"
                 fullWidth={true}
             >
                 <Link href={serviceRoute} target={"_blank"}>
