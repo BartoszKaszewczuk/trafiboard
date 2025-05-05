@@ -1,13 +1,16 @@
 'use client'
 import _ from 'lodash'
 import React, {FC, useState} from "react";
+import {Input, Switch} from "@heroui/react";
+import Image from 'next/image';
 import {TrafiServicePresentableMap, TrafiServicePresentableType, TrafiHostServiceMap} from "TrafiTypes";
-import {Input} from "@heroui/input";
-import {Switch} from "@heroui/switch";
 import {TrafiServiceListGrouped} from "@/app/outgoing/traefik/components/TrafiServiceListGrouped";
 import {Tab, Tabs} from "@heroui/react";
 import {FaMagnifyingGlass} from "react-icons/fa6";
 import {isNullOrUndefined} from "@/app/utils";
+import iconNginx from './icon-nginx.svg';
+import iconTraefik from './icon-traefik.svg';
+import {ServiceType} from "@/app/outgoing/traefik/models";
 
 function getTabTitle(maybeTitle: string): string {
     if (isNullOrUndefined(maybeTitle)) {
@@ -21,14 +24,26 @@ function getTabTitle(maybeTitle: string): string {
     }
 }
 
+function getImage(hostType: ServiceType) {
+    let icon
+    switch (hostType) {
+        case ServiceType.TRAEFIK:
+            icon = iconTraefik
+            break
+        case ServiceType.NGINX:
+            icon = iconNginx
+            break
+    }
+
+    return <Image
+        className={"inline-block fill-blue-500 relative"}
+        width={20}
+        src={icon} alt={`${hostType} icon`}/>
+}
+
 export const TrafiServiceListGroupedFiltered: FC<TrafiHostServiceMap> = ({trafiServicesMap}) => {
     const [query, setQuery] = useState('')
     const [dedup, setDedup] = useState(true)
-
-    const hostServiceMap = new Map<string, TrafiServicePresentableType[]>
-    for (const [key, value] of trafiServicesMap) {
-        hostServiceMap.set(key.hostname, value)
-    }
 
     const servicesFlat = Array.from(trafiServicesMap.values()).flat()
     let chain = _.chain(servicesFlat)
@@ -41,9 +56,6 @@ export const TrafiServiceListGroupedFiltered: FC<TrafiHostServiceMap> = ({trafiS
     const allFiltered = chain
         .filter(x => x.rule.includes(query) || x.name.includes(query))
         .value()
-
-
-    // const mergedServices = new Map([["All", allFiltered], ...hostServiceMap])
 
     const TAB_NAME_ALL = "All"
     const TAB_ALL = (
@@ -81,33 +93,36 @@ export const TrafiServiceListGroupedFiltered: FC<TrafiHostServiceMap> = ({trafiS
     )
 
     return (
-        // <div className="flex w-full flex-col">
+        <div className="flex w-full flex-col">
             <Tabs
-                  key={"dupa"}
-                  aria-label="Hosts"
-                  size={"md"}
-                  variant={"bordered"}
-                  color={"primary"}
-                  classNames={{
-                      tab: "max-w-fit px-3 bg-slate-200 bg-gray-500/30",
-                      tabContent: "text-white/80",
-                      tabList: "backdrop-blur-sm bg-gray-500/30 border-1 border-white/30",
-                      panel: "bg-transparent px-0",
-                  }}
+                key={"dupa"}
+                aria-label="Hosts"
+                size={"md"}
+                variant={"bordered"}
+                color={"primary"}
+                classNames={{
+                    tab: "max-w-fit px-3 bg-slate-200 bg-gray-500/30",
+                    tabContent: "text-white/80",
+                    tabList: "backdrop-blur-sm bg-gray-500/30 border-1 border-white/30",
+                    panel: "bg-transparent px-0",
+                }}
             >
                 {TAB_ALL}
-                <Tab key={"paka"} title={"kakaHost"}></Tab>
-
-                {Array.from(hostServiceMap.entries()).map(([hostUrl, services], index) => {
-                    const host = getTabTitle(hostUrl)
+                {Array.from(trafiServicesMap.entries()).map(([trafiHost, services], index) => {
+                    const host = getTabTitle(trafiHost.hostname)
                     return (
-                        <Tab key={host} title={host}>
+                        <Tab key={host} title={
+                            <div className="flex items-center space-x-2 relative">
+                                {getImage(trafiHost.hostType)}
+                                <span>{host}</span>
+                            </div>
+                        }>
                             <TrafiServiceListGrouped key={host} trafiServices={services}></TrafiServiceListGrouped>
                         </Tab>
                     )
                 })
                 }
             </Tabs>
-        // </div>
+        </div>
     )
 }
