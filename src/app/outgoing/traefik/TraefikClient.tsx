@@ -49,7 +49,7 @@ export namespace TraefikClient {
         return !!(await getApiVersion(host));
     }
 
-    export async function getRules(host: TraefikHost): Promise<TraefikRouter[]> {
+    export async function getRouters(host: TraefikHost): Promise<TraefikRouter[]> {
         isUrlValidUnsafe(host.url)
         const url = host.url + ENDPOINT_TRAEFIK_ROUTERS
         logger.trace(`Calling GET on Rules from ${url}`)
@@ -57,7 +57,7 @@ export namespace TraefikClient {
         return routes.map((router: any) => {
                 const out: TraefikRouter = {
                     provider: router.provider,
-                    name: router.name,
+                    name: router.service,
                     rule: router.rule,
                     entryPointType: router.entryPoints[0] // TODO Handle multiple entry points?
                 }
@@ -82,12 +82,12 @@ export namespace TraefikClient {
     }
 
     export async function getTrafiServices(traefikHost: TraefikHost): Promise<TrafiService[]> {
-        const rules = await getRules(traefikHost);
+        const routers = await getRouters(traefikHost);
         const entryPoints = await getEntryPoints(traefikHost);
 
         const mapOfEntryPoints = new Map<string, TraefikEntryPoint>()
         entryPoints.forEach((entryPoint) => mapOfEntryPoints.set(entryPoint.name, entryPoint))
-        const services: TrafiService[] = rules
+        const services: TrafiService[] = routers
             .map(rule => {
                 const entrypoint = mapOfEntryPoints.get(rule.entryPointType);
                 if (!entrypoint) {
@@ -96,7 +96,7 @@ export namespace TraefikClient {
                     return null
                 }
                 return new TrafiService(
-                    ServiceType.TRAEFIK, entrypoint.port, rule.provider, entrypoint.name, rule.rule, rule.entryPointType
+                    ServiceType.TRAEFIK, entrypoint.port, rule.provider, rule.name, rule.rule, rule.entryPointType
                 )
             })
             .filter(maybeNull => maybeNull !== null) as TrafiService[]
