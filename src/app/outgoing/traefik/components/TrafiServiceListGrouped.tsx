@@ -15,7 +15,7 @@ export const TrafiServiceListGrouped: FC<TrafiServiceListGroupedProps> = ({trafi
         .pickBy((v, k) => discardTypes.some((discard) => !discard.includes(k.toLowerCase())))
         .map((value, entryPointName) => {
             return (
-                <div key={entryPointName} className="pb-50 block mb-16">
+                <div key={entryPointName} className="pb-50 block mb-10">
                     <h3 className="mb-5 text-xl inline-block rounded-full bg-gray-500/30 py-2 px-6 text-white/90 backdrop-blur-sm border-white/10 border-1">
                         {entryPointName}
                     </h3>
