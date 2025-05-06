@@ -1,6 +1,6 @@
 'use client'
 import _ from 'lodash'
-import React, {FC, useState} from "react";
+import React, {FC, ReactElement, useState} from "react";
 import {Input, Switch} from "@heroui/react";
 import Image from 'next/image';
 import {TrafiServicePresentableMap, TrafiServicePresentableType, TrafiHostServiceMap} from "TrafiTypes";
@@ -24,7 +24,7 @@ function getTabTitle(maybeTitle: string): string {
     }
 }
 
-function getImage(hostType: ServiceType) {
+function getImage(hostType: ServiceType): ReactElement {
     let icon
     switch (hostType) {
         case ServiceType.TRAEFIK:
@@ -34,7 +34,7 @@ function getImage(hostType: ServiceType) {
             icon = iconNginx
             break
     }
-
+    return null
     return <Image
         className={"inline-block fill-blue-500 relative"}
         width={20}
