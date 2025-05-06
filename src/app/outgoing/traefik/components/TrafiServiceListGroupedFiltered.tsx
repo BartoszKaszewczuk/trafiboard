@@ -24,7 +24,7 @@ function getTabTitle(maybeTitle: string): string {
     }
 }
 
-function getImage(hostType: ServiceType): ReactElement {
+function getImage(hostType: ServiceType): ReactElement | null {
     let icon
     switch (hostType) {
         case ServiceType.TRAEFIK:
