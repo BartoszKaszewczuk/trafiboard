@@ -3,7 +3,7 @@ import 'server-only'
 import {
     ENDPOINT_TRAEFIK_ENTRYPOINTS,
     ENDPOINT_TRAEFIK_ROUTERS,
-    ENDPOINT_TRAEFIK_VERSION
+    ENDPOINT_TRAEFIK_VERSION, TB_HOST_TIMEOUT
 } from "@/app/outgoing/traefik/config";
 // import {plainToInstance} from 'class-transformer';
 import {isUrlValidUnsafe, logger as logger_master} from "@/app/utils";
@@ -19,7 +19,7 @@ export namespace TraefikClient {
             response = await fetch(url, {
                 ...requestInit,
                 mode: 'no-cors',
-                signal: AbortSignal.timeout(10000)
+                signal: AbortSignal.timeout(TB_HOST_TIMEOUT)
             })
         } catch (e) {
             logger.error({e}, `Error while calling URL: ${url}`)
