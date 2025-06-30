@@ -18,7 +18,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       packages: write
       # This is used to complete the identity challenge
       # with sigstore/fulcio when running outside of PRs.
@@ -73,7 +73,7 @@ jobs:
             type=ref,event=branch
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
-            ${{ steps.semver-tags.outputs.part }}
+            ${{ steps.tag_version.outputs.new_tag }}
             latest
 
       # Build and push Docker image with Buildx (don't push on PR)
