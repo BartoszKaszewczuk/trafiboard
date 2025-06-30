@@ -48,6 +48,14 @@ export default function Home() {
                 {process.env.TB_PAGE_TITLE}
             </Link>
             <TrafiServiceListGroupedFiltered trafiServicesMap={servicesPresentable}></TrafiServiceListGroupedFiltered>
+            <footer>
+                <Link
+                    className="float-right text-sm inline-block rounded-full bg-gray-500/10 py-2 px-6 mb-5 text-white/40 backdrop-blur-sm border-1 border-white/10"
+                    href="https://github.com/BartoszKaszewczuk/trafiboard"
+                >
+                Developed by Bartosz Kaszewczuk on GitHub
+                </Link>
+            </footer>
         </main>
     )
 }
