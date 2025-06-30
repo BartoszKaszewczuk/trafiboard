@@ -59,6 +59,14 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           default_bump: minor
 
+      - name: Extract major version
+        id: extract-semver-major
+        run: |
+          version="${{ steps.tag_version.outputs.new_tag }}"
+          major=$(echo "$version" | sed -E 's/^v([0-9]+)\..*/\1/')
+          echo "Extracted major: $major"
+          echo "major=$major" >> $GITHUB_OUTPUT
+
       # Extract metadata (tags, labels) for Docker
       # https://github.com/docker/metadata-action
       - name: Extract Docker metadata
@@ -77,6 +85,7 @@ jobs:
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
             ${{ steps.tag_version.outputs.new_tag }}
+            ${{ steps.extract-semver-major.outputs.major }}
             latest
 
       # Build and push Docker image with Buildx (don't push on PR)
@@ -122,6 +131,5 @@ jobs:
             ## Changelog
             
             ${{ steps.tag_version.outputs.changelog }}
-          generateReleaseNotes: true
           removeArtifacts: true
 
