@@ -1,11 +1,11 @@
 version: '3'
 
 services:
-  trafi:
+  trafiboard:
     build:
       context: .
       dockerfile: Dockerfile
-    image: docker-registry.kaszewczuk.com/trafi:latest
+    image: ghcr.io/bartoszkaszewczuk/trafiboard:latest
     ports:
       - 8080:8080
     environment:

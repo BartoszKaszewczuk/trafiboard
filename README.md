@@ -44,7 +44,6 @@ services:
     ports:
       - 8080:8080
     environment:
-      TB_PAGE_TITLE: "TrafiBoard Apps"
       TB_HOSTS: >
         [
           {
@@ -74,9 +73,8 @@ services:
 
 ## 💬 FAQ
 
-Q: How to add a static entry/route to TrafiBoard?
-
-A: Just declare it in Nginx Proxy Manager UI or in a `file-provider.yaml` incase of Traefik.
+1. How to add a static entry/route to TrafiBoard?
+   1. Static routes can be added by declaring them in Nginx Proxy Manager UI or in a `file-provider.yaml` incase of Traefik.
 
 
 ## 🧑‍💻 Contributing

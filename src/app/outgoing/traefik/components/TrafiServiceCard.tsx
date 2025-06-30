@@ -15,11 +15,11 @@ export const TrafiServiceCard: FC<TrafiServiceCardProps> = ({trafiService}: Traf
                 isFooterBlurred
                 onPress={(e) => window.open(serviceRoute)}
                 radius="lg"
-                className="border-none object-cover max-w-[300px] text-wrap"
+                className="border-none border-white/20 object-cover max-w-[300px] text-wrap"
                 fullWidth={true}
+                shadow={"md"}
             >
                 <Link href={serviceRoute} target={"_blank"}>
-                    {/*<CardBody className="overflow-visible p-0">*/}
                     <Image
                         isZoomed
                         height="130px"
@@ -29,7 +29,6 @@ export const TrafiServiceCard: FC<TrafiServiceCardProps> = ({trafiService}: Traf
                         // src={"https://picsum.photos/350/200"}
                         alt={`thumbnail-${serviceName}`}
                     />
-                    {/*</CardBody>*/}
                     <CardBody
                         className="backdrop-blur-sm bg-gray-500/30 border-gray-400 before:bg-white/10 border-white/20 border-1 flex-row overflow-hidden py-1 z-20 absolute before:rounded-xl rounded-large bottom-9 w-[calc(100%_-_8px)] shadow-small ml-1"
                     >
