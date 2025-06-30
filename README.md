@@ -44,8 +44,8 @@ services:
     ports:
       - 8080:8080
     environment:
-      TRAFI_TITLE: "TrafiBoard Apps"
-      TRAFI_TRAEFIK_HOSTS: >
+      TB_PAGE_TITLE: "TrafiBoard Apps"
+      TB_HOSTS: >
         [
           {
             "url": "https://traefik.instance1.com",
