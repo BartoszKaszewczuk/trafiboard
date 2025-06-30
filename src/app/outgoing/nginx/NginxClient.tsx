@@ -2,7 +2,12 @@ import 'server-only'
 
 import {TraefikHost, TrafiHost} from "TrafiTypes";
 import {isUrlValidUnsafe, logger as logger_master} from "@/app/utils";
-import {ENDPOINT_NGINX_HOSTS, ENDPOINT_NGINX_TOKEN, ENDPOINT_NGINX_VERSION,} from "@/app/outgoing/traefik/config";
+import {
+    ENDPOINT_NGINX_HOSTS,
+    ENDPOINT_NGINX_TOKEN,
+    ENDPOINT_NGINX_VERSION,
+    TB_HOST_TIMEOUT,
+} from "@/app/outgoing/traefik/config";
 import {ServiceType, TrafiService} from "@/app/outgoing/traefik/models";
 
 
@@ -19,7 +24,7 @@ export namespace NginxClient {
                 ...requestInit,
                 method: 'GET',
                 mode: 'no-cors',
-                signal: AbortSignal.timeout(10000)
+                signal: AbortSignal.timeout(TB_HOST_TIMEOUT)
             })
         } catch (e) {
             logger.error({e}, `Error while calling URL: ${url}`)
@@ -43,7 +48,7 @@ export namespace NginxClient {
                 ...requestInit,
                 method: 'POST',
                 mode: 'no-cors',
-                signal: AbortSignal.timeout(10000),
+                signal: AbortSignal.timeout(TB_HOST_TIMEOUT),
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json, */*;q=0.5'
