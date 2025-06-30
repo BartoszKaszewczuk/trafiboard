@@ -57,6 +57,7 @@ jobs:
         uses: mathieudutour/github-tag-action@v6.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          default_bump: minor
 
       # Extract metadata (tags, labels) for Docker
       # https://github.com/docker/metadata-action
@@ -69,6 +70,7 @@ jobs:
             org.opencontainers.image.title=TrafiBoard
             org.opencontainers.image.description=Automagicall HomeLab Dashbaord
             org.opencontainers.image.vendor=@BartoszKaszewczuk
+            org.opencontainers.image.version=${{ steps.tag_version.outputs.new_tag }}
           tags: |
             type=ref,event=branch
             type=semver,pattern={{version}}
