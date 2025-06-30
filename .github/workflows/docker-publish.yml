@@ -64,6 +64,7 @@ jobs:
             org.opencontainers.image.description=Automagicall HomeLab Dashbaord
             org.opencontainers.image.vendor=@BartoszKaszewczuk
           tags: |
+            type=ref,event=branch
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
             latest
