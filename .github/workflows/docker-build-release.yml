@@ -53,7 +53,7 @@ jobs:
       - id: semver-tag
         uses: gandarez/semver-action@master
         with:
-          branching_model: "git-flow"
+          branching_model: "trunk-based"
           main_branch_name: "main"
       - name: "Calculated new Git Tag"
         run: echo "tag ${{ steps.semver-tag.outputs.semver_tag }}"
