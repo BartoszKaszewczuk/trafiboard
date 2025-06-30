@@ -1,30 +1,29 @@
-# 💡🐳 TrafiBoard
+# 🎯 TrafiBoard
 
-TrafiBoard is a dynamic `Reverse-Proxy-to-Dashboard` application capable of aggregating multiple Reverse Proxies, parsing their data and generating a unified dashboard that is always up to date with your infrastructure! 
+TrafiBoard is a dynamic `Reverse-Proxy-to-Dashboard` application capable of aggregating multiple Reverse Proxies, parsing their API data and generating a unified dashboard that is always up to date with your infrastructure! 
 
 No more bookmarks or manually managed dashboards with broken links!
 
-Do you use Traefik as reverse proxy for your Docker containers or Nginx Proxy Manager?
+Do you use Traefik or Nginx Proxy Manager as reverse proxy for your Docker containers or Infrastructrue?
 
-If so then TrafiBoard may be just the tool for you.
-
-TrafiBoard automagically generates a dashboard/index of services from reverse proxies (even multiple).
+If so then give TrafiBoard a spin and let it automagically generate a dashboard with an index of your services and hosts.
 
 ## 📸 Demo
 
-Include screenshots, GIFs, or a link to a live demo if available.
+[TBD]
 
 ## 🌟 Features
-1. 🍱 Capable of indexing multiple proxies and aggregating their routes/services into a unified view
+1. 🍱 Supports indexing and aggregating of multiple reverse-proxies into a unified view
 1. 🧩 Supports indexing of Reverse Proxies:
    1. [Traefik](https://traefik.io/traefik/)
    1. [Nginx Proxy Manager](https://nginxproxymanager.com)
 1. 👯 Toggleable deduplication of routes that are common across hosts
 2. 🎯 Search bar to find your services even faster!
-3. ⚙️ Dead simple to setup and maintain 
-   4. Just configure the URLs to your proxies and TrafiBoard will figure out the type of proxy and how to extract its information.
-4. 🐳 Docker deployment. Fast and simple.
-4. 💨 Stateless. No volumes to mount. No file permissions to deal with.
+3. ⚙️ Dead simple to setup and maintain:
+   1. Configure the URLs to the APIs of your proxies
+   2. TrafiBoard will figure out the type of proxy and how to extract its information.
+4. 🐳 Docker deployment 
+5. 💨 Stateless. No volumes to mount. No file permissions to deal with.
 
 ---
 
@@ -86,5 +85,5 @@ Pull requests are welcome! For major changes, please open an issue first.
 
 ## 🪪 License
 
-TBD
+[BSD-3 Clause](LICENSE)
 
