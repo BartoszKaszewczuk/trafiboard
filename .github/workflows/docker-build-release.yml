@@ -5,8 +5,6 @@ on:
     branches: [ "main" ]
     # Publish semver tags as releases.
     tags: [ 'v*.*.*' ]
-  pull_request:
-    branches: [ "main" ]
 
 env:
   # Use docker.io for Docker Hub if empty
@@ -52,6 +50,26 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Determine next version tag
+        id: tag
+        run: |
+          latest_tag=$(git tag --sort=-v:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -n 1)
+          
+          if [ -z "$latest_tag" ]; then
+            new_tag="v0.1.0"
+          else
+            IFS='.' read -r major minor patch <<< "${latest_tag#v}"
+            patch=$((patch + 1))
+            new_tag="v$major.$minor.$patch"
+          fi
+          
+          echo "new_tag=$new_tag" >> $GITHUB_OUTPUT
+
+      - name: Create and push tag
+        run: |
+          git tag ${{ steps.tag.outputs.new_tag }}
+          git push origin ${{ steps.tag.outputs.new_tag }}          
+
       # Extract metadata (tags, labels) for Docker
       # https://github.com/docker/metadata-action
       - name: Extract Docker metadata
@@ -67,6 +85,7 @@ jobs:
             type=ref,event=branch
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
+            ${{ steps.tag.outputs.new_tag }}
             latest
             
       # Build and push Docker image with Buildx (don't push on PR)
