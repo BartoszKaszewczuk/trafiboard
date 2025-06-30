@@ -12,6 +12,8 @@ env:
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}
 
+concurrency: production
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -50,18 +52,30 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - id: semver-tag
-        uses: gandarez/semver-action@master
-        with:
-          branching_model: "trunk-based"
-          main_branch_name: "main"
-      - name: "Calculated new Git Tag"
-        run: echo "tag ${{ steps.semver-tag.outputs.semver_tag }}"
+      - name: Minor version for each merge
+        id: semver-tag-dryrun
+        uses: anothrNick/github-tag-action@1.36.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: true
+          DRY_RUN: true
 
-      - name: 🔖 Create Git Tag
-        uses: rickstaa/action-create-tag@v1.7.2
-        with:
-          tag: ${{ steps.semver-tag.outputs.semver_tag }}
+      - name: echo new tag
+        run: |
+          echo "The next tag version will be: ${{ steps.semver-tag-dryrun.outputs.new_tag }}"
+      - name: echo tag
+        run: |
+          echo "The current tag is: ${{ steps.semver-tag-dryrun.outputs.tag }}"
+      - name: echo part
+        run: |
+          echo "The version increment was: ${{ steps.semver-tag-dryrun.outputs.part }}"
+
+      - name: Minor version for each merge
+        id: semver-tag
+        uses: anothrNick/github-tag-action@1.36.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: true
 
       # Extract metadata (tags, labels) for Docker
       # https://github.com/docker/metadata-action
@@ -78,7 +92,7 @@ jobs:
             type=ref,event=branch
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
-            ${{ steps.tag.outputs.semver_tag }}
+            ${{ steps.semver-tags.outputs.part }}
             latest
 
       # Build and push Docker image with Buildx (don't push on PR)
