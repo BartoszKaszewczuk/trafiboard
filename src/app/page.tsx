@@ -45,7 +45,7 @@ export default function Home() {
                 className="text-3xl inline-block rounded-full bg-gray-500/30 py-2 px-6 mb-5 text-white/90 backdrop-blur-sm border-1 border-white/10"
                 href="#"
             >
-                {process.env.TRAFI_TITLE}
+                {process.env.TB_PAGE_TITLE}
             </Link>
             <TrafiServiceListGroupedFiltered trafiServicesMap={servicesPresentable}></TrafiServiceListGroupedFiltered>
         </main>
