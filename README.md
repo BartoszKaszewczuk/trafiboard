@@ -1,4 +1,4 @@
-# 🎯 TrafiBoard
+# <img src="public/favicon.ico" alt="TrafiBoard icon" height="26"/> TrafiBoard 
 
 TrafiBoard is a dynamic `Reverse-Proxy-to-Dashboard` application capable of aggregating multiple Reverse Proxies, parsing their API data and generating a unified dashboard that is always up to date with your infrastructure! 
 
@@ -13,17 +13,17 @@ If so then give TrafiBoard a spin and let it automagically generate a dashboard 
 [TBD]
 
 ## 🌟 Features
-1. 🍱 Supports indexing and aggregating of multiple reverse-proxies into a unified view
 1. 🧩 Supports indexing of Reverse Proxies:
    1. [Traefik](https://traefik.io/traefik/)
    1. [Nginx Proxy Manager](https://nginxproxymanager.com)
-1. 👯 Toggleable deduplication of routes that are common across hosts
-2. 🎯 Search bar to find your services even faster!
-3. ⚙️ Dead simple to setup and maintain:
+2. 🍱 Supports indexing and aggregating of multiple reverse-proxies into a unified view
+3. 👯 Toggleable deduplication of routes that are common across hosts
+4. 🔍 Search bar to find your services even faster!
+5. ⚙️ Simple to setup and maintain:
    1. Configure the URLs to the APIs of your proxies
    2. TrafiBoard will figure out the type of proxy and how to extract its information.
-4. 🐳 Docker deployment 
-5. 💨 Stateless. No volumes to mount. No file permissions to deal with.
+6. 🐳 Docker deployment 
+7. 💨 Stateless. No volumes to mount. No file permissions to deal with.
 
 ---
 
@@ -65,9 +65,10 @@ services:
 ```
 ---
 
-## ⚠️ Current Limitations
-1. Only unprotected API access to Traefik is currently supported. We recommend setting up communication over a private network.
-2. Currently only services defining `favicon.ico` at the root will display a favicon beside service name.
+## ⚠️ Considerations
+1. In current state, this project is developed cheaply and on demand with new features/improvements added as my own use-cases expand. Please do not take it a reference project for production patterns.
+2. Only unprotected API access to Traefik is currently supported. We recommend setting up communication over a private network.
+3. Currently only services defining `favicon.ico` at the root will display a favicon beside service name.
 
 ---
 
