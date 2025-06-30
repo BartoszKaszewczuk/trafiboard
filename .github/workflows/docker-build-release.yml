@@ -85,7 +85,7 @@ jobs:
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
             ${{ steps.tag_version.outputs.new_tag }}
-            ${{ steps.extract-semver-major.outputs.major }}
+            v${{ steps.extract-semver-major.outputs.major }}
             latest
 
       # Build and push Docker image with Buildx (don't push on PR)
