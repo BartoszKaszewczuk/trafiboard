@@ -1,8 +1,5 @@
 name: Docker
 
-permissions:
-  contents: write
-
 on:
   push:
     branches: [ "main" ]
@@ -53,25 +50,18 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Determine next version tag
-        id: tag
-        run: |
-          latest_tag=$(git tag --sort=-v:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -n 1)
-          
-          if [ -z "$latest_tag" ]; then
-            new_tag="v0.1.0"
-          else
-            IFS='.' read -r major minor patch <<< "${latest_tag#v}"
-            patch=$((patch + 1))
-            new_tag="v$major.$minor.$patch"
-          fi
-          
-          echo "new_tag=$new_tag" >> $GITHUB_OUTPUT
+      - id: semver-tag
+        uses: gandarez/semver-action@master
+        with:
+          branching_model: "git-flow"
+          main_branch_name: "main"
+      - name: "Calculated new Git Tag"
+        run: echo "tag ${{ steps.semver-tag.outputs.semver_tag }}"
 
-      - name: Create and push tag
-        run: |
-          git tag ${{ steps.tag.outputs.new_tag }}
-          git push origin ${{ steps.tag.outputs.new_tag }}          
+      - name: 🔖 Create Git Tag
+        uses: rickstaa/action-create-tag@v1.7.2
+        with:
+          tag: ${{ steps.semver-tag.outputs.semver_tag }}
 
       # Extract metadata (tags, labels) for Docker
       # https://github.com/docker/metadata-action
@@ -88,9 +78,9 @@ jobs:
             type=ref,event=branch
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
-            ${{ steps.tag.outputs.new_tag }}
+            ${{ steps.tag.outputs.semver_tag }}
             latest
-            
+
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
       - name: Build and push Docker image
