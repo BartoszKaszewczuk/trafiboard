@@ -34,17 +34,14 @@ Include screenshots, GIFs, or a link to a live demo if available.
 ```bash
 docker run -p 8080:8080 --name traefiboard \ 
   -e '[{"url":"https://traefik.instance1.com","username":"","password":""},{"url":"http://192.168.0.1","username":"","password":""},{"url":"https://nginx.instance3.com","username":"","password":""}]' \
-  ghcr.io/TBD
+  ghcr.io/bartoszkaszewczuk/trafiboard:latest
 ```
 
 ### 🐳 Docker Compose
 ```yaml
 services:
   trafiboard:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: //TODO ghcr.io/TBD
+    image: ghcr.io/bartoszkaszewczuk/trafiboard:latest
     ports:
       - 8080:8080
     environment:
