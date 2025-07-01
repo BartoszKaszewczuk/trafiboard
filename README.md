@@ -30,7 +30,6 @@ If so then give TrafiBoard a spin and let it automagically generate a dashboard 
 6. 🐳 Docker deployment 
 7. 💨 Stateless. No volumes to mount. No file permissions to deal with.
 
----
 
 ## 📦 Deployment
 
@@ -68,7 +67,6 @@ services:
           }
         ]
 ```
----
 
 ## 👍🏻 Considerations
 1. TrafiBoard does not tunnel the traffic. Destinations should already be accessible to the client.
@@ -76,17 +74,16 @@ services:
 3. Currently only services defining `favicon.ico` at the root will display a favicon beside service name.
 4. Traefik supports complex routing rules but TrafiBoard currently has only naive support for them and as a result some routes discovered may appear broken.
 
----
 
 ## 💬 FAQ
 
 1. How to add a static entry/route to TrafiBoard?
-   1. Static routes can be added by declaring them in Nginx Proxy Manager UI or in a `file-provider.yaml` incase of Traefik.
+   1. Static routes can be added by declaring them in Nginx Proxy Manager UI or in a `file-provider.yaml` in case of Traefik.
 
 
 ## 🧑‍💻 About
 
-I'm a solo developer and I kicked off TrafiBoard because I wanted to have an always up to date index with all of my services and frankly I was growing tired of having to manually manage bashboards and links pointing to my ever changing selfhosted services.
+I'm a solo developer and I kicked off TrafiBoard because I wanted to have an always up-to-date index with all of my services, and frankly I was growing tired of having to manually manage dashboards and links pointing to my ever-changing self-hosted services.
 
 TrafiBoard solves it by surfacing active routes to Docker services registered with Traefik; and with Nginx Proxy Manager support aggregating static services is a breeze too.  
 
