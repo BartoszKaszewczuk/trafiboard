@@ -1,4 +1,4 @@
-# <center><img src="public/favicon.ico" alt="TrafiBoard icon" height="128"/></center> <center>TrafiBoard</center> 
+# <center><img src="public/favicon.ico" alt="TrafiBoard icon" height="128"/></center><br/><center>TrafiBoard</center> 
 
 TrafiBoard is a dynamic `Reverse-Proxy-to-Dashboard` application capable of aggregating multiple Reverse Proxies, parsing their API data and generating a unified dashboard that is always up to date with your infrastructure! 
 
