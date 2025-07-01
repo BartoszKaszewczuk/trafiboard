@@ -16,11 +16,11 @@ If so then give TrafiBoard a spin and let it automagically generate a dashboard 
 ![demo.gif](public/demo.gif)
 
 ## 🌟 Features
-1. 🧩 Supports indexing of Reverse Proxies:
+1. 🧩 Supports indexing of following Reverse Proxies:
    1. [Traefik](https://traefik.io/traefik/)
-      2. Over unauthenticated API
-   1. [Nginx Proxy Manager](https://nginxproxymanager.com)
-      2. Over authenticated API
+      1. Over unauthenticated API
+   2. [Nginx Proxy Manager](https://nginxproxymanager.com)
+      1. Over authenticated API
 2. 🍱 Supports indexing and aggregating of multiple reverse-proxies into a unified view
 3. 👯 Toggleable deduplication of routes that are common across hosts
 4. 🔍 Search bar to find your services even faster!
