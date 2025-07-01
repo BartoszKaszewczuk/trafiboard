@@ -16,11 +16,11 @@ If so then give TrafiBoard a spin and let it automagically generate a dashboard 
 ![demo.gif](public/demo.gif)
 
 ## 🌟 Features
-1. 🧩 Supports indexing of Reverse Proxies:
+1. 🧩 Supports indexing of following Reverse Proxies:
    1. [Traefik](https://traefik.io/traefik/)
-      2. Over unauthenticated API
-   1. [Nginx Proxy Manager](https://nginxproxymanager.com)
-      2. Over authenticated API
+      1. via unauthenticated API
+   2. [Nginx Proxy Manager](https://nginxproxymanager.com)
+      1. via authenticated API
 2. 🍱 Supports indexing and aggregating of multiple reverse-proxies into a unified view
 3. 👯 Toggleable deduplication of routes that are common across hosts
 4. 🔍 Search bar to find your services even faster!
@@ -30,7 +30,6 @@ If so then give TrafiBoard a spin and let it automagically generate a dashboard 
 6. 🐳 Docker deployment 
 7. 💨 Stateless. No volumes to mount. No file permissions to deal with.
 
----
 
 ## 📦 Deployment
 
@@ -68,26 +67,25 @@ services:
           }
         ]
 ```
----
 
-## ⚠️ Considerations
+## 👍🏻 Considerations
 1. TrafiBoard does not tunnel the traffic. Destinations should already be accessible to the client.
 2. Only unprotected API access to Traefik is currently supported. We recommend setting up communication over a private network.
 3. Currently only services defining `favicon.ico` at the root will display a favicon beside service name.
+4. Traefik supports complex routing rules but TrafiBoard currently has only naive support for them and as a result some routes discovered may appear broken.
 
----
 
 ## 💬 FAQ
 
 1. How to add a static entry/route to TrafiBoard?
-   1. Static routes can be added by declaring them in Nginx Proxy Manager UI or in a `file-provider.yaml` incase of Traefik.
+   1. Static routes can be added by declaring them in Nginx Proxy Manager UI or in a `file-provider.yaml` in case of Traefik.
 
 
 ## 🧑‍💻 About
 
-I'm a solo developer and I kicked off TrafiBoard because I wanted to have an always up to date index with all of my services and frankly I was growing tired of having to manually manage bashboards and links pointing to my ever changing selfhosted services.
+I'm a solo developer and I kicked off TrafiBoard because I wanted to have an always up-to-date index with all of my services, and frankly I was growing tired of having to manually manage dashboards and links pointing to my ever-changing self-hosted services.
 
-TrafiBoard always shows active docker services registered with Traefik and with Nginx Proxy Manager support it makes aggregating static services a breeze too.  
+TrafiBoard solves it by surfacing active routes to Docker services registered with Traefik; and with Nginx Proxy Manager support aggregating static services is a breeze too.  
 
 If you like the idea, the project has helped you, or saved you time, I'd greatly appreciate your support with a pull request or maybe even a donation.
 
@@ -95,7 +93,10 @@ If you like the idea, the project has helped you, or saved you time, I'd greatly
 
 You can support financially through the following platforms:
 
-- [**Ko-fi**](https://ko-fi.com/bartoszkaszewczuk) – Support with one-time or monthly donations 💙
+| Platform                                         | Description                                   | Link                                                                                                                                                                                                                  |
+|--------------------------------------------------|-----------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [Ko-fi.com](https://ko-fi.com/bartoszkaszewczuk) | Support with one-time or monthly donations 💛 | <a href='https://ko-fi.com/bartoszkaszewczuk' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi1.png?v=6' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a> |
+
 
 Your contributions help cover development time, maintenance, and motivates me for continued improvements.
 
