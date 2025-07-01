@@ -95,7 +95,10 @@ If you like the idea, the project has helped you, or saved you time, I'd greatly
 
 You can support financially through the following platforms:
 
-- [**Ko-fi**](https://ko-fi.com/bartoszkaszewczuk) – Support with one-time or monthly donations 💙
+| Platform                                         | Description                                   | Link                                                                                                                                                                                                                  |
+|--------------------------------------------------|-----------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [Ko-fi.com](https://ko-fi.com/bartoszkaszewczuk) | Support with one-time or monthly donations 💛 | <a href='https://ko-fi.com/bartoszkaszewczuk' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi1.png?v=6' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a> |
+
 
 Your contributions help cover development time, maintenance, and motivates me for continued improvements.
 
