@@ -18,9 +18,9 @@ If so then give TrafiBoard a spin and let it automagically generate a dashboard 
 ## 🌟 Features
 1. 🧩 Supports indexing of following Reverse Proxies:
    1. [Traefik](https://traefik.io/traefik/)
-      1. Over unauthenticated API
+      1. via unauthenticated API
    2. [Nginx Proxy Manager](https://nginxproxymanager.com)
-      1. Over authenticated API
+      1. via authenticated API
 2. 🍱 Supports indexing and aggregating of multiple reverse-proxies into a unified view
 3. 👯 Toggleable deduplication of routes that are common across hosts
 4. 🔍 Search bar to find your services even faster!
@@ -74,6 +74,7 @@ services:
 1. TrafiBoard does not tunnel the traffic. Destinations should already be accessible to the client.
 2. Only unprotected API access to Traefik is currently supported. We recommend setting up communication over a private network.
 3. Currently only services defining `favicon.ico` at the root will display a favicon beside service name.
+4. Traefik supports complex routing rules but TrafiBoard currently has only naive support for them and as a result some routes discovered may appear broken.
 
 ---
 
