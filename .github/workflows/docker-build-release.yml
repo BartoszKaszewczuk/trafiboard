@@ -5,6 +5,11 @@ on:
     branches: [ "main" ]
     # Publish semver tags as releases.
     tags: [ 'v*.*.*' ]
+  pull_request:
+    types:
+      - closed
+    branches:
+      - master    
 
 env:
   # Use docker.io for Docker Hub if empty
@@ -53,11 +58,12 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Bump SemVer version and push tag
+        uses: anothrNick/github-tag-action@v1
         id: tag_version
-        uses: mathieudutour/github-tag-action@v6.2
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          default_bump: minor
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+          TAG_PREFIX: v
+          PRERELEASE: true
 
       - name: Extract major version
         id: extract-semver-major
