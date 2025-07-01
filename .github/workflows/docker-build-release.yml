@@ -125,7 +125,7 @@ jobs:
             ## Docker Image
             
             ```
-                ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.tag_version.outputs.new_tag }}
+            docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.tag_version.outputs.new_tag }}
             ```
             
             ## Changelog

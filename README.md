@@ -1,21 +1,21 @@
-# <img src="public/favicon.ico" alt="TrafiBoard icon" height="26"/> TrafiBoard 
+# <center><img src="public/favicon.ico" alt="TrafiBoard icon" height="128"/></center> <center>TrafiBoard</center> 
 
 TrafiBoard is a dynamic `Reverse-Proxy-to-Dashboard` application capable of aggregating multiple Reverse Proxies, parsing their API data and generating a unified dashboard that is always up to date with your infrastructure! 
 
 No more bookmarks or manually managed dashboards with broken links!
 
-Do you use Traefik or Nginx Proxy Manager as reverse proxy for your Docker containers or Infrastructrue?
+Do you use Traefik or Nginx Proxy Manager as reverse proxy for your Docker containers or Infrastructure?
 
 If so then give TrafiBoard a spin and let it automagically generate a dashboard with an index of your services and hosts.
 
-## 📸 Demo
-
-[TBD]
+![demo.gif](public/demo.gif)
 
 ## 🌟 Features
 1. 🧩 Supports indexing of Reverse Proxies:
    1. [Traefik](https://traefik.io/traefik/)
+      2. Over unauthenticated API
    1. [Nginx Proxy Manager](https://nginxproxymanager.com)
+      2. Over authenticated API
 2. 🍱 Supports indexing and aggregating of multiple reverse-proxies into a unified view
 3. 👯 Toggleable deduplication of routes that are common across hosts
 4. 🔍 Search bar to find your services even faster!
@@ -66,7 +66,7 @@ services:
 ---
 
 ## ⚠️ Considerations
-1. In current state, this project is developed cheaply and on demand with new features/improvements added as my own use-cases expand. Please do not take it a reference project for production patterns.
+1. TrafiBoard does not tunnel the traffic. Destinations should already be accessible to the client.
 2. Only unprotected API access to Traefik is currently supported. We recommend setting up communication over a private network.
 3. Currently only services defining `favicon.ico` at the root will display a favicon beside service name.
 
@@ -78,9 +78,24 @@ services:
    1. Static routes can be added by declaring them in Nginx Proxy Manager UI or in a `file-provider.yaml` incase of Traefik.
 
 
-## 🧑‍💻 Contributing
+## 🧑‍💻 About
 
-Pull requests are welcome! For major changes, please open an issue first.
+I'm a solo developer and I kicked off TrafiBoard because I wanted to have an always up to date index with all of my services and frankly I was growing tired of having to manually manage bashboards and links pointing to my ever changing selfhosted services.
+
+TrafiBoard always shows active docker services registered with Traefik and with Nginx Proxy Manager support it makes aggregating static services a breeze too.  
+
+If you like the idea, the project has helped you, or saved you time, I'd greatly appreciate your support with a pull request or maybe even a donation.
+
+## 💰 Support
+
+You can support financially through the following platforms:
+
+- [**Ko-fi**](https://ko-fi.com/bartoszkaszewczuk) – Support with one-time or monthly donations 💙
+
+Your contributions help cover development time, maintenance, and motivates me for continued improvements.
+
+Every contribution, no matter the size, makes a difference. **Thank you for your support!**
+
 
 ## 🪪 License
 
