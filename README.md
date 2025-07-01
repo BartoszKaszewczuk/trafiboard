@@ -70,7 +70,7 @@ services:
 ```
 ---
 
-## ⚠️ Considerations
+## 👍🏻 Considerations
 1. TrafiBoard does not tunnel the traffic. Destinations should already be accessible to the client.
 2. Only unprotected API access to Traefik is currently supported. We recommend setting up communication over a private network.
 3. Currently only services defining `favicon.ico` at the root will display a favicon beside service name.
@@ -87,7 +87,7 @@ services:
 
 I'm a solo developer and I kicked off TrafiBoard because I wanted to have an always up to date index with all of my services and frankly I was growing tired of having to manually manage bashboards and links pointing to my ever changing selfhosted services.
 
-TrafiBoard always shows active docker services registered with Traefik and with Nginx Proxy Manager support it makes aggregating static services a breeze too.  
+TrafiBoard solves it by surfacing active routes to Docker services registered with Traefik; and with Nginx Proxy Manager support it makes aggregating static services a breeze too.  
 
 If you like the idea, the project has helped you, or saved you time, I'd greatly appreciate your support with a pull request or maybe even a donation.
 
