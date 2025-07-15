@@ -43,3 +43,10 @@ export function isUrlValidUnsafe(url: string): boolean {
     }
     return result
 }
+
+export function applyDemoDomainOverride(serviceDomain: string) {
+    const subparts = serviceDomain.split('.');
+    subparts[subparts.length - 1] = "io";
+    subparts[subparts.length - 2] = "demo";
+    return subparts.join('.')
+}

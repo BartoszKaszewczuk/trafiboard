@@ -3,12 +3,18 @@ import {Card, CardFooter, Image, CardBody, Link} from "@heroui/react";
 import {nullAsUndefined} from "null-as-undefined";
 import {TrafiServiceCardProps} from 'TrafiTypes'
 import {FC} from "react";
+import {DEMO_MODE} from "@/app/outgoing/traefik/config";
+import {applyDemoDomainOverride} from "@/app/utils";
 
 export const TrafiServiceCard: FC<TrafiServiceCardProps> = ({trafiService}: TrafiServiceCardProps) => {
     const serviceName = trafiService.name
     const serviceRoute = trafiService.rule
+    let serviceDomain = serviceRoute.split("://")[1]
     const thumbnailUrl = trafiService.thumbnailUrl
     const faviconUrl = serviceRoute + '/favicon.ico'
+    if (DEMO_MODE) {
+        serviceDomain = applyDemoDomainOverride(serviceDomain);
+    }
     return (
             <Card
                 key={serviceName}
@@ -49,7 +55,7 @@ export const TrafiServiceCard: FC<TrafiServiceCardProps> = ({trafiService}: Traf
                     <CardFooter
                         className="absolute bg-gray-500/30 border-gray-400 bottom-0 border-t-1 border-white/20 z-10 justify-between p-3 pt-1.5 pb-1.5">
                         <p className="text-tiny text-white/70 shadow overflow-hidden">
-                            {serviceRoute.split("://")[1]}
+                            {serviceDomain}
                         </p>
                     </CardFooter>
                 </Link>
