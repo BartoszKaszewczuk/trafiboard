@@ -7,8 +7,15 @@ import {FC} from "react";
 export const TrafiServiceCard: FC<TrafiServiceCardProps> = ({trafiService}: TrafiServiceCardProps) => {
     const serviceName = trafiService.name
     const serviceRoute = trafiService.rule
+    let serviceDomain = serviceRoute.split("://")[1]
     const thumbnailUrl = trafiService.thumbnailUrl
     const faviconUrl = serviceRoute + '/favicon.ico'
+    // TODO: Use DEMO feature flag
+    if (DEMO_MODE) {
+        const subparts = serviceDomain.split('.');
+        subparts[subparts.length-2] = "demo";
+        serviceDomain = subparts.join('.')
+    }
     return (
             <Card
                 key={serviceName}
@@ -49,7 +56,7 @@ export const TrafiServiceCard: FC<TrafiServiceCardProps> = ({trafiService}: Traf
                     <CardFooter
                         className="absolute bg-gray-500/30 border-gray-400 bottom-0 border-t-1 border-white/20 z-10 justify-between p-3 pt-1.5 pb-1.5">
                         <p className="text-tiny text-white/70 shadow overflow-hidden">
-                            {serviceRoute.split("://")[1]}
+                            {serviceDomain}
                         </p>
                     </CardFooter>
                 </Link>
