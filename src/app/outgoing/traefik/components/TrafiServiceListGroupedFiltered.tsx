@@ -55,7 +55,7 @@ export const TrafiServiceListGroupedFiltered: FC<TrafiHostServiceMap> = ({trafiS
 
     // Apply search term to filter services
     const allFiltered = chain
-        .filter(x => x.rule.includes(query) || x.name.includes(query))
+        .filter(x => x.rule.includes(query.toLowerCase()) || x.name.includes(query.toLowerCase()))
         .value()
 
     const TAB_NAME_ALL = "All"
@@ -78,7 +78,7 @@ export const TrafiServiceListGroupedFiltered: FC<TrafiHostServiceMap> = ({trafiS
                         }
                         autoFocus
                         value={query}
-                        onChange={e => setQuery(e.target.value)}
+                        onChange={e => setQuery(e.target.value.toLowerCase)}
                     />
                 </div>
                 <div className="flex-auto w-80 pl-6 align-middle">
