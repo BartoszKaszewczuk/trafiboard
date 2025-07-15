@@ -7,10 +7,11 @@ import {TrafiServicePresentableMap, TrafiServicePresentableType, TrafiHostServic
 import {TrafiServiceListGrouped} from "@/app/outgoing/traefik/components/TrafiServiceListGrouped";
 import {Tab, Tabs} from "@heroui/react";
 import {FaMagnifyingGlass} from "react-icons/fa6";
-import {isNullOrUndefined} from "@/app/utils";
+import {applyDemoDomainOverride, isNullOrUndefined} from "@/app/utils";
 import iconNginx from './icon-nginx.svg';
 import iconTraefik from './icon-traefik.svg';
 import {ServiceType} from "@/app/outgoing/traefik/models";
+import {DEMO_MODE} from "@/app/outgoing/traefik/config";
 
 function getTabTitle(maybeTitle: string): string {
     if (isNullOrUndefined(maybeTitle)) {
@@ -95,7 +96,7 @@ export const TrafiServiceListGroupedFiltered: FC<TrafiHostServiceMap> = ({trafiS
     return (
         <div className="flex w-full flex-col">
             <Tabs
-                key={"dupa"}
+                key={"hosts"}
                 aria-label="Hosts"
                 size={"md"}
                 variant={"bordered"}
@@ -109,7 +110,12 @@ export const TrafiServiceListGroupedFiltered: FC<TrafiHostServiceMap> = ({trafiS
             >
                 {TAB_ALL}
                 {Array.from(trafiServicesMap.entries()).map(([trafiHost, services], index) => {
-                    const host = getTabTitle(trafiHost.hostname)
+                    let host: string
+                    if (DEMO_MODE) {
+                        host = getTabTitle(applyDemoDomainOverride(trafiHost.hostname))
+                    } else {
+                        host = getTabTitle(trafiHost.hostname)
+                    }
                     return (
                         <Tab key={host} title={
                             <div className="flex items-center space-x-2 relative">
