@@ -93,10 +93,10 @@ If you like the idea, the project has helped you, or saved you time, I'd greatly
 
 You can support financially through the following platforms:
 
-| Platform                                         | Description                                   | Link                                                                                                                                                                                                                  |
-|--------------------------------------------------|-----------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [Ko-fi.com](https://ko-fi.com/bartoszkaszewczuk) | Support with one-time or monthly donations 💛 | <a href='https://ko-fi.com/bartoszkaszewczuk' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi1.png?v=6' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a> |
-
+| Platform                                                       | Description                                                 | Link                                                                                                                                                                                                                                 |
+|----------------------------------------------------------------|-------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [Ko-fi.com](https://ko-fi.com/bartoszkaszewczuk)               | Support with one-time or monthly donations 💛               | <a href='https://ko-fi.com/bartoszkaszewczuk' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi1.png?v=6' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>                |
+| [Buy Me a Coffee](https://buymeacoffee.com/bartosz.kaszewczuk) | A quick, friendly way to say thanks with a small donation ☕ | <a href="https://www.buymeacoffee.com/bartosz.kaszewczuk" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 40px !important;width: 140px !important;" ></a> |
 
 Your contributions help cover development time, maintenance, and motivates me for continued improvements.
 
