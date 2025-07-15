@@ -55,7 +55,7 @@ export const TrafiServiceListGroupedFiltered: FC<TrafiHostServiceMap> = ({trafiS
 
     // Apply search term to filter services
     const allFiltered = chain
-        .filter(x => x.rule.includes(query) || x.name.includes(query))
+        .filter(x => x.rule.includes(query.toLowerCase()) || x.name.includes(query.toLowerCase()))
         .value()
 
     const TAB_NAME_ALL = "All"
