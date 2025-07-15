@@ -102,8 +102,6 @@ Your contributions help cover development time, maintenance, and motivates me fo
 
 Every contribution, no matter the size, makes a difference. **Thank you for your support!**
 
-
 ## 🪪 License
 
 [BSD-3 Clause](LICENSE)
-

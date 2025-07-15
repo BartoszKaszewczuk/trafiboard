@@ -28,48 +28,6 @@ declare module 'TrafiTypes' {
         NGINX = "NGINX"
     }
 
-    // class TrafiService implements TraefikRouter, TraefikEntryPoint {
-    //     constructor(
-    //         public serviceType: ServiceType,
-    //         public port: string,
-    //         public provider: string,
-    //         public name: string,
-    //         public rule: string,
-    //         public entryPointType: string,
-    //     ) {}
-    // }
-    //
-    // class TrafiServicePresentable extends TrafiService implements MaybeThumbnail {
-    //     constructor(
-    //         public serviceType: ServiceType,
-    //         public port: string,
-    //         public provider: string,
-    //         public name: string,
-    //         public rule: string,
-    //         public entryPointType: string,
-    //         public thumbnailUrl: string | null,
-    //     ) {
-    //         super(serviceType, port, provider, name, rule, entryPointType)
-    //         this.thumbnailUrl = thumbnailUrl
-    //     }
-    //
-    //     static fromTrafiService(trafiService: TrafiService, thumbnailUrl: string | null): TrafiServicePresentable {
-    //         return new TrafiServicePresentable(trafiService.serviceType, trafiService.port, trafiService.provider, trafiService.name, trafiService.rule, trafiService.entryPointType, thumbnailUrl)
-    //     }
-    //     static fromTrafiServiceType(trafiService: TrafiService, thumbnailUrl: string | null): TrafiServicePresentableType {
-    //         const type: TrafiServicePresentableType = {
-    //             type: trafiService.serviceType,
-    //             port: trafiService.port,
-    //             provider: trafiService.provider,
-    //             name: trafiService.name,
-    //             rule: trafiService.rule,
-    //             entryPointType: trafiService.entryPointType,
-    //             thumbnailUrl: thumbnailUrl
-    //         }
-    //         return type
-    //     }
-    // }
-
     type TrafiServicePresentableType = {
         serviceType: ServiceType,
         port: string,
