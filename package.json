@@ -15,7 +15,7 @@
     "@types/lodash": "^4.17.0",
     "class-transformer": "^0.5.1",
     "framer-motion": "^11.0.12",
-    "lodash": "^4.17.21",
+    "lodash": "^4.17.23",
     "next": "15.1.2",
     "null-as-undefined": "^0.4.0",
     "pino": "^9.6.0",
