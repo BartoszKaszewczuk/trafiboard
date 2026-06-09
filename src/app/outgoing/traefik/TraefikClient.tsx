@@ -6,7 +6,7 @@ import {
     ENDPOINT_TRAEFIK_VERSION, TB_HOST_TIMEOUT
 } from "@/app/outgoing/traefik/config";
 // import {plainToInstance} from 'class-transformer';
-import {isUrlValidUnsafe, logger as logger_master} from "@/app/utils";
+import {isUrlValid, isUrlValidUnsafe, logger as logger_master} from "@/app/utils";
 import {ServiceType, TrafiService} from "@/app/outgoing/traefik/models";
 import { TrafiServicePresentableType, TraefikEntryPoint, TraefikRouter, TraefikHost, TrafiHost } from "TrafiTypes";
 
@@ -163,15 +163,29 @@ export namespace TraefikClient {
     function getRoutesFromRule(rule: string, port: string): string[] {
         const items = rule
             .split("||")
+
+            // Try to parse a route from Traefik rule
             .map(subRule => subRule.substring(subRule.indexOf("`") + 1, subRule.lastIndexOf("`")))
-        return items.map(route => {
-            switch (port) {
-                case ":443" || "https":
-                    return `https://${route}`
-                default:
-                    // noinspection HttpUrlsUsage
-                    return `http://${route}`
-            }
-        })
+
+            // Prepend protocol
+            .map(route => {
+                switch (port) {
+                    case ":443" || "https":
+                        return `https://${route}`
+                    default:
+                        // noinspection HttpUrlsUsage
+                        return `http://${route}`
+                }
+            })
+
+            return items
+                .map(maybeRoute => {
+                    if (isUrlValid(maybeRoute)) {
+                        return maybeRoute
+                    } else {
+                        logger.warn(`Excluding route "${maybeRoute}" since it doesn't look like a valid URL. Route was derived from rule: "${rule}"`)
+                        return ""
+                    }
+                })
     }
 }
