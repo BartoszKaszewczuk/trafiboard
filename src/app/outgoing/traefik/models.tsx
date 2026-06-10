@@ -1,22 +1,22 @@
-import { TrafiServicePresentableType, TraefikRouter, TraefikEntryPoint } from "TrafiTypes";
+import { TrafiServicePresentableType } from "TrafiTypes";
 
-// export interface TraefikHost {
-//     url: string;
-//     username: string;
-//     password: string;
-// }
+export interface TraefikHost {
+    url: string;
+    username: string;
+    password: string;
+}
 
-// export interface TraefikRouter {
-//     provider: string;
-//     name: string;
-//     rule: string;
-//     entryPointType: string;
-// }
-//
-// export interface TraefikEntryPoint {
-//     name: string;
-//     port: string;
-// }
+export interface TraefikRouter {
+    provider: string;
+    name: string;
+    rule: string;
+    entryPointType: string;
+}
+
+export interface TraefikEntryPoint {
+    name: string;
+    port: string;
+}
 
 export interface MaybeThumbnail {
     thumbnailUrl: string | null,

@@ -192,7 +192,9 @@ export namespace NginxClient {
 
     function getRouteFromHost(rule: string, port: string): string {
         switch (port) {
-            case "443" || "https":
+            case "443":
+                return `https://${rule}`
+            case "https":
                 return `https://${rule}`
             default:
                 // noinspection HttpUrlsUsage
