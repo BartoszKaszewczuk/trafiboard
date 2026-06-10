@@ -170,8 +170,10 @@ export namespace TraefikClient {
             // Prepend protocol
             .map(route => {
                 switch (port) {
-                    case ":443" || "https":
-                        return `https://${route}`
+                    case ":443":
+                        return `https://${rule}`
+                    case "https":
+                        return `https://${rule}`
                     default:
                         // noinspection HttpUrlsUsage
                         return `http://${route}`
