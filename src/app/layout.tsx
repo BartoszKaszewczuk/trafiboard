@@ -13,6 +13,7 @@ export const metadata: Metadata = {
     description: "Your dynamic homepage auto populated with Traefik routes",
     icons: {
         icon: '/favicon.ico',
+        apple: '/app-icon.png'
     },
 };
 
