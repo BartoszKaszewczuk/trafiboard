@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start -p 8080",
     "prod": "next export",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "jest"
   },
   "dependencies": {
     "@emotion/styled": "^11.11.0",
@@ -29,6 +30,11 @@
     "turbocommons-ts": "^3.11.0"
   },
   "devDependencies": {
+    "@babel/preset-typescript": "^7.29.7",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@types/jest": "^30.0.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
@@ -36,9 +42,14 @@
     "autoprefixer": "^10.0.1",
     "eslint": "^9",
     "eslint-config-next": "16.2.7",
+    "jest": "^30.4.2",
+    "jest-environment-jsdom": "^30.4.1",
+    "jest-fetch-mock": "^3.0.3",
     "postcss": "^8",
     "tailwindcss": "^3.3.0",
-    "typescript": "^5",
+    "ts-jest": "^29.4.11",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3",
     "voca": "^1.4.1"
   }
 }
