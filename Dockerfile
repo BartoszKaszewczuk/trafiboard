@@ -10,7 +10,8 @@ COPY . .
 
 #RUN mkdir app && npm install && npm run build .
 RUN npm install
-RUN npm test && npm run build
+RUN npm test
+RUN npm run build
 
 # TODO: Shall we clean up src files after the build?
 
