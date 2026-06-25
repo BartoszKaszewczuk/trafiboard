@@ -172,17 +172,17 @@ export namespace TraefikClient {
                 let url = null;
                 switch (port) {
                     case "https":
-                        url = `https://${rule}`
+                        url = `https://${route}`
                         break
                     case ":443":
-                        url = `https://${rule}`
+                        url = `https://${route}`
                         break
                     default:
                         // noinspection HttpUrlsUsage
                         url = `http://${route}`
                         break
                 }
-                logger.debug(`Extracted Traefik route from port "${port}" and rule "${rule}": ${url}`)
+                logger.debug(`Extracted Traefik URL ${url} from port "${port}", rule "${rule}" and possible route "${route}" `)
                 return url
             })
 
