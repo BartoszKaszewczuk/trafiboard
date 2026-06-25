@@ -31,7 +31,7 @@ export namespace TraefikClient {
         return response.json();
     }
 
-    export async function getApiVersion(host: TraefikHost): Promise<string | null> {
+    async function getApiVersion(host: TraefikHost): Promise<string | null> {
         isUrlValidUnsafe(host.url)
         const url = host.url + ENDPOINT_TRAEFIK_VERSION
         try {
@@ -49,7 +49,7 @@ export namespace TraefikClient {
         return !!(await getApiVersion(host));
     }
 
-    export async function getRouters(host: TraefikHost): Promise<TraefikRouter[]> {
+    async function getRouters(host: TraefikHost): Promise<TraefikRouter[]> {
         isUrlValidUnsafe(host.url)
         const url = host.url + ENDPOINT_TRAEFIK_ROUTERS
         logger.trace(`Calling GET on Rules from ${url}`)
@@ -66,7 +66,7 @@ export namespace TraefikClient {
         )
     }
 
-    export async function getEntryPoints(host: TraefikHost): Promise<TraefikEntryPoint[]> {
+    async function getEntryPoints(host: TraefikHost): Promise<TraefikEntryPoint[]> {
         isUrlValidUnsafe(host.url)
         const url = host.url + ENDPOINT_TRAEFIK_ENTRYPOINTS
         logger.trace(`Calling GET on Entrypoints from ${url}`)
@@ -169,13 +169,21 @@ export namespace TraefikClient {
 
             // Prepend protocol
             .map(route => {
+                let url = null;
                 switch (port) {
-                    case ":443" || "https":
-                        return `https://${route}`
+                    case "https":
+                        url = `https://${route}`
+                        break
+                    case ":443":
+                        url = `https://${route}`
+                        break
                     default:
                         // noinspection HttpUrlsUsage
-                        return `http://${route}`
+                        url = `http://${route}`
+                        break
                 }
+                logger.debug(`Extracted Traefik URL ${url} from port "${port}", rule "${rule}" and possible route "${route}" `)
+                return url
             })
 
             return items

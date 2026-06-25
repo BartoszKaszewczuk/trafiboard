@@ -6,6 +6,7 @@
 
 # testing
 /coverage
+/.swc
 
 # next.js
 /.next/
@@ -17,6 +18,8 @@
 # misc
 .DS_Store
 *.pem
+/.idea
+/.github
 
 # debug
 npm-debug.log*
