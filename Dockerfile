@@ -1,4 +1,4 @@
-FROM node:21-alpine
+FROM node:24-alpine
 
 LABEL maintainer="bartosz.kaszewczuk@icloud.com"
 LABEL app_name="trafiboard"
