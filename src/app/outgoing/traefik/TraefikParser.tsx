@@ -35,7 +35,7 @@ export namespace TraefikParser {
                 if (isUrlValid(maybeRoute)) {
                     return maybeRoute
                 } else {
-                    logger.warn(`Excluding route "${maybeRoute}" since it doesn't look like a valid URL. Route was derived from rule: "${rule}"`)
+                    logger.warn(`Excluding route "${maybeRoute}" since it doesn't look like a valid URL after parsing. Route was derived from rule: "${rule}"`)
                     return ""
                 }
             })
