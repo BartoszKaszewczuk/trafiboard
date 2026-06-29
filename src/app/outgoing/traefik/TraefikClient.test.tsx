@@ -1,6 +1,7 @@
 import {expect, test} from "@jest/globals";
-import {TraefikClient} from "./TraefikClient";
+import {TraefikClient} from "../traefik/TraefikClient";
 import {ServiceType, TraefikEntryPoint, TraefikRouter, TrafiService} from "@/app/outgoing/traefik/models";
+import {TraefikParser} from "@/app/outgoing/traefik/TraefikParser";
 
 beforeEach(() => {
     fetch.resetMocks();
@@ -39,5 +40,21 @@ describe('#isApiReachable', () => {
         expect(actual).toBe(false)
         expect(fetch).toHaveBeenCalledTimes(1);
     });
+});
+
+describe('#getTrafiServices', () => {
+    test.each([
+            ["80", "Host(\`fake-domain.com\`)", ["http://fake-domain.com"]],
+            ["9999", "Host(\`fake-domain.com\`)", ["http://fake-domain.com"]],
+            ["443", "Host(\`fake-domain.com\`)", ["https://fake-domain.com"]],
+            ["8443", "Host(\`fake-domain.com\`)", ["https://fake-domain.com"]],
+            ["443", "Host(\`abc.fake-domain.com\`)", ["https://abc.fake-domain.com"]],
+            ["443", "emptyRule", [""]],
+            ["443", "Host(\`123.fake-domain.com\`) || Host(\`456.fake-domain.com\`)", ["https://123.fake-domain.com", "https://456.fake-domain.com"]]
+        ])
+        ('should parse port %s and rule %s and return urls: %s', async (inputPort, inputRule, expected) => {
+            expect(TraefikParser.getRoutesFromRule(inputRule, inputPort)).toStrictEqual(expected)
+        }
+    );
 });
 
