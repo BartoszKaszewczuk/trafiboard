@@ -3,12 +3,14 @@ import 'server-only'
 import {
     ENDPOINT_TRAEFIK_ENTRYPOINTS,
     ENDPOINT_TRAEFIK_ROUTERS,
-    ENDPOINT_TRAEFIK_VERSION, TB_HOST_TIMEOUT
+    ENDPOINT_TRAEFIK_VERSION,
+    TB_HOST_TIMEOUT
 } from "@/app/outgoing/traefik/config";
 // import {plainToInstance} from 'class-transformer';
-import {isUrlValid, isUrlValidUnsafe, logger as logger_master} from "@/app/utils";
+import {isUrlValidUnsafe, logger as logger_master} from "@/app/utils";
 import {ServiceType, TrafiService} from "@/app/outgoing/traefik/models";
-import { TrafiServicePresentableType, TraefikEntryPoint, TraefikRouter, TraefikHost, TrafiHost } from "TrafiTypes";
+import {TraefikEntryPoint, TraefikHost, TraefikRouter, TrafiHost} from "TrafiTypes";
+import {TraefikParser} from "@/app/outgoing/traefik/TraefikParser";
 
 export namespace TraefikClient {
     const logger = logger_master.child({module: "TRAEFIK"})
@@ -105,7 +107,7 @@ export namespace TraefikClient {
             .map(service => {
                 // Transform Traefik Rules into Trafi routes
                 service.name = cleanupTrafiServiceName(service.name)
-                service.rule = getRoutesFromRule(service.rule, service.port)[0]
+                service.rule = TraefikParser.getRoutesFromRule(service.rule, service.port)[0]
                 return service
             });
         return trafiServices
@@ -160,40 +162,6 @@ export namespace TraefikClient {
         return name.split("@")[0];
     }
 
-    function getRoutesFromRule(rule: string, port: string): string[] {
-        const items = rule
-            .split("||")
 
-            // Try to parse a route from Traefik rule
-            .map(subRule => subRule.substring(subRule.indexOf("`") + 1, subRule.lastIndexOf("`")))
-
-            // Prepend protocol
-            .map(route => {
-                let url = null;
-                switch (port) {
-                    case "https":
-                        url = `https://${route}`
-                        break
-                    case ":443":
-                        url = `https://${route}`
-                        break
-                    default:
-                        // noinspection HttpUrlsUsage
-                        url = `http://${route}`
-                        break
-                }
-                logger.debug(`Extracted Traefik URL ${url} from port "${port}", rule "${rule}" and possible route "${route}" `)
-                return url
-            })
-
-            return items
-                .map(maybeRoute => {
-                    if (isUrlValid(maybeRoute)) {
-                        return maybeRoute
-                    } else {
-                        logger.warn(`Excluding route "${maybeRoute}" since it doesn't look like a valid URL. Route was derived from rule: "${rule}"`)
-                        return ""
-                    }
-                })
-    }
 }
+
