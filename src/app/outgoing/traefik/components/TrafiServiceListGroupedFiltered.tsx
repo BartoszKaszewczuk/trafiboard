@@ -79,6 +79,8 @@ export const TrafiServiceListGroupedFiltered: FC<TrafiHostServiceMap> = ({trafiS
                         autoFocus
                         value={query}
                         onChange={e => setQuery(e.target.value)}
+                        isClearable
+                        onClear={() => setQuery("")}
                     />
                 </div>
                 <div className="flex-auto w-80 pl-6 align-middle">
