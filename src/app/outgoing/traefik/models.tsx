@@ -55,7 +55,7 @@ export class TrafiServicePresentable extends TrafiService implements MaybeThumbn
     static fromTrafiService(trafiService: TrafiService, thumbnailUrl: string | null): TrafiServicePresentable {
         return new TrafiServicePresentable(trafiService.serviceType, trafiService.port, trafiService.provider, trafiService.name, trafiService.rule, trafiService.entryPointType, thumbnailUrl)
     }
-    static fromTrafiServiceType(trafiService: TrafiService, thumbnailUrl: string | null): TrafiServicePresentableType {
+    static fromTrafiServiceType(trafiService: TrafiService, thumbnailUrl: string | undefined): TrafiServicePresentableType {
         const type: TrafiServicePresentableType = {
             serviceType: trafiService.serviceType,
             port: trafiService.port,

@@ -46,7 +46,7 @@ export const TrafiServiceListGroupedFiltered: FC<TrafiHostServiceMap> = ({trafiS
     const [query, setQuery] = useState('')
     const [dedup, setDedup] = useState(true)
 
-    const servicesFlat = Array.from(trafiServicesMap.values()).flat()
+    const servicesFlat: TrafiServicePresentableType[] = Array.from(trafiServicesMap.values()).flat()
     let chain = _.chain(servicesFlat)
     // Apply deduplication
     if (dedup) {
@@ -55,7 +55,7 @@ export const TrafiServiceListGroupedFiltered: FC<TrafiHostServiceMap> = ({trafiS
 
     // Apply search term to filter services
     const allFiltered = chain
-        .filter(x => x.rule.includes(query.toLowerCase()) || x.name.includes(query.toLowerCase()))
+        .filter((x: TrafiServicePresentableType) => x.rule?.includes(query.toLowerCase()) || x.name.includes(query.toLowerCase()))
         .value()
 
     const TAB_NAME_ALL = "All"
