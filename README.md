@@ -35,8 +35,8 @@ If so then give TrafiBoard a spin and let it automagically generate a dashboard 
 
 ### 🐳 Docker Run
 ```bash
-docker run -p 8080:8080 --name traefiboard \ 
-  -e '[{"url":"https://traefik.instance1.com","username":"","password":""},{"url":"http://192.168.0.1","username":"","password":""},{"url":"https://nginx.instance3.com","username":"","password":""}]' \
+docker run -p 8080:8080 --name traefiboard \
+  -e TB_HOSTS='[{"url":"https://traefik.instance1.com","username":"","password":""},{"url":"http://192.168.0.1","username":"","password":""},{"url":"https://nginx.instance3.com","username":"","password":""}]' \
   ghcr.io/bartoszkaszewczuk/trafiboard:latest
 ```
 

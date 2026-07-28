@@ -1,12 +1,18 @@
 import {isUrlValid, logger as logger_master} from "@/app/utils";
 
 export namespace TraefikParser {
+    const TAG_HOST = "Host("
 
     const logger = logger_master.child({module: "TRAEFIK_PARSER"})
 
     export function getRoutesFromRule(rule: string, port: string): string[] {
         const items = rule
             .split("||")
+            .map((x: string) => x.split("&&")).flat()
+            .map((x: string) => x.trim())
+
+            // Filter rule segments to supported tags only
+            .filter((x: string) => x.startsWith(TAG_HOST))
 
             // Try to extract the domain part from Traefik rule
             .map(subRule => subRule.substring(subRule.indexOf("`") + 1, subRule.lastIndexOf("`")))
