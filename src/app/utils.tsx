@@ -28,12 +28,7 @@ export function isNullOrUndefined(obj: any) {
 }
 
 export function isUrlValid(url: string): boolean {
-    try {
-        new URL(url)
-        return true;
-    } catch (e) {
-        return false;
-    }
+    return URL.canParse(url)
 }
 
 export function isUrlValidUnsafe(url: string): boolean {
@@ -48,5 +43,8 @@ export function applyDemoDomainOverride(serviceDomain: string) {
     const subparts = serviceDomain.split('.');
     subparts[subparts.length - 1] = "io";
     subparts[subparts.length - 2] = "demo";
+    if (subparts[subparts.length - 3] && subparts[subparts.length - 4]) {
+        subparts.splice(subparts.length - 3, 1);
+    }
     return subparts.join('.')
 }

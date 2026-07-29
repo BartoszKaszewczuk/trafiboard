@@ -114,7 +114,7 @@ export const TrafiServiceListGroupedFiltered: FC<TrafiHostServiceMap> = ({trafiS
                 {Array.from(trafiServicesMap.entries()).map(([trafiHost, services], index) => {
                     let host: string
                     if (DEMO_MODE) {
-                        host = getTabTitle(applyDemoDomainOverride(trafiHost.alias ? trafiHost.alias : trafiHost.host))
+                        host = trafiHost.alias ? trafiHost.alias : getTabTitle(applyDemoDomainOverride(trafiHost.host))
                     } else {
                         host = getTabTitle(trafiHost.alias ? trafiHost.alias : trafiHost.host)
                     }
