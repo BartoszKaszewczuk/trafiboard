@@ -187,6 +187,7 @@ jobs:
       - build
 
     permissions:
+      contents: write
       packages: write
 
     steps:
@@ -231,6 +232,7 @@ jobs:
       - name: Create a GitHub release
         uses: ncipollo/release-action@v1
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ needs.version.outputs.version }}
           name: Release ${{ needs.version.outputs.version }}
           body: |
