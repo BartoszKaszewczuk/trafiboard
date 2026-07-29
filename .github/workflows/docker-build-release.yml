@@ -32,7 +32,7 @@ jobs:
           fetch-depth: 0
 
       - id: semver
-        uses: PaulHatch/semantic-version@v5.4.0
+        uses: PaulHatch/semantic-version@v6
         with:
           tag_prefix: "v"
           major_pattern: "BREAKING CHANGE:"
@@ -51,13 +51,13 @@ jobs:
             org.opencontainers.image.description=Automagicall HomeLab Dashbaord
             org.opencontainers.image.vendor=@BartoszKaszewczuk
             org.opencontainers.image.url="https://github.com/BartoszKaszewczuk/trafiboard"
-            org.opencontainers.image.version=${{ needs.version.outputs.version }}
+            org.opencontainers.image.version=${{ steps.semver.outputs.version }}
           tags: |
             latest
             type=ref,event=branch
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
-            type=raw,value=${{ needs.version.outputs.version }}
+            type=raw,value=${{ steps.semver.outputs.version }}
 
   build:
     needs: version
@@ -137,7 +137,7 @@ jobs:
           platforms: ${{ matrix.platform }}
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ needs.version.outputs.version }}
-          labels: ${{ steps.meta.outputs.labels }}
+          labels: ${{ needs.version.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           outputs: type=image,push-by-digest=true,name-canonical=true,push=true
@@ -151,7 +151,7 @@ jobs:
         if: ${{ github.event_name != 'pull_request' }}
         env:
           # https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-an-intermediate-environment-variable
-          TAGS: ${{ steps.meta.outputs.tags }}
+          TAGS: ${{ needs.version.outputs.tags }}
           DIGEST: ${{ steps.build-and-push.outputs.digest }}
         # This step uses the identity token to provision an ephemeral certificate
         # against the sigstore community Fulcio instance.
@@ -160,7 +160,7 @@ jobs:
       - name: Export digest
         run: |
           mkdir -p "$RUNNER_TEMP/digests"
-          digest="${{ steps.build.outputs.digest }}"
+          digest="${{ steps.build-and-push.outputs.digest }}"
           touch "$RUNNER_TEMP/digests/${digest#sha256:}"
 
       - uses: actions/upload-artifact@v4
