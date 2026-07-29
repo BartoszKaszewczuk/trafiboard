@@ -198,6 +198,8 @@ jobs:
       - name: Debug artifacts
         run: |
           echo "Runner temp: $RUNNER_TEMP"
+          ls -lah "$RUNNER_TEMP/digests"
+          ls -lah "/home/runner/work/trafiboard/trafiboard/$RUNNER_TEMP/digests"
           find "$RUNNER_TEMP/digests" -print
 
       - uses: docker/setup-buildx-action@v4
