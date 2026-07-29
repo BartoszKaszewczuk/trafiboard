@@ -26,11 +26,16 @@ jobs:
       version: ${{ steps.semver.outputs.version }}
       tags: ${{ steps.meta.outputs.tags }}
       labels: ${{ steps.meta.outputs.labels }}
-      image: ${{ steps.meta.inputs.images }}
+      image: ${{ steps.meta.outputs.repository }}
     steps:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
+
+      - id: lower-repo
+        name: Repository to lowercase
+        run: |
+          echo "repository=${GITHUB_REPOSITORY@L}" >> $GITHUB_OUTPUT
 
       - id: semver
         uses: PaulHatch/semantic-version@v6.0.2
@@ -136,7 +141,7 @@ jobs:
           context: .
           platforms: ${{ matrix.platform }}
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: ${{ env.REGISTRY }}/${{ needs.version.outputs.image }} }}
           labels: ${{ needs.version.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
