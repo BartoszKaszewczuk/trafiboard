@@ -25,7 +25,7 @@ function fetchPresentableTrafiServicesType(): Map<TrafiHost, TrafiServicePresent
     for (const [host, services] of hosts.entries()) {
         const presentables: TrafiServicePresentableType[] = services.map((service: TrafiService) => {
 //         const screenshot = use(getScreenshot(service.getRoutes()[0]))
-            const screenshot = null
+            const screenshot = undefined
             return TrafiServicePresentable.fromTrafiServiceType(service, screenshot)
         })
         mapOfPresentableServices.set(host, presentables)

@@ -33,9 +33,9 @@ declare module 'TrafiTypes' {
         port: string,
         provider: string,
         name: string,
-        rule: string,
+        rule?: string,
         entryPointType: string,
-        thumbnailUrl: string | null,
+        thumbnailUrl?: string,
     }
 
     interface TrafiHost {
