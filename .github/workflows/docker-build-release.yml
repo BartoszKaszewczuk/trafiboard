@@ -26,7 +26,7 @@ jobs:
       version: ${{ steps.semver.outputs.version }}
       tags: ${{ steps.meta.outputs.tags }}
       labels: ${{ steps.meta.outputs.labels }}
-      repository: ${{ steps.meta.outputs.repository }}
+      repository: ${{ steps.lower-repo.outputs.repository }}
     steps:
       - uses: actions/checkout@v7
         with:
