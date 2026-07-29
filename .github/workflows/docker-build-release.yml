@@ -55,11 +55,10 @@ jobs:
             org.opencontainers.image.version=${{ steps.semver.outputs.version }}
           annotations: ${{ steps.meta.outputs.labels }}
           tags: |
-            latest
-            type=ref,event=branch
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
             type=raw,value=${{ steps.semver.outputs.version }}
+            latest
 
   build:
     needs: version
