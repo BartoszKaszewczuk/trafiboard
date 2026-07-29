@@ -191,9 +191,14 @@ jobs:
     steps:
       - uses: actions/download-artifact@v8
         with:
-          path: $RUNNER_TEMP/digests
+          path: $RUNNER_TEMP/digests/*
           pattern: "*"
           merge-multiple: true
+
+      - name: Debug artifacts
+        run: |
+          echo "Runner temp: $RUNNER_TEMP"
+          find "$RUNNER_TEMP/digests" -print
 
       - uses: docker/setup-buildx-action@v4
 
