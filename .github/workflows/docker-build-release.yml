@@ -27,6 +27,7 @@ jobs:
       tags: ${{ steps.meta.outputs.tags }}
       labels: ${{ steps.meta.outputs.labels }}
       repository: ${{ steps.lower-repo.outputs.repository }}
+      changelog: ${{ steps.changelog.outputs.content }}
     steps:
       - uses: actions/checkout@v7
         with:
@@ -64,6 +65,20 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=raw,value=${{ steps.semver.outputs.version }}
             latest
+
+      - uses: orhun/git-cliff-action@v4
+        id: cliff
+        with:
+          args: --latest
+
+      - id: changelog
+        shell: bash
+        run: |
+          {
+            echo "content<<EOF"
+            cat "${{ steps.cliff.outputs.changelog }}"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
 
   build:
     needs: version
@@ -229,6 +244,10 @@ jobs:
           "${TAG_ARGS[@]}" \
           $(printf '${{ env.REGISTRY }}/${{ needs.version.outputs.repository }}@sha256:%s ' *)
 
+      - name: Inspect Image
+        run: |
+          docker buildx imagetools inspect ${{ env.REGISTRY }}/${{ env.REGISTRY_IMAGE }}:${{ steps.meta.outputs.version }}
+
       - name: Create a GitHub release
         uses: ncipollo/release-action@v1
         with:
@@ -248,5 +267,5 @@ jobs:
 
             ## Changelog
 
-            ${{ steps.tag_version.outputs.changelog }}
+            ${{ needs.version.outputs.changelog }}
           removeArtifacts: true
