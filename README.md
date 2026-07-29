@@ -52,18 +52,17 @@ services:
         [
           {
             "url": "https://traefik.instance1.com",
-            "username": "",
-            "password": ""
+            "alias": "Traefik 1"
           },
           {
             "url": "http://192.168.0.1",
-            "username": "",
-            "password": ""
+            "alias": "Traefik 2"
           },
           {
             "url": "https://nginx.instance3.com",
-            "username": "",
-            "password": ""
+            "alias": "Nginx",
+            "username": "user",
+            "password": "pass"
           }
         ]
 ```
