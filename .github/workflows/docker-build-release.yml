@@ -176,7 +176,7 @@ jobs:
       - uses: actions/upload-artifact@v7
         with:
           name: "*"
-          path: $RUNNER_TEMP/digests/*
+          path: $RUNNER_TEMP/digests/
           retention-days: 1
 
   merge:
