@@ -213,7 +213,7 @@ jobs:
 
           docker buildx imagetools create \
             $TAG_ARGS \
-            $(printf '${{ needs.version.outputs.repository }} }}@sha256:%s ' *)
+            $(printf '${{ env.REGISTRY }}/${{ needs.version.outputs.repository }}@sha256:%s ' *)
 
       - name: Create a GitHub release
         uses: ncipollo/release-action@v1
