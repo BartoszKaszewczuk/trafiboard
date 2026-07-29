@@ -1,4 +1,4 @@
-name: Docker
+name: Build - Release
 
 on:
   push:
@@ -9,7 +9,8 @@ on:
     types:
       - closed
     branches:
-      - master    
+      - master
+      - main
 
 env:
   # Use docker.io for Docker Hub if empty
@@ -20,92 +21,130 @@ env:
 concurrency: production
 
 jobs:
-  build:
+  version:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      packages: write
-      # This is used to complete the identity challenge
-      # with sigstore/fulcio when running outside of PRs.
-      id-token: write
-
+    outputs:
+      version: ${{ steps.semver.outputs.version }}
+      tags: ${{ steps.meta.outputs.tags }}
+      labels: ${{ steps.meta.outputs.labels }}
+      repository: ${{ steps.lower-repo.outputs.repository }}
+      changelog: ${{ steps.changelog.outputs.content }}
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      # Install the cosign tool except on PR
-      # https://github.com/sigstore/cosign-installer
-      - name: Install cosign
-        if: github.event_name != 'pull_request'
-        uses: sigstore/cosign-installer@59acb6260d9c0ba8f4a2f9d9b48431a222b68e20 #v3.5.0
+      - uses: actions/checkout@v7
         with:
-          cosign-release: 'v2.2.4'
+          fetch-depth: 0
 
-      # Set up BuildKit Docker container builder to be able to build
-      # multi-platform images and export cache
-      # https://github.com/docker/setup-buildx-action
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@f95db51fddba0c2d1ec667646a06c2ce06100226 # v3.0.0
-
-      # Login against a Docker registry except on PR
-      # https://github.com/docker/login-action
-      - name: Log into registry ${{ env.REGISTRY }}
-        if: github.event_name != 'pull_request'
-        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Bump SemVer version and push tag
-        uses: anothrNick/github-tag-action@v1
-        id: tag_version
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
-          TAG_PREFIX: v
-          PRERELEASE: true
-
-      - name: Extract major version
-        id: extract-semver-major
+      - id: lower-repo
+        name: Repository to lowercase
         run: |
-          version="${{ steps.tag_version.outputs.new_tag }}"
-          major=$(echo "$version" | sed -E 's/^v([0-9]+)\..*/\1/')
-          echo "Extracted major: $major"
-          echo "major=$major" >> $GITHUB_OUTPUT
+          echo "repository=${GITHUB_REPOSITORY@L}" >> $GITHUB_OUTPUT
+
+      - id: semver
+        uses: PaulHatch/semantic-version@v6.0.2
+        with:
+          tag_prefix: "v"
+          major_pattern: "BREAKING CHANGE:"
+          minor_pattern: "feat:"
+          version_format: "v${major}.${minor}.${patch}"
 
       # Extract metadata (tags, labels) for Docker
       # https://github.com/docker/metadata-action
       - name: Extract Docker metadata
         id: meta
-        uses: docker/metadata-action@96383f45573cb7f253c731d3b3ab81c87ef81934 # v5.0.0
+        uses: docker/metadata-action@v6
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           labels: |
             org.opencontainers.image.title=TrafiBoard
             org.opencontainers.image.description=Automagicall HomeLab Dashbaord
             org.opencontainers.image.vendor=@BartoszKaszewczuk
-            org.opencontainers.image.url="https://github.com/BartoszKaszewczuk/trafiboard"
-            org.opencontainers.image.version=${{ steps.tag_version.outputs.new_tag }}
+            org.opencontainers.image.url=https://github.com/BartoszKaszewczuk/trafiboard
+            org.opencontainers.image.version=${{ steps.semver.outputs.version }}
+          annotations: ${{ steps.meta.outputs.labels }}
           tags: |
-            type=ref,event=branch
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
-            ${{ steps.tag_version.outputs.new_tag }}
-            v${{ steps.extract-semver-major.outputs.major }}
+            type=raw,value=${{ steps.semver.outputs.version }}
             latest
+
+      - uses: orhun/git-cliff-action@v4
+        id: cliff
+        with:
+          args: --latest
+
+      - id: changelog
+        shell: bash
+        run: |
+          {
+            echo "content<<EOF"
+            cat "${{ steps.cliff.outputs.changelog }}"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+  build:
+    needs: version
+
+    runs-on: ${{ matrix.runner }}
+    permissions:
+      contents: write
+      packages: write
+      # This is used to complete the identity challenge
+      # with sigstore/fulcio when running outside of PRs.
+      id-token: write
+    strategy:
+      matrix:
+        include:
+          - platform: linux/amd64
+            runner: ubuntu-latest
+          - platform: linux/arm64
+            runner: ubuntu-24.04-arm
+
+    steps:
+      # Checkout repo
+      # https://github.com/actions/checkout
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      # Install the cosign tool except on PR
+      # https://github.com/sigstore/cosign-installer
+      - name: Install cosign
+        if: github.event_name != 'pull_request'
+        uses: sigstore/cosign-installer@v4.1.0
+
+      # Set up BuildKit Docker container builder to be able to build
+      # multi-platform images and export cache
+      # https://github.com/docker/setup-buildx-action
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      # QEMU for multiplatform build
+      # https://github.com/docker/setup-qemu-action
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v4
+
+      # Login against a Docker registry
+      # https://github.com/docker/login-action
+      - name: Log into registry ${{ env.REGISTRY }}
+        uses: docker/login-action@v4
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
       - name: Build and push Docker image
         id: build-and-push
-        uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5.0.0
+        uses: docker/build-push-action@v7
         with:
           context: .
+          platforms: ${{ matrix.platform }}
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ env.REGISTRY }}/${{ needs.version.outputs.repository }}
+          labels: ${{ needs.version.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          outputs: type=image,push-by-digest=true,name-canonical=true,push=true
 
       # Sign the resulting Docker image digest except on PRs.
       # This will only write to the public Rekor transparency log when the Docker
@@ -116,26 +155,90 @@ jobs:
         if: ${{ github.event_name != 'pull_request' }}
         env:
           # https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-an-intermediate-environment-variable
-          TAGS: ${{ steps.meta.outputs.tags }}
+          TAGS: ${{ needs.version.outputs.tags }}
           DIGEST: ${{ steps.build-and-push.outputs.digest }}
         # This step uses the identity token to provision an ephemeral certificate
         # against the sigstore community Fulcio instance.
         run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
 
+      - name: Export digest
+        run: |
+          mkdir -p "${{ runner.temp }}/digests"
+          digest="${{ steps.build-and-push.outputs.digest }}"
+          touch "${{ runner.temp }}/digests/${digest#sha256:}"
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: digests-linux-${{ matrix.architecture }}
+          path: ${{ runner.temp }}/digests/*
+          if-no-files-found: error
+          retention-days: 1
+
+  merge:
+    runs-on: ubuntu-latest
+    needs:
+      - version
+      - build
+
+    permissions:
+      contents: write
+      packages: write
+
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          path: ${{ runner.temp }}/digests
+          pattern: digests-*
+          merge-multiple: true
+
+      # Login against a Docker registry
+      # https://github.com/docker/login-action
+      - name: Log into registry ${{ env.REGISTRY }}
+        uses: docker/login-action@v4
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: docker/setup-buildx-action@v4
+
+      - name: Create manifest
+        working-directory: ${{ runner.temp }}/digests
+        env:
+          TAGS: ${{ needs.version.outputs.tags }}
+        run: |
+          TAG_ARGS=()
+          
+          while IFS= read -r tag; do
+          TAG_ARGS+=("-t" "$tag")
+          done <<< "$TAGS"
+          
+          docker buildx imagetools create \
+          "${TAG_ARGS[@]}" \
+          $(printf '${{ env.REGISTRY }}/${{ needs.version.outputs.repository }}@sha256:%s ' *)
+
+      - name: Inspect Image
+        run: |
+          docker buildx imagetools inspect ${{ env.REGISTRY }}/${{ needs.version.outputs.repository }}:${{ needs.version.outputs.version }}
+
       - name: Create a GitHub release
         uses: ncipollo/release-action@v1
         with:
-          tag: ${{ steps.tag_version.outputs.new_tag }}
-          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ needs.version.outputs.version }}
+          name: Release ${{ needs.version.outputs.version }}
           body: |
             ## Docker Image
-            
-            ```
-            docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.tag_version.outputs.new_tag }}
-            ```
-            
-            ## Changelog
-            
-            ${{ steps.tag_version.outputs.changelog }}
-          removeArtifacts: true
 
+            ```
+            docker pull ${{ env.REGISTRY }}/${{ needs.version.outputs.repository }}:${{ needs.version.outputs.version }}
+            ```
+            or
+            ```
+            docker pull ${{ env.REGISTRY }}/${{ needs.version.outputs.repository }}:latest
+            ```
+
+            ## Changelog
+
+            ${{ needs.version.outputs.changelog }}
+          removeArtifacts: true

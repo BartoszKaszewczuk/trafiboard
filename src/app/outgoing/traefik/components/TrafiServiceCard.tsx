@@ -8,7 +8,7 @@ import {applyDemoDomainOverride} from "@/app/utils";
 
 export const TrafiServiceCard: FC<TrafiServiceCardProps> = ({trafiService}: TrafiServiceCardProps) => {
     const serviceName = trafiService.name
-    const serviceRoute = trafiService.rule
+    const serviceRoute = trafiService.rule ? trafiService.rule : "no-op"
     let serviceDomain = serviceRoute.split("://")[1]
     const thumbnailUrl = trafiService.thumbnailUrl
     const faviconUrl = serviceRoute + '/favicon.ico'
