@@ -26,7 +26,7 @@ jobs:
       version: ${{ steps.semver.outputs.version }}
       tags: ${{ steps.meta.outputs.tags }}
       labels: ${{ steps.meta.outputs.labels }}
-      image: ${{ steps.meta.outputs.repository }}
+      repository: ${{ steps.meta.outputs.repository }}
     steps:
       - uses: actions/checkout@v7
         with:
@@ -141,7 +141,7 @@ jobs:
           context: .
           platforms: ${{ matrix.platform }}
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ env.REGISTRY }}/${{ needs.version.outputs.image }} }}
+          tags: ${{ env.REGISTRY }}/${{ needs.version.outputs.repository }} }}
           labels: ${{ needs.version.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -208,7 +208,7 @@ jobs:
 
           docker buildx imagetools create \
             $TAG_ARGS \
-            $(printf '${{ needs.version.outputs.image }}@sha256:%s ' *)
+            $(printf '${{ needs.version.outputs.repository }} }}@sha256:%s ' *)
 
       - name: Create a GitHub release
         uses: ncipollo/release-action@v1
@@ -223,7 +223,7 @@ jobs:
             ```
             or
             ```
-            docker pull ${{ needs.version.outputs.image }}:latest
+            docker pull ${{ env.REGISTRY }}/${{ needs.version.outputs.repository }}:latest
             ```
 
             ## Changelog
