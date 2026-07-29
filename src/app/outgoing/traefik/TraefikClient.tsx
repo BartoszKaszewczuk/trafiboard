@@ -130,7 +130,8 @@ export namespace TraefikClient {
                 const services = await getTrafiServices(host);
                 logger.info(`Indexed ${services.length} Traefik service routes hosted by ${host.url}`);
                 const key: TrafiHost = {
-                    hostname: host.url,
+                    host: host.url,
+                    alias: host.alias,
                     hostType: ServiceType.TRAEFIK
                 }
                 // mapOfHosts.set(host.url, services)
