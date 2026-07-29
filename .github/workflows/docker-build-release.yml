@@ -32,7 +32,7 @@ jobs:
           fetch-depth: 0
 
       - id: semver
-        uses: PaulHatch/semantic-version@v6
+        uses: PaulHatch/semantic-version@v6.0.2
         with:
           tag_prefix: "v"
           major_pattern: "BREAKING CHANGE:"
