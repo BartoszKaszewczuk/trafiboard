@@ -4,9 +4,9 @@
 <h1 align="center">
    TrafiBoard
 </h1>
-<h5 align="center">
+<h4 align="center">
    <i>Turn your Reverse-Proxies into a Dashboard</i>
-</h5>
+</h4>
 
 TrafiBoard is a dynamic `Reverse-Proxy-to-Dashboard` application capable of aggregating multiple Reverse Proxies, parsing their API data and generating a unified dashboard that is always up to date with your infrastructure! 
 
