@@ -45,23 +45,10 @@ export function applyDemoDomainOverride(serviceDomain: string) {
         return serviceDomain
     }
     const postfix = Math.floor(Math.random() * (20 - 1 + 1)) + 1;
-    // const postfix = hashString(subparts[0]+subparts[1])
     subparts[subparts.length - 1] = "io";
     subparts[subparts.length - 2] = "demo"+postfix;
     if (subparts[subparts.length - 3] && subparts[subparts.length - 4]) {
         subparts.splice(subparts.length - 3, 1);
     }
     return subparts.join('.')
-}
-
-export function hashString(str: string) {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-        hash += Math.pow(str.charCodeAt(i)*17,  3)
-        // hash /= 3
-        // hash += Math.pow(str.charCodeAt(i), str.length - i);
-        // hash = hash & hash; // Convert to 32-bit integer
-    }
-    const string = hash.toString();
-    return string.substring(0, string.length / 4);
 }

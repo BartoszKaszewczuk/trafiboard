@@ -23,10 +23,10 @@ export namespace RouteAggregator {
 
         const mapOfPresentableServices = new Map<TrafiHost, TrafiServicePresentableType[]>()
         for (const [host, services] of hosts.entries()) {
+            if (DEMO_MODE) {
+                host.alias = applyDemoDomainOverride(host.alias ? host.alias : host.host)
+            }
             const presentables: TrafiServicePresentableType[] = services.map((service: TrafiService) => {
-                if (DEMO_MODE) {
-                    host.alias = applyDemoDomainOverride(host.alias ? host.alias : host.host)
-                }
      //         const screenshot = use(getScreenshot(service.getRoutes()[0]))
                 const screenshot = undefined
                 return TrafiServicePresentable.fromTrafiServiceType(service, screenshot)
