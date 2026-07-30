@@ -42,7 +42,7 @@ function getImage(hostType: ServiceType): ReactElement | null {
         src={icon} alt={`${hostType} icon`}/>
 }
 
-export const TrafiServiceListGroupedFiltered: FC<TrafiHostServiceMap> = ({trafiServicesMap}) => {
+export const TrafiServiceListGroupedFiltered: FC<TrafiHostServiceMap> = ({trafiServicesMap: trafiServicesMap}) => {
     const [query, setQuery] = useState('')
     const [dedup, setDedup] = useState(true)
 
@@ -112,14 +112,9 @@ export const TrafiServiceListGroupedFiltered: FC<TrafiHostServiceMap> = ({trafiS
             >
                 {TAB_ALL}
                 {Array.from(trafiServicesMap.entries()).map(([trafiHost, services], index) => {
-                    let host: string
-                    if (DEMO_MODE) {
-                        host = getTabTitle(applyDemoDomainOverride(trafiHost.hostname))
-                    } else {
-                        host = getTabTitle(trafiHost.hostname)
-                    }
+                    const host = getTabTitle(trafiHost.alias ? trafiHost.alias : trafiHost.host)
                     return (
-                        <Tab key={host} title={
+                        <Tab key={host+index} title={
                             <div className="flex items-center space-x-2 relative">
                                 {getImage(trafiHost.hostType)}
                                 <span>{host}</span>
