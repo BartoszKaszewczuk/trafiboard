@@ -112,12 +112,7 @@ export const TrafiServiceListGroupedFiltered: FC<TrafiHostServiceMap> = ({trafiS
             >
                 {TAB_ALL}
                 {Array.from(trafiServicesMap.entries()).map(([trafiHost, services], index) => {
-                    let host: string
-                    if (DEMO_MODE) {
-                        host = trafiHost.alias ? trafiHost.alias : getTabTitle(applyDemoDomainOverride(trafiHost.host))
-                    } else {
-                        host = getTabTitle(trafiHost.alias ? trafiHost.alias : trafiHost.host)
-                    }
+                    const host = getTabTitle(trafiHost.alias ? trafiHost.alias : trafiHost.host)
                     return (
                         <Tab key={host+index} title={
                             <div className="flex items-center space-x-2 relative">
