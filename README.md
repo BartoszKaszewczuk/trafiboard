@@ -54,14 +54,10 @@ services:
       TB_HOSTS: >
         [
           {
-            "url": "https://traefik.instance1.com",
-            "username": "",
-            "password": ""
+            "url": "https://traefik.instance1.com"
           },
           {
-            "url": "http://192.168.0.1",
-            "username": "",
-            "password": ""
+            "url": "http://192.168.0.1"
           },
           {
             "url": "https://nginx.instance3.com",
