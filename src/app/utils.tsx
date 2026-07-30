@@ -40,8 +40,11 @@ export function isUrlValidUnsafe(url: string): boolean {
 }
 
 export function applyDemoDomainOverride(serviceDomain: string) {
-    const postfix = Math.floor(Math.random() * (20 - 1 + 1)) + 1;
     const subparts = serviceDomain.split('.');
+    if (subparts.length <= 1) {
+        return serviceDomain
+    }
+    const postfix = Math.floor(Math.random() * (20 - 1 + 1)) + 1;
     subparts[subparts.length - 1] = "io";
     subparts[subparts.length - 2] = "demo"+postfix;
     if (subparts[subparts.length - 3] && subparts[subparts.length - 4]) {
