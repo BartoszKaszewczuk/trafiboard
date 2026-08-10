@@ -4,6 +4,9 @@
 <h1 align="center">
    TrafiBoard
 </h1>
+<h4 align="center">
+   <i>Turn your Reverse-Proxies into a Dashboard</i>
+</h4>
 
 TrafiBoard is a dynamic `Reverse-Proxy-to-Dashboard` application capable of aggregating multiple Reverse Proxies, parsing their API data and generating a unified dashboard that is always up to date with your infrastructure! 
 
@@ -52,14 +55,10 @@ services:
       TB_HOSTS: >
         [
           {
-            "url": "https://traefik.instance1.com",
-            "username": "",
-            "password": ""
+            "url": "https://traefik.instance1.com"
           },
           {
-            "url": "http://192.168.0.1",
-            "username": "",
-            "password": ""
+            "url": "http://192.168.0.1"
           },
           {
             "url": "https://nginx.instance3.com",
