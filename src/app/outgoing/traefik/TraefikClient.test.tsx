@@ -87,11 +87,11 @@ describe('#isApiReachable', () => {
                 expect(actualArgs.headers).not.toBeDefined()
             })
         });
-        describe('Test Digest Authentication', () => {
+        describe('Test Basic Auth Header Authentication', () => {
             test('should include digest auth credentials when provided', async () => {
                 const fakeTraefikHost = {
                     url: "https://localhost:8080",
-                    authDigest: basicAuthDigest
+                    basicAuthHeader: basicAuthDigest
                 }
                 fetch.mockResponseOnce(JSON.stringify({Version: 1}));
 
@@ -107,7 +107,7 @@ describe('#isApiReachable', () => {
             test('should prefix auth digest credentials with "Basic " when missing in the digest', async () => {
                 const fakeTraefikHost = {
                     url: "https://localhost:8080",
-                    authDigest: basicAuthDigest.replace("Basic ", "")
+                    basicAuthHeader: basicAuthDigest.replace("Basic ", "")
                 }
                 fetch.mockResponseOnce(JSON.stringify({Version: 1}));
 
@@ -125,7 +125,7 @@ describe('#isApiReachable', () => {
                     url: "https://localhost:8080",
                     username: "string" + Math.random(),
                     password: "string" + Math.random(),
-                    authDigest: basicAuthDigest
+                    basicAuthHeader: basicAuthDigest
                 }
                 fetch.mockResponseOnce(JSON.stringify({Version: 1}));
 
@@ -207,11 +207,11 @@ describe('#getTrafiServices', () => {
                 });
             })
         });
-        describe('Test Digest Authentication', () => {
+        describe('Test Basic Auth Header Authentication', () => {
             test('should include digest auth credentials when provided', async () => {
                 const fakeTraefikHost = {
                     url: "https://localhost:8080",
-                    authDigest: basicAuthDigest
+                    basicAuthHeader: basicAuthDigest
                 }
                 fetch.mockResponse(JSON.stringify(fakeRoutersResponse));
 
@@ -230,7 +230,7 @@ describe('#getTrafiServices', () => {
             test('should prefix auth digest credentials with "Basic " when missing in the digest', async () => {
                 const fakeTraefikHost = {
                     url: "https://localhost:8080",
-                    authDigest: basicAuthDigest.replace("Basic ", "")
+                    basicAuthHeader: basicAuthDigest.replace("Basic ", "")
                 }
                 fetch.mockResponse(JSON.stringify(fakeRoutersResponse));
 
@@ -251,7 +251,7 @@ describe('#getTrafiServices', () => {
                     url: "https://localhost:8080",
                     username: "string" + Math.random(),
                     password: "string" + Math.random(),
-                    authDigest: basicAuthDigest
+                    basicAuthHeader: basicAuthDigest
                 }
                 fetch.mockResponse(JSON.stringify(fakeRoutersResponse));
 
