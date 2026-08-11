@@ -28,8 +28,8 @@ If so then give TrafiBoard a spin and let it automagically generate a dashboard 
 2. 🍱 Supports indexing and aggregating of multiple reverse-proxies into a unified view
 3. 👯 Toggleable deduplication of routes that are common across hosts
 4. 🔍 Search bar to find your services even faster!
-5. ⚙️ Simple to setup and maintain:
-   1. Configure the URLs to the APIs of your proxies
+5. ⚙️ Simple to set up and maintain:
+   1. Configure URLs to the APIs of your proxies
    2. TrafiBoard will figure out the type of proxy and how to extract its information.
 6. 🐳 Docker deployment 
 7. 💨 Stateless. No volumes to mount. No file permissions to deal with.
@@ -55,7 +55,13 @@ services:
       TB_HOSTS: >
         [
           {
-            "url": "https://traefik.instance1.com"
+            "url": "https://traefik.instance1.com",
+            "username": "someUser",
+            "password": "somePassword"
+          },
+          {
+             "url": "https://traefik.instance.com",
+             "basicAuthHeader": "c3RyaW5nOnN0cmluZw==" 
           },
           {
             "url": "http://192.168.0.1"
@@ -67,6 +73,21 @@ services:
           }
         ]
 ```
+
+## ⚙️ Configuration
+- `TB_HOSTS` - List of reverse proxy hosts along with their credentials in JSON array format.
+  - `url` - Reverse proxy host url with `https://` or `http://`
+  - `username` and `password` filled with credentials that will be used to calculate Basic Auth digest.
+    - `username` and `password` have to be not empty.
+  - `basicAuthHeader` precalculated Basic Auth header.
+    - `basicAuthHeader` will have `Basic ` prepended to it if missing.
+    - `basicAuthHeader` takes precedence over `username` and `password` when both are provided.
+
+
+- `TB_PAGE_TITLE` - Custom page title. Defaults to `TrafiBoard`
+
+
+- `TB_HOST_TIMEOUT` - Timeout limit after which a slow host will be excluded from results. Defaults to `5000`
 
 ## 👍🏻 Considerations
 1. TrafiBoard does not tunnel the traffic. Destinations should already be accessible to the client.
