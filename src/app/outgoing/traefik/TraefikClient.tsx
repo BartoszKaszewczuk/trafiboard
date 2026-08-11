@@ -15,6 +15,24 @@ import {TraefikParser} from "@/app/outgoing/traefik/TraefikParser";
 export namespace TraefikClient {
     const logger = logger_master.child({module: "TRAEFIK"})
 
+    function getMaybeAuthHeader(host: TraefikHost): RequestInit {
+        if (host.basicAuthHeader) {
+            if (!host.basicAuthHeader.startsWith("Basic")) {
+                const authHeaders: RequestInit = {headers: {Authorization: `Basic ${host.basicAuthHeader}`}}
+                return authHeaders
+            }
+            const authHeaders: RequestInit = {headers: {Authorization: host.basicAuthHeader}}
+            return authHeaders
+        }
+        if (host.username && host.password) {
+            const auth = 'Basic ' + Buffer.from(host.username + ":" + host.password).toString('base64')
+
+            const authHeaders: RequestInit = {headers: {Authorization: auth}}
+            return authHeaders
+        }
+        return {}
+    }
+
     async function httpGetBody(url: string, requestInit: RequestInit | null = null): Promise<any | null> {
         let response;
         try {
@@ -37,7 +55,8 @@ export namespace TraefikClient {
         isUrlValidUnsafe(host.url)
         const url = host.url + ENDPOINT_TRAEFIK_VERSION
         try {
-            const version = await httpGetBody(url, {cache: 'no-store'});
+            const authHeaders = getMaybeAuthHeader(host)
+            const version = await httpGetBody(url, {...authHeaders, ...{cache: 'no-store'}});
             if (!version) {
                 return null
             }
@@ -55,7 +74,8 @@ export namespace TraefikClient {
         isUrlValidUnsafe(host.url)
         const url = host.url + ENDPOINT_TRAEFIK_ROUTERS
         logger.trace(`Calling GET on Rules from ${url}`)
-        const routes = await httpGetBody(url, {cache: 'no-store'});
+        const authHeaders = getMaybeAuthHeader(host)
+        const routes = await httpGetBody(url, {...authHeaders, ...{cache: 'no-store'}});
         return routes.map((router: any) => {
                 const out: TraefikRouter = {
                     provider: router.provider,
@@ -72,7 +92,8 @@ export namespace TraefikClient {
         isUrlValidUnsafe(host.url)
         const url = host.url + ENDPOINT_TRAEFIK_ENTRYPOINTS
         logger.trace(`Calling GET on Entrypoints from ${url}`)
-        const entryPoints = await httpGetBody(url);
+        const authHeaders = getMaybeAuthHeader(host)
+        const entryPoints = await httpGetBody(url, authHeaders);
         return entryPoints.map((entryPoint: any) => {
                 const out: TraefikEntryPoint = {
                     name: entryPoint.name,

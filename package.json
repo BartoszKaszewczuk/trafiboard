@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "next telemetry disable",
     "build": "next build",
     "start": "next start -p 8080",
     "prod": "next export",
@@ -45,6 +46,7 @@
     "glob": "^13.0.6",
     "jest": "^30.4.2",
     "jest-environment-jsdom": "^30.4.1",
+    "jest-extended": "^7.0.0",
     "jest-fetch-mock": "^3.2.0",
     "postcss": "^8.5.25",
     "tailwindcss": "^3.4.19",
