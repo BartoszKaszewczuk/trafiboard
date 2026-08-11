@@ -41,45 +41,99 @@ describe('#isApiReachable', () => {
     });
 
     describe('Test Authorization', () => {
-        test('should include auth credentials when provided', async () => {
-            fetch.mockResponseOnce(JSON.stringify({Version: 1}));
+        describe('Test Username+Password Authentication', () => {
+            test('should include auth credentials when provided', async () => {
+                fetch.mockResponseOnce(JSON.stringify({Version: 1}));
 
-            await TraefikClient.isApiReachable(fakeTraefikHost);
-            const actualArgs = fetch.mock.calls[0][1];
+                await TraefikClient.isApiReachable(fakeTraefikHost);
+                const actualArgs = fetch.mock.calls[0][1];
 
-            expect(fetch).toHaveBeenCalledTimes(1);
-            expect(actualArgs.headers).toBeDefined()
-            expect(actualArgs.headers.Authorization).toBeDefined()
-            expect(actualArgs.headers.Authorization).toBe(basicAuthDigest)
-        })
-        test('should NOT include auth credentials when NOT provided', async () => {
-            const fakeTraefikHost = {
-                url: "https://localhost:8080",
-            }
-            fetch.mockResponseOnce(JSON.stringify({Version: 1}));
+                expect(fetch).toHaveBeenCalledTimes(1);
+                expect(actualArgs.headers).toBeDefined()
+                expect(actualArgs.headers.Authorization).toBeDefined()
+                expect(actualArgs.headers.Authorization).toBe(basicAuthDigest)
+            })
+            test('should NOT include auth credentials when NOT provided', async () => {
+                const fakeTraefikHost = {
+                    url: "https://localhost:8080",
+                }
+                fetch.mockResponseOnce(JSON.stringify({Version: 1}));
 
-            await TraefikClient.isApiReachable(fakeTraefikHost);
-            const actualArgs = fetch.mock.calls[0][1];
+                await TraefikClient.isApiReachable(fakeTraefikHost);
+                const actualArgs = fetch.mock.calls[0][1];
 
-            expect(fetch).toHaveBeenCalledTimes(1);
-            expect(actualArgs.headers).not.toBeDefined()
-        })
-        test('should NOT include auth credentials when blank are provided', async () => {
-            const fakeTraefikHost = {
-                url: "https://localhost:8080",
-                username: "",
-                password: ""
-            }
-            fetch.mockResponseOnce(JSON.stringify({Version: 1}));
+                expect(fetch).toHaveBeenCalledTimes(1);
+                expect(actualArgs.headers).not.toBeDefined()
+            })
+            test('should NOT include auth credentials when blank are provided', async () => {
+                const fakeTraefikHost = {
+                    url: "https://localhost:8080",
+                    username: "",
+                    password: ""
+                }
+                fetch.mockResponseOnce(JSON.stringify({Version: 1}));
 
-            await TraefikClient.isApiReachable(fakeTraefikHost);
-            const actualArgs = fetch.mock.calls[0][1];
+                await TraefikClient.isApiReachable(fakeTraefikHost);
+                const actualArgs = fetch.mock.calls[0][1];
 
-            expect(fetch).toHaveBeenCalledTimes(1);
-            expect(actualArgs.headers).not.toBeDefined()
-        })
+                expect(fetch).toHaveBeenCalledTimes(1);
+                expect(actualArgs.headers).not.toBeDefined()
+            })
+        });
+        describe('Test Digest Authentication', () => {
+            test('should include digest auth credentials when provided', async () => {
+                const fakeTraefikHost = {
+                    url: "https://localhost:8080",
+                    authDigest: basicAuthDigest
+                }
+                fetch.mockResponseOnce(JSON.stringify({Version: 1}));
+
+                await TraefikClient.isApiReachable(fakeTraefikHost);
+                const actualArgs = fetch.mock.calls[0][1];
+
+                expect(fetch).toHaveBeenCalledTimes(1);
+                expect(actualArgs.headers).toBeDefined()
+                expect(actualArgs.headers.Authorization).toBeDefined()
+                expect(actualArgs.headers.Authorization).toBe(basicAuthDigest)
+            })
+            test('should prefix auth digest credentials with "Basic " when missing in the digest', async () => {
+                const fakeTraefikHost = {
+                    url: "https://localhost:8080",
+                    authDigest: basicAuthDigest.replace("Basic ", "")
+                }
+                fetch.mockResponseOnce(JSON.stringify({Version: 1}));
+
+                await TraefikClient.isApiReachable(fakeTraefikHost);
+                const actualArgs = fetch.mock.calls[0][1];
+
+                expect(fetch).toHaveBeenCalledTimes(1);
+                expect(actualArgs.headers).toBeDefined()
+                expect(actualArgs.headers.Authorization).toBeDefined()
+                expect(actualArgs.headers.Authorization).toBe(basicAuthDigest)
+            })
+            test('should take auth digest over user+password when both are provided', async () => {
+                const fakeTraefikHost = {
+                    url: "https://localhost:8080",
+                    username: "string" + Math.random(),
+                    password: "string" + Math.random(),
+                    authDigest: basicAuthDigest
+                }
+                fetch.mockResponseOnce(JSON.stringify({Version: 1}));
+
+                await TraefikClient.isApiReachable(fakeTraefikHost);
+                const actualArgs = fetch.mock.calls[0][1];
+
+                expect(fetch).toHaveBeenCalledTimes(1);
+                expect(actualArgs.headers).toBeDefined()
+                expect(actualArgs.headers.Authorization).toBeDefined()
+                expect(actualArgs.headers.Authorization).toBe(basicAuthDigest)
+            })
+        });
     })
 });
+
+const expectedEndpointEntrypoints = "/api/entrypoints";
+const expectedEndpointRouters = "/api/http/routers";
 
 describe('#getTrafiServices', () => {
     const fakeRoutersResponse = [
@@ -94,48 +148,118 @@ describe('#getTrafiServices', () => {
     // TODO: Add more tests
 
     describe('Test Authorization', () => {
-        test('should include auth credentials when provided', async () => {
-            fetch.mockResponse(JSON.stringify(fakeRoutersResponse));
+        describe('Test Username+Password Authentication', () => {
 
-            await TraefikClient.getTrafiServices(fakeTraefikHost);
+            test('should include auth credentials when provided', async () => {
+                fetch.mockResponse(JSON.stringify(fakeRoutersResponse));
 
-            expect(fetch).toHaveBeenCalledTimes(2);
-            fetch.mock.calls.forEach(response => {
-                const actualArgs = response[1]; // Get request args
-                expect(actualArgs.headers).toBeDefined()
-                expect(actualArgs.headers.Authorization).toBeDefined()
-                expect(actualArgs.headers.Authorization).toBe(basicAuthDigest)
-            });
-        })
-        test('should NOT include auth credentials when NOT provided', async () => {
-            const fakeTraefikHost = {
-                url: "https://localhost:8080",
-            }
-            fetch.mockResponse(JSON.stringify(fakeRoutersResponse));
+                await TraefikClient.getTrafiServices(fakeTraefikHost);
 
-            await TraefikClient.getTrafiServices(fakeTraefikHost);
+                expect(fetch).toHaveBeenCalledTimes(2);
+                expect(fetch.mock.calls[0][0].endsWith(expectedEndpointRouters)).toBe(true)
+                expect(fetch.mock.calls[1][0].endsWith(expectedEndpointEntrypoints)).toBe(true)
+                fetch.mock.calls.forEach(response => {
+                    const actualArgs = response[1]; // Get request args
+                    expect(actualArgs.headers).toBeDefined()
+                    expect(actualArgs.headers.Authorization).toBeDefined()
+                    expect(actualArgs.headers.Authorization).toBe(basicAuthDigest)
+                });
+            })
+            test('should NOT include auth credentials when NOT provided', async () => {
+                const fakeTraefikHost = {
+                    url: "https://localhost:8080",
+                }
+                fetch.mockResponse(JSON.stringify(fakeRoutersResponse));
 
-            expect(fetch).toHaveBeenCalledTimes(2);
-            fetch.mock.calls.forEach(response => {
-                const actualArgs = response[1]; // Get request args
-                expect(actualArgs.headers).not.toBeDefined()
-            });
-        })
-        test('should NOT include auth credentials when blank are provided', async () => {
-            const fakeTraefikHost = {
-                url: "https://localhost:8080",
-                username: "",
-                password: ""
-            }
-            fetch.mockResponse(JSON.stringify(fakeRoutersResponse));
+                await TraefikClient.getTrafiServices(fakeTraefikHost);
 
-            await TraefikClient.getTrafiServices(fakeTraefikHost);
+                expect(fetch).toHaveBeenCalledTimes(2);
+                expect(fetch.mock.calls[0][0].endsWith(expectedEndpointRouters)).toBe(true)
+                expect(fetch.mock.calls[1][0].endsWith(expectedEndpointEntrypoints)).toBe(true)
+                fetch.mock.calls.forEach(response => {
+                    const actualArgs = response[1]; // Get request args
+                    expect(actualArgs.headers).not.toBeDefined()
+                });
+            })
+            test('should NOT include auth credentials when blank are provided', async () => {
+                const fakeTraefikHost = {
+                    url: "https://localhost:8080",
+                    username: "",
+                    password: ""
+                }
+                fetch.mockResponse(JSON.stringify(fakeRoutersResponse));
 
-            expect(fetch).toHaveBeenCalledTimes(2);
-            fetch.mock.calls.forEach(response => {
-                const actualArgs = response[1]; // Get request args
-                expect(actualArgs.headers).not.toBeDefined()
-            });
-        })
+                await TraefikClient.getTrafiServices(fakeTraefikHost);
+
+                expect(fetch).toHaveBeenCalledTimes(2);
+                expect(fetch.mock.calls[0][0].endsWith(expectedEndpointRouters)).toBe(true)
+                expect(fetch.mock.calls[1][0].endsWith(expectedEndpointEntrypoints)).toBe(true)
+                fetch.mock.calls.forEach(response => {
+                    const actualArgs = response[1]; // Get request args
+                    expect(actualArgs.headers).not.toBeDefined()
+                });
+            })
+        });
+        describe('Test Digest Authentication', () => {
+            test('should include digest auth credentials when provided', async () => {
+                const fakeTraefikHost = {
+                    url: "https://localhost:8080",
+                    authDigest: basicAuthDigest
+                }
+                fetch.mockResponse(JSON.stringify(fakeRoutersResponse));
+
+                await TraefikClient.getTrafiServices(fakeTraefikHost);
+
+                expect(fetch).toHaveBeenCalledTimes(2);
+                expect(fetch.mock.calls[0][0].endsWith(expectedEndpointRouters)).toBe(true)
+                expect(fetch.mock.calls[1][0].endsWith(expectedEndpointEntrypoints)).toBe(true)
+                fetch.mock.calls.forEach(response => {
+                    const actualArgs = response[1]; // Get request args
+                    expect(actualArgs.headers).toBeDefined()
+                    expect(actualArgs.headers.Authorization).toBeDefined()
+                    expect(actualArgs.headers.Authorization).toBe(basicAuthDigest)
+                });
+            })
+            test('should prefix auth digest credentials with "Basic " when missing in the digest', async () => {
+                const fakeTraefikHost = {
+                    url: "https://localhost:8080",
+                    authDigest: basicAuthDigest.replace("Basic ", "")
+                }
+                fetch.mockResponse(JSON.stringify(fakeRoutersResponse));
+
+                await TraefikClient.getTrafiServices(fakeTraefikHost);
+
+                expect(fetch).toHaveBeenCalledTimes(2);
+                expect(fetch.mock.calls[0][0].endsWith(expectedEndpointRouters)).toBe(true)
+                expect(fetch.mock.calls[1][0].endsWith(expectedEndpointEntrypoints)).toBe(true)
+                fetch.mock.calls.forEach(response => {
+                    const actualArgs = response[1]; // Get request args
+                    expect(actualArgs.headers).toBeDefined()
+                    expect(actualArgs.headers.Authorization).toBeDefined()
+                    expect(actualArgs.headers.Authorization).toBe(basicAuthDigest)
+                });
+            })
+            test('should take auth digest over user+password when both are provided', async () => {
+                const fakeTraefikHost = {
+                    url: "https://localhost:8080",
+                    username: "string" + Math.random(),
+                    password: "string" + Math.random(),
+                    authDigest: basicAuthDigest
+                }
+                fetch.mockResponse(JSON.stringify(fakeRoutersResponse));
+
+                await TraefikClient.getTrafiServices(fakeTraefikHost);
+
+                expect(fetch).toHaveBeenCalledTimes(2);
+                expect(fetch.mock.calls[0][0].endsWith(expectedEndpointRouters)).toBe(true)
+                expect(fetch.mock.calls[1][0].endsWith(expectedEndpointEntrypoints)).toBe(true)
+                fetch.mock.calls.forEach((response, callIdx) => {
+                    const actualArgs = response[1]; // Get request args
+                    expect(actualArgs.headers).toBeDefined()
+                    expect(actualArgs.headers.Authorization).toBeDefined()
+                    expect(actualArgs.headers.Authorization).toBe(basicAuthDigest)
+                });
+            })
+        });
     })
 })
