@@ -28,6 +28,8 @@ jobs:
       # https://github.com/actions/checkout
       - name: Checkout repository
         uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
 
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer
@@ -45,6 +47,22 @@ jobs:
       # https://github.com/docker/setup-qemu-action
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v4
+
+      - uses: orhun/git-cliff-action@v4
+        id: cliff
+        with:
+          args: --latest
+
+      - id: changelog
+        name: Changelog Preview
+        shell: bash
+        run: |
+          {
+            echo "content<<EOF"
+            cat "${{ steps.cliff.outputs.changelog }}"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+          cat "${{ steps.cliff.outputs.changelog }}"
 
       # Login against a Docker registry except on PR
       # https://github.com/docker/login-action
