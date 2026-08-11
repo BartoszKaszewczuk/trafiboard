@@ -12,6 +12,10 @@ const fakeTraefikHost = {
 }
 const basicAuthDigest = "Basic c3RyaW5nOnN0cmluZw==";
 
+const expextedEndpointVersion = "/api/version";
+const expectedEndpointEntrypoints = "/api/entrypoints";
+const expectedEndpointRouters = "/api/http/routers";
+
 describe('#isApiReachable', () => {
     test('should return true when api response is valid', async () => {
         fetch.mockResponseOnce(JSON.stringify({Version: 1}));
@@ -20,6 +24,7 @@ describe('#isApiReachable', () => {
 
         expect(actual).toBe(true)
         expect(fetch).toHaveBeenCalledTimes(1);
+        expect(fetch.mock.calls[0][0]).toEndWith(expextedEndpointVersion)
     });
 
     test('should return false when api response is not valid', async () => {
@@ -29,6 +34,7 @@ describe('#isApiReachable', () => {
 
         expect(actual).toBe(false)
         expect(fetch).toHaveBeenCalledTimes(1);
+        expect(fetch.mock.calls[0][0]).toEndWith(expextedEndpointVersion)
     });
 
     test('should return false when api throws exception', async () => {
@@ -38,6 +44,7 @@ describe('#isApiReachable', () => {
 
         expect(actual).toBe(false)
         expect(fetch).toHaveBeenCalledTimes(1);
+        expect(fetch.mock.calls[0][0]).toEndWith(expextedEndpointVersion)
     });
 
     describe('Test Authorization', () => {
@@ -89,9 +96,10 @@ describe('#isApiReachable', () => {
                 fetch.mockResponseOnce(JSON.stringify({Version: 1}));
 
                 await TraefikClient.isApiReachable(fakeTraefikHost);
-                const actualArgs = fetch.mock.calls[0][1];
 
                 expect(fetch).toHaveBeenCalledTimes(1);
+                expect(fetch.mock.calls[0][0]).toEndWith(expextedEndpointVersion)
+                const actualArgs = fetch.mock.calls[0][1];
                 expect(actualArgs.headers).toBeDefined()
                 expect(actualArgs.headers.Authorization).toBeDefined()
                 expect(actualArgs.headers.Authorization).toBe(basicAuthDigest)
@@ -104,9 +112,10 @@ describe('#isApiReachable', () => {
                 fetch.mockResponseOnce(JSON.stringify({Version: 1}));
 
                 await TraefikClient.isApiReachable(fakeTraefikHost);
-                const actualArgs = fetch.mock.calls[0][1];
 
                 expect(fetch).toHaveBeenCalledTimes(1);
+                expect(fetch.mock.calls[0][0]).toEndWith(expextedEndpointVersion)
+                const actualArgs = fetch.mock.calls[0][1];
                 expect(actualArgs.headers).toBeDefined()
                 expect(actualArgs.headers.Authorization).toBeDefined()
                 expect(actualArgs.headers.Authorization).toBe(basicAuthDigest)
@@ -121,9 +130,10 @@ describe('#isApiReachable', () => {
                 fetch.mockResponseOnce(JSON.stringify({Version: 1}));
 
                 await TraefikClient.isApiReachable(fakeTraefikHost);
-                const actualArgs = fetch.mock.calls[0][1];
 
                 expect(fetch).toHaveBeenCalledTimes(1);
+                expect(fetch.mock.calls[0][0]).toEndWith(expextedEndpointVersion)
+                const actualArgs = fetch.mock.calls[0][1];
                 expect(actualArgs.headers).toBeDefined()
                 expect(actualArgs.headers.Authorization).toBeDefined()
                 expect(actualArgs.headers.Authorization).toBe(basicAuthDigest)
@@ -131,9 +141,6 @@ describe('#isApiReachable', () => {
         });
     })
 });
-
-const expectedEndpointEntrypoints = "/api/entrypoints";
-const expectedEndpointRouters = "/api/http/routers";
 
 describe('#getTrafiServices', () => {
     const fakeRoutersResponse = [
@@ -156,8 +163,8 @@ describe('#getTrafiServices', () => {
                 await TraefikClient.getTrafiServices(fakeTraefikHost);
 
                 expect(fetch).toHaveBeenCalledTimes(2);
-                expect(fetch.mock.calls[0][0].endsWith(expectedEndpointRouters)).toBe(true)
-                expect(fetch.mock.calls[1][0].endsWith(expectedEndpointEntrypoints)).toBe(true)
+                expect(fetch.mock.calls[0][0]).toEndWith(expectedEndpointRouters)
+                expect(fetch.mock.calls[1][0]).toEndWith(expectedEndpointEntrypoints)
                 fetch.mock.calls.forEach(response => {
                     const actualArgs = response[1]; // Get request args
                     expect(actualArgs.headers).toBeDefined()
@@ -174,8 +181,8 @@ describe('#getTrafiServices', () => {
                 await TraefikClient.getTrafiServices(fakeTraefikHost);
 
                 expect(fetch).toHaveBeenCalledTimes(2);
-                expect(fetch.mock.calls[0][0].endsWith(expectedEndpointRouters)).toBe(true)
-                expect(fetch.mock.calls[1][0].endsWith(expectedEndpointEntrypoints)).toBe(true)
+                expect(fetch.mock.calls[0][0]).toEndWith(expectedEndpointRouters)
+                expect(fetch.mock.calls[1][0]).toEndWith(expectedEndpointEntrypoints)
                 fetch.mock.calls.forEach(response => {
                     const actualArgs = response[1]; // Get request args
                     expect(actualArgs.headers).not.toBeDefined()
@@ -192,8 +199,8 @@ describe('#getTrafiServices', () => {
                 await TraefikClient.getTrafiServices(fakeTraefikHost);
 
                 expect(fetch).toHaveBeenCalledTimes(2);
-                expect(fetch.mock.calls[0][0].endsWith(expectedEndpointRouters)).toBe(true)
-                expect(fetch.mock.calls[1][0].endsWith(expectedEndpointEntrypoints)).toBe(true)
+                expect(fetch.mock.calls[0][0]).toEndWith(expectedEndpointRouters)
+                expect(fetch.mock.calls[1][0]).toEndWith(expectedEndpointEntrypoints)
                 fetch.mock.calls.forEach(response => {
                     const actualArgs = response[1]; // Get request args
                     expect(actualArgs.headers).not.toBeDefined()
@@ -211,8 +218,8 @@ describe('#getTrafiServices', () => {
                 await TraefikClient.getTrafiServices(fakeTraefikHost);
 
                 expect(fetch).toHaveBeenCalledTimes(2);
-                expect(fetch.mock.calls[0][0].endsWith(expectedEndpointRouters)).toBe(true)
-                expect(fetch.mock.calls[1][0].endsWith(expectedEndpointEntrypoints)).toBe(true)
+                expect(fetch.mock.calls[0][0]).toEndWith(expectedEndpointRouters)
+                expect(fetch.mock.calls[1][0]).toEndWith(expectedEndpointEntrypoints)
                 fetch.mock.calls.forEach(response => {
                     const actualArgs = response[1]; // Get request args
                     expect(actualArgs.headers).toBeDefined()
@@ -230,8 +237,8 @@ describe('#getTrafiServices', () => {
                 await TraefikClient.getTrafiServices(fakeTraefikHost);
 
                 expect(fetch).toHaveBeenCalledTimes(2);
-                expect(fetch.mock.calls[0][0].endsWith(expectedEndpointRouters)).toBe(true)
-                expect(fetch.mock.calls[1][0].endsWith(expectedEndpointEntrypoints)).toBe(true)
+                expect(fetch.mock.calls[0][0]).toEndWith(expectedEndpointRouters)
+                expect(fetch.mock.calls[1][0]).toEndWith(expectedEndpointEntrypoints)
                 fetch.mock.calls.forEach(response => {
                     const actualArgs = response[1]; // Get request args
                     expect(actualArgs.headers).toBeDefined()
@@ -251,8 +258,8 @@ describe('#getTrafiServices', () => {
                 await TraefikClient.getTrafiServices(fakeTraefikHost);
 
                 expect(fetch).toHaveBeenCalledTimes(2);
-                expect(fetch.mock.calls[0][0].endsWith(expectedEndpointRouters)).toBe(true)
-                expect(fetch.mock.calls[1][0].endsWith(expectedEndpointEntrypoints)).toBe(true)
+                expect(fetch.mock.calls[0][0]).toEndWith(expectedEndpointRouters)
+                expect(fetch.mock.calls[1][0]).toEndWith(expectedEndpointEntrypoints)
                 fetch.mock.calls.forEach((response, callIdx) => {
                     const actualArgs = response[1]; // Get request args
                     expect(actualArgs.headers).toBeDefined()
