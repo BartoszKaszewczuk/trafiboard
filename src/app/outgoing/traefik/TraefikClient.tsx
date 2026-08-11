@@ -16,6 +16,14 @@ export namespace TraefikClient {
     const logger = logger_master.child({module: "TRAEFIK"})
 
     function getMaybeAuthHeader(host: TraefikHost): RequestInit {
+        if (host.authDigest) {
+            if (!host.authDigest.startsWith("Basic")) {
+                const authHeaders: RequestInit = {headers: {Authorization: `Basic ${host.authDigest}`}}
+                return authHeaders
+            }
+            const authHeaders: RequestInit = {headers: {Authorization: host.authDigest}}
+            return authHeaders
+        }
         if (host.username && host.password) {
             const auth = 'Basic ' + Buffer.from(host.username + ":" + host.password).toString('base64')
 

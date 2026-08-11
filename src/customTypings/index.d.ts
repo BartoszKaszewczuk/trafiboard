@@ -5,6 +5,7 @@ declare module 'TrafiTypes' {
         url: string;
         username?: string;
         password?: string;
+        authDigest?: string;
     }
 
     interface TraefikRouter {
