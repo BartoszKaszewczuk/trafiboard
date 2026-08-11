@@ -49,20 +49,10 @@ jobs:
         uses: docker/setup-qemu-action@v4
 
       - uses: orhun/git-cliff-action@v4
+        name: Changelog Preview
         id: cliff
         with:
           args: --latest
-
-      - id: changelog
-        name: Changelog Preview
-        shell: bash
-        run: |
-          {
-            echo "content<<EOF"
-            cat "${{ steps.cliff.outputs.changelog }}"
-            echo "EOF"
-          } >> "$GITHUB_OUTPUT"
-          cat "${{ steps.cliff.outputs.changelog }}"
 
       # Login against a Docker registry except on PR
       # https://github.com/docker/login-action
