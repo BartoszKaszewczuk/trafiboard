@@ -3,8 +3,9 @@
 declare module 'TrafiTypes' {
     interface TraefikHost {
         url: string;
-        username: string;
-        password: string;
+        username?: string;
+        password?: string;
+        basicAuthHeader?: string;
         alias?: string;
     }
 

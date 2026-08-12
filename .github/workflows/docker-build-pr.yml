@@ -21,13 +21,19 @@ jobs:
       id-token: write
     strategy:
       matrix:
-        platform: [ linux/amd64, linux/arm64 ]
+        includes:
+        - platform: linux/amd64
+          runner: ubuntu-latest
+        - platform: linux/arm64
+          runner: ubuntu-24.04-arm
 
     steps:
       # Checkout repo
       # https://github.com/actions/checkout
       - name: Checkout repository
         uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
 
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer
@@ -45,6 +51,12 @@ jobs:
       # https://github.com/docker/setup-qemu-action
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v4
+
+      - uses: orhun/git-cliff-action@v4
+        name: Changelog Preview
+        id: cliff
+        with:
+          args: --latest
 
       # Login against a Docker registry except on PR
       # https://github.com/docker/login-action
