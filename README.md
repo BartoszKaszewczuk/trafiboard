@@ -75,9 +75,9 @@ services:
 ```
 
 ## ⚙️ Configuration
-- `TB_HOSTS` - List of reverse proxy hosts along with their credentials in JSON array format.
+- `TB_HOSTS` - List of reverse proxy hosts along with their optional credentials in JSON array format.
   - `url` - Reverse proxy host url with `https://` or `http://`
-  - `username` and `password` filled with credentials that will be used to calculate Basic Auth digest.
+  - `username` and `password` optional, filled with credentials that will be used to calculate Basic Auth digest.
     - `username` and `password` have to be not empty.
   - `basicAuthHeader` precalculated Basic Auth header.
     - `basicAuthHeader` will have `Basic ` prepended to it if missing.
