@@ -39,7 +39,7 @@ If so then give TrafiBoard a spin and let it automagically generate a dashboard 
 
 ### 🐳 Docker Run
 ```bash
-docker run -p 8080:8080 --name traefiboard \
+docker run -p 8080:8080 --name trafiboard \
   -e TB_HOSTS='[{"url":"https://traefik.instance1.com","username":"","password":""},{"url":"http://192.168.0.1","username":"","password":""},{"url":"https://nginx.instance3.com","username":"","password":""}]' \
   ghcr.io/bartoszkaszewczuk/trafiboard:latest
 ```
@@ -78,9 +78,9 @@ services:
 ```
 
 ## ⚙️ Configuration
-- `TB_HOSTS` - List of reverse proxy hosts along with their credentials in JSON array format.
+- `TB_HOSTS` - List of reverse proxy hosts along with their optional credentials in JSON array format.
   - `url` - Reverse proxy host url with `https://` or `http://`
-  - `username` and `password` filled with credentials that will be used to calculate Basic Auth digest.
+  - `username` and `password` optional, filled with credentials that will be used to calculate Basic Auth digest.
     - `username` and `password` have to be not empty.
   - `basicAuthHeader` precalculated Basic Auth header.
     - `basicAuthHeader` will have `Basic ` prepended to it if missing.
