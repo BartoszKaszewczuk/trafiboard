@@ -70,7 +70,7 @@ jobs:
       - uses: orhun/git-cliff-action@v4
         id: cliff
         with:
-          args: --latest
+          args: --latest --strip header --tag ${{ steps.semver.outputs.version }}
 
       - id: changelog
         shell: bash
@@ -242,6 +242,5 @@ jobs:
 
             ${{ needs.version.outputs.changelog }}
           removeArtifacts: true
-          generateReleaseNotes: true
           draft: true
           prerelease: true
