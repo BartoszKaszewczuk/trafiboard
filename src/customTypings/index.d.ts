@@ -6,6 +6,7 @@ declare module 'TrafiTypes' {
         username?: string;
         password?: string;
         basicAuthHeader?: string;
+        alias?: string;
     }
 
     interface TraefikRouter {
@@ -40,7 +41,8 @@ declare module 'TrafiTypes' {
     }
 
     interface TrafiHost {
-        hostname: string,
+        host: string,
+        alias?: string,
         hostType: ServiceType,
     }
 

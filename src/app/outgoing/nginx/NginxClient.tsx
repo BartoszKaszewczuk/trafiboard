@@ -170,7 +170,8 @@ export namespace NginxClient {
                 const services = await getHosts(host);
                 logger.info(`Indexed ${services.length} NGINX service routes hosted by ${host.url}`);
                 const key: TrafiHost = {
-                    hostname: host.url,
+                    host: host.url,
+                    alias: host.alias,
                     hostType: ServiceType.NGINX
                 }
                 mapOfHosts.set(key, services)

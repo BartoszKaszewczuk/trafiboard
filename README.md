@@ -56,20 +56,23 @@ services:
         [
           {
             "url": "https://traefik.instance1.com",
-            "username": "someUser",
-            "password": "somePassword"
+            "username": "user",
+            "password": "pass"
           },
           {
              "url": "https://traefik.instance.com",
+             "alias": "Traefik Staging",
              "basicAuthHeader": "c3RyaW5nOnN0cmluZw==" 
           },
           {
-            "url": "http://192.168.0.1"
+            "url": "http://192.168.0.1",
+            "alias": "Traefik Dev"
           },
           {
             "url": "https://nginx.instance3.com",
-            "username": "",
-            "password": ""
+            "alias": "Nginx",
+            "username": "user",
+            "password": "pass"
           }
         ]
 ```
