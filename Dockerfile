@@ -1,4 +1,4 @@
-FROM node:24-alpine
+FROM --platform=$BUILDPLATFORM node:24-alpine
 
 LABEL maintainer="bartosz.kaszewczuk@icloud.com"
 LABEL app_name="trafiboard"
