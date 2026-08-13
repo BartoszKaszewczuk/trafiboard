@@ -36,8 +36,7 @@ jobs:
           MATRIX_PLATFORM: ${{ matrix.platform }}
         run: |
           echo "repository=${GITHUB_REPOSITORY@L}" >> $GITHUB_OUTPUT
-          echo "${MATRIX_PLATFORM}"
-          echo "architecture=${MATRIX_PLATFORM | tr '/' ''}" >> $GITHUB_OUTPUT
+          echo "architecture=$(echo $MATRIX_PLATFORM | tr '/' '-')" >> $GITHUB_OUTPUT
 
       - id: semver
         uses: PaulHatch/semantic-version@v6.0.2
