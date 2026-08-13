@@ -63,6 +63,7 @@ jobs:
             latest
 
       - uses: orhun/git-cliff-action@v4
+        name: Generate Changelog
         id: cliff
         with:
           args: --latest --strip header --unreleased --tag ${{ steps.semver.outputs.version }}
@@ -165,7 +166,7 @@ jobs:
 
       - uses: actions/upload-artifact@v7
         with:
-          name: digests-linux-${{ matrix.architecture }}
+          name: digests-linux-${{ matrix.platform }}
           path: ${{ runner.temp }}/digests/*
           if-no-files-found: error
           retention-days: 1
