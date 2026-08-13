@@ -65,7 +65,7 @@ jobs:
       - uses: orhun/git-cliff-action@v4
         id: cliff
         with:
-          args: --latest --strip header --tag ${{ steps.semver.outputs.version }}
+          args: --latest --strip header --unreleased --tag ${{ steps.semver.outputs.version }}
 
       - id: changelog
         shell: bash
