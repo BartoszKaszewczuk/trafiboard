@@ -30,13 +30,11 @@ jobs:
         with:
           fetch-depth: 0
 
+        # Repository name can have upper case chars but Docker image names have to be lower case, so we need to normalise it
       - id: normalised-strings
         name: Normalise strings
-        env:
-          MATRIX_PLATFORM: ${{ matrix.platform }}
         run: |
           echo "repository=${GITHUB_REPOSITORY@L}" >> $GITHUB_OUTPUT
-          echo "architecture=$(echo $MATRIX_PLATFORM | tr '/' '-')" >> $GITHUB_OUTPUT
 
       - id: semver
         uses: PaulHatch/semantic-version@v6.0.2
@@ -131,6 +129,14 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+        # Platform string contains '/' so we need to replace it with '-'
+      - id: normalised-strings
+        name: Normalise strings
+        env:
+          MATRIX_PLATFORM: ${{ matrix.platform }}
+        run: |
+          echo "architecture=$(echo $MATRIX_PLATFORM | tr '/' '-')" >> $GITHUB_OUTPUT
+
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
       - name: Build and push Docker image
@@ -170,7 +176,7 @@ jobs:
 
       - uses: actions/upload-artifact@v7
         with:
-          name: digests-linux-${{ needs.version.outputs.architecture }}
+          name: digests-linux-${{ steps.normalised-strings.outputs.architecture }}
           path: ${{ runner.temp }}/digests/*
           if-no-files-found: error
           retention-days: 1
