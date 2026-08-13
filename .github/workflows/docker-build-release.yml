@@ -22,17 +22,19 @@ jobs:
       version: ${{ steps.semver.outputs.version }}
       tags: ${{ steps.meta.outputs.tags }}
       labels: ${{ steps.meta.outputs.labels }}
-      repository: ${{ steps.lower-repo.outputs.repository }}
+      repository: ${{ steps.normalised-strings.outputs.repository }}
+      architecture: ${{ steps.normalised-strings.outputs.architecture }}
       changelog: ${{ steps.changelog.outputs.content }}
     steps:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
-      - id: lower-repo
-        name: Repository to lowercase
+      - id: normalised-strings
+        name: Normalise strings
         run: |
           echo "repository=${GITHUB_REPOSITORY@L}" >> $GITHUB_OUTPUT
+          echo "architecture=${MATRIX_PLATFORM | tr '/' ''}" >> $GITHUB_OUTPUT
 
       - id: semver
         uses: PaulHatch/semantic-version@v6.0.2
@@ -166,7 +168,7 @@ jobs:
 
       - uses: actions/upload-artifact@v7
         with:
-          name: digests-linux-${{ matrix.platform }}
+          name: digests-linux-${{ needs.version.outputs.architecture }}
           path: ${{ runner.temp }}/digests/*
           if-no-files-found: error
           retention-days: 1
