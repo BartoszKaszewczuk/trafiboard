@@ -12,14 +12,14 @@ All notable changes to this project will be documented in this file.\n
 # See https://keats.github.io/tera/docs/#introduction
 body = """
 {% if version %}\
-    ## {{ version | trim_start_matches(pat="v") }} - {{ timestamp | date(format="%Y-%m-%d") }}
+    ## New in {{ version | trim_start_matches(pat="v") }} - {{ timestamp | date(format="%Y-%m-%d") }}
 {% else %}\
     ## Unreleased
 {% endif %}\
 {% for group, commits in commits | group_by(attribute="group") %}
     ### {{ group | upper_first }}
     {% for commit in commits %}
-        - {{ commit.message | split(pat="\n") | first | trim_end }}\
+        - {{ commit.message | split(pat="\n") | first | trim_end | replace(from="[no ci]", to="") }}\
     {% endfor %}
 {% endfor %}\n
 """
