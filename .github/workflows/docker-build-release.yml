@@ -32,9 +32,10 @@ jobs:
 
       - id: normalised-strings
         name: Normalise strings
+        env:
+          MATRIX_PLATFORM: ${{ matrix.platform }}
         run: |
           echo "repository=${GITHUB_REPOSITORY@L}" >> $GITHUB_OUTPUT
-          env
           echo "${MATRIX_PLATFORM}"
           echo "architecture=${MATRIX_PLATFORM | tr '/' ''}" >> $GITHUB_OUTPUT
 
