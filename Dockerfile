@@ -6,14 +6,10 @@ LABEL project="trafiboard"
 
 WORKDIR /app
 COPY package*.json ./
+
+RUN npm ci
 COPY . .
-
-#RUN mkdir app && npm install && npm run build .
-RUN npm install
-RUN npm test
 RUN npm run build
-
-# TODO: Shall we clean up src files after the build?
 
 EXPOSE 8080
 
