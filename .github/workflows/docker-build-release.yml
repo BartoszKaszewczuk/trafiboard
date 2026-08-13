@@ -34,6 +34,8 @@ jobs:
         name: Normalise strings
         run: |
           echo "repository=${GITHUB_REPOSITORY@L}" >> $GITHUB_OUTPUT
+          env
+          echo "${MATRIX_PLATFORM}"
           echo "architecture=${MATRIX_PLATFORM | tr '/' ''}" >> $GITHUB_OUTPUT
 
       - id: semver
