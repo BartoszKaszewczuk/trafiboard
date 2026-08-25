@@ -18,6 +18,8 @@ concurrency: production
 jobs:
   version:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       version: ${{ steps.semver.outputs.version }}
       tags: ${{ steps.meta.outputs.tags }}
